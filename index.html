@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Abdullahinur — Web Designer</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    :root {
+      --deep-blue: #0038a8;
+      --sky-blue: #07C7F2;
+      --sun-yellow: #F2E313;
+      --orange: #F29F05;
+      --red: #F20505;
+    }
+    body {
+      font-family: 'Inter', sans-serif;
+    }
+  </style>
+</head>
+<body class="bg-[var(--deep-blue)] text-white font-sans">
+
+  <!-- Hero with Fullscreen Background -->
+  <section class="relative h-screen w-full bg-cover bg-center bg-no-repeat" 
+           style="background-image: url('hero2.png');">
+    
+    <!-- Optional dark overlay for readability (can remove) -->
+    <!-- <div class="absolute inset-0 bg-black/20"></div> -->
+
+    <!-- Navbar -->
+    <nav class="relative z-10 flex justify-between items-center p-6 max-w-6xl mx-auto">
+      <div class="font-bold text-lg">LOGO</div>
+      <ul class="flex space-x-8 text-[var(--sun-yellow)] font-medium">
+        <li><a href="#about" class="hover:text-[var(--sky-blue)]">About</a></li>
+        <li><a href="#projects" class="hover:text-[var(--sky-blue)]">Work</a></li>
+        <li><a href="#contact" class="hover:text-[var(--sky-blue)]">Contact</a></li>
+      </ul>
+    </nav>
+
+<!-- Hero Text Content -->
+<div class="relative z-10 flex flex-col justify-center items-start max-w-6xl mx-auto h-[40vh] px-6 mt-10 md:mt-16">
+  <h1 class="text-5xl md:text-7xl font-extrabold text-[var(--sun-yellow)] leading-tight mb-4">
+    Hi, <br />I’m a Web Designer
+  </h1>
+  <p class="text-xl md:text-2xl mb-6 max-w-md">I craft responsive and engaging websites</p>
+  <a href="#projects"
+     class="inline-block bg-[var(--red)] text-white px-6 py-3 rounded-lg shadow-lg 
+            hover:bg-[var(--orange)] transition font-semibold">
+    View My Work
+  </a>
+</div>
+  </section>
+
+  <!-- Projects Section -->
+  <section id="projects" class="bg-[#F5F0E1] text-black py-16">
+    <div class="max-w-6xl mx-auto px-6">
+      <h2 class="text-3xl font-bold text-[var(--red)] mb-10">Projects</h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        
+        <!-- Project 1 -->
+        <div class="bg-[var(--red)] text-white p-6 rounded-lg">
+          <h3 class="text-2xl font-bold mb-2">Project One</h3>
+          <div class="space-x-2">
+            <span class="bg-[var(--sun-yellow)] text-black px-3 py-1 text-sm rounded">Unihoage</span>
+            <span class="bg-[var(--sun-yellow)] text-black px-3 py-1 text-sm rounded">Fromandi Development</span>
+          </div>
+        </div>
+
+        <!-- Project 2 -->
+        <div class="bg-[var(--deep-blue)] text-white p-6 rounded-lg">
+          <h3 class="text-2xl font-bold mb-2">Project Two</h3>
+          <span class="bg-[var(--sky-blue)] text-black px-3 py-1 text-sm rounded">Fromandi Development</span>
+        </div>
+
+        <!-- Project 3 -->
+        <div class="bg-[var(--sun-yellow)] text-black p-6 rounded-lg">
+          <h3 class="text-2xl font-bold mb-2">Project Three</h3>
+          <span class="bg-[var(--deep-blue)] text-white px-3 py-1 text-sm rounded">Fromandi Development</span>
+        </div>
+
+        <!-- Project 4 -->
+        <div class="bg-[var(--orange)] text-black p-6 rounded-lg">
+          <h3 class="text-2xl font-bold mb-2">Project Four</h3>
+          <span class="bg-[var(--sun-yellow)] text-black px-3 py-1 text-sm rounded">Fromandi Development</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="bg-[var(--deep-blue)] text-center py-6 text-slate-200">
+    &copy; 2025 Abdullahinur. Designed with love and TailwindCSS.
+  </footer>
+
+</body>
+</html>
