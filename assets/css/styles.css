@@ -1,0 +1,13 @@
+    body {
+      font-family: 'Inter', sans-serif;
+    }
+
+    h1 {
+      font-family: 'Playfair Display', serif;
+    }
+
+    .bg-hero {
+      background-image: url('../images/hero1.png');
+      /* background-size: cover; */
+      background-position: center;
+    }
