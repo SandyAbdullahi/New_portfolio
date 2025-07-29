@@ -1,13 +1,81 @@
     body {
-      font-family: 'Inter', sans-serif;
+        font-family: 'Inter', sans-serif;
     }
 
     h1 {
-      font-family: 'Playfair Display', serif;
+        font-family: 'Playfair Display', serif;
     }
 
     .bg-hero {
-      background-image: url('../images/hero1.png');
-      /* background-size: cover; */
-      background-position: center;
+        background-image: url('../images/hero1.png');
+        /* background-size: cover; */
+        background-position: center;
+        /* background-repeat: no-repeat; */
+    }
+
+    /* quick utility (add in <style>) */
+    .nav-toggle.open .bar:first-child {
+        transform: rotate(45deg);
+    }
+
+    .nav-toggle.open .bar:last-child {
+        transform: rotate(-45deg);
+    }
+
+    .nav-toggle.open .bar:last-child {
+        top: 0;
+    }
+
+    .nav-toggle.open .bar:first-child {
+        top: 0;
+    }
+
+    .nav-toggle.open {
+        background: #C6E376;
+        border-color: #C6E376;
+    }
+
+    /* toggle icon */
+    .line,
+    .line::before,
+    .line::after {
+        position: absolute;
+        width: 16px;
+        /* bar length */
+        height: 2px;
+        /* bar thickness */
+        background: #C6E376;
+        /* lime-200 */
+        transition: transform 0.3s;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+    }
+
+    /* create the two extra bars with pseudo-elements */
+    .line::before,
+    .line::after {
+        content: '';
+    }
+
+    /* default (circle state) – we show just one small dot */
+    .line {
+        width: 4px;
+        height: 4px;
+        border-radius: 50%;
+    }
+
+    /* OPEN STATE */
+    .nav-open .line {
+        width: 16px;
+        height: 2px;
+        border-radius: 0;
+    }
+
+    .nav-open .line::before {
+        transform: translate(-50%, -50%) rotate(45deg);
+    }
+
+    .nav-open .line::after {
+        transform: translate(-50%, -50%) rotate(-45deg);
     }

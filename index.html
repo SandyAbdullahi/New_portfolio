@@ -32,13 +32,15 @@
     <div class="hidden md:block w-1/4 h-0 border-t-2 border-lime-200"></div>
 
     <!-- Mobile toggle (lime outline circle) -->
-    <button id="mobileMenuToggle"
-            class="md:hidden w-9 h-9 rounded-full border-2 border-lime-200
-                   flex items-center justify-center
-                   transition-colors duration-300">
-      <!-- small dot for visual interest -->
-      <span class="w-1.5 h-1.5 bg-lime-200 rounded-full"></span>
-    </button>
+<!-- Mobile toggle -->
+<button id="mobileMenuToggle"
+        class="md:hidden w-9 h-9 rounded-full border-2 border-lime-200
+               grid place-content-center relative overflow-hidden transition">
+
+  <span class="line before after"></span>
+</button>
+
+
 
     <!-- Mobile menu -->
     <div id="mobileMenu"
