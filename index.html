@@ -13,7 +13,8 @@
   <link rel="stylesheet" href="assets/css/styles.css">
 </head>
 
-<body>
+<body class="overflow-x-hidden">
+
   <!-- ⬇︎  NEW overlay (put it just after <body>) -->
   <div id="intro-overlay" class="fixed inset-0 z-50 bg-[#1A2318] flex items-center justify-center">
     <!-- lime bar grows then acts as “wipe” -->
@@ -92,8 +93,9 @@
     <!-- ABOUT SECTION (replace your current block with this) -->
     <section id="about" class="bg-[#1A2318] text-white py-24 px-6 md:px-20">
       <div class="max-w-6xl mx-auto grid md:grid-cols-2 gap-12 items-center">
+
         <!-- Brutalist image -->
-        <figure class="relative h-[450px] md:h-[550px] overflow-hidden">
+        <figure class="about-img relative h-[450px] md:h-[550px] overflow-hidden">
           <img src="assets/images/profile.png" alt="Brutalist building"
             class="w-full h-full object-cover contrast-90" />
 
@@ -110,7 +112,7 @@
         </figure>
 
         <!-- Staggered text -->
-        <div class="space-y-8">
+        <div class="about-text space-y-8">
           <!-- Staggered heading -->
           <h2 class="text-5xl font-bold leading-none -translate-x-4">
             About<br><span class="pl-20">Me</span>

@@ -53,31 +53,97 @@
     })
   })
 
-  
-ScrollTrigger.matchMedia({
 
-  // ≥ 768 px (Tailwind’s `md:` breakpoint)
-  "(min-width: 768px)" : () => {
+  ScrollTrigger.matchMedia({
 
-    const introTL = gsap.timeline({ defaults:{ ease:"power4.inOut" } })
+    // ≥ 768 px (Tailwind’s `md:` breakpoint)
+    "(min-width: 768px)": () => {
 
-    introTL
-      .to(".intro-stroke",{ width:"100%", duration:0.6 })
-      .to("#intro-overlay",{ yPercent:-100, duration:1 })
-      .set("#intro-overlay",{ display:"none" })
-
-      // ← nav links animate only on desktop now
-      .from(".nav-link",{
-        y:-20,
-        opacity:0,
-        stagger:0.1,
-        duration:0.6,
-        ease:"power3.out"
+      const introTL = gsap.timeline({
+        defaults: {
+          ease: "power4.inOut"
+        }
       })
 
-      .from(".hero-accent-bar",{ scaleX:0, transformOrigin:"left center", duration:0.6 },"-=0.3")
-      .from(".hero-content h1",{ y:70, opacity:0, duration:0.8 },"-=0.3")
-      .from([".hero-copy",".hero-rule"],{ y:40, opacity:0, stagger:0.12, duration:0.6 },"-=0.5")
-  }
+      introTL
+        .to(".intro-stroke", {
+          width: "100%",
+          duration: 0.6
+        })
+        .to("#intro-overlay", {
+          yPercent: -100,
+          duration: 1
+        })
+        .set("#intro-overlay", {
+          display: "none"
+        })
 
-})
+        // ← nav links animate only on desktop now
+        .from(".nav-link", {
+          y: -20,
+          opacity: 0,
+          stagger: 0.1,
+          duration: 0.6,
+          ease: "power3.out"
+        })
+
+        .from(".hero-accent-bar", {
+          scaleX: 0,
+          transformOrigin: "left center",
+          duration: 0.6
+        }, "-=0.3")
+        .from(".hero-content h1", {
+          y: 70,
+          opacity: 0,
+          duration: 0.8
+        }, "-=0.3")
+        .from([".hero-copy", ".hero-rule"], {
+          y: 40,
+          opacity: 0,
+          stagger: 0.12,
+          duration: 0.6
+        }, "-=0.5")
+    }
+
+  })
+
+  gsap.registerPlugin(ScrollTrigger);
+
+  // Scroll-scrub animation for About
+  gsap.timeline({
+      scrollTrigger: {
+        trigger: "#about",
+        start: "top 70%", // when 70% of viewport hits section top
+        end: "bottom 30%", // until bottom of section is 30% from top
+        scrub: true, // link progress to scroll
+      }
+    })
+    // enter
+    .fromTo(".about-img", {
+      xPercent: -50,
+      opacity: 0
+    }, {
+      xPercent: 0,
+      opacity: 1,
+      ease: "power3.out"
+    }, 0)
+    .fromTo(".about-text", {
+      xPercent: 50,
+      opacity: 0
+    }, {
+      xPercent: 0,
+      opacity: 1,
+      ease: "power3.out"
+    }, 0)
+
+    // exit
+    .to(".about-img", {
+      xPercent: 40,
+      opacity: 0,
+      ease: "power3.in"
+    }, 0.5)
+    .to(".about-text", {
+      xPercent: -40,
+      opacity: 0,
+      ease: "power3.in"
+    }, 0.5);
