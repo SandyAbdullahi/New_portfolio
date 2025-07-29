@@ -54,57 +54,30 @@
   })
 
   
-  /* LOAD / INTRO timeline */
-  const introTL = gsap.timeline({
-    defaults: {
-      ease: "power4.inOut"
-    }
-  });
+ScrollTrigger.matchMedia({
 
-  introTL
-    // lime stroke grows across
-    .to(".intro-stroke", {
-      width: "100%",
-      duration: 0.6
-    })
+  // ≥ 768 px (Tailwind’s `md:` breakpoint)
+  "(min-width: 768px)" : () => {
 
-    // overlay slides up & off
-    .to("#intro-overlay", {
-      yPercent: -100,
-      duration: 1
-    })
+    const introTL = gsap.timeline({ defaults:{ ease:"power4.inOut" } })
 
-    // finally remove overlay from layout
-    .set("#intro-overlay", {
-      display: "none"
-    })
+    introTL
+      .to(".intro-stroke",{ width:"100%", duration:0.6 })
+      .to("#intro-overlay",{ yPercent:-100, duration:1 })
+      .set("#intro-overlay",{ display:"none" })
 
-    // nav links fade-in
-    .from(".nav-link", {
-      y: -20,
-      opacity: 0,
-      stagger: 0.1,
-      duration: 0.5
-    }, "-=0.4") /* overlap 0.4 s with overlay */
+      // ← nav links animate only on desktop now
+      .from(".nav-link",{
+        y:-20,
+        opacity:0,
+        stagger:0.1,
+        duration:0.6,
+        ease:"power3.out"
+      })
 
-    // hero accent bar wipes in
-    .from(".hero-accent-bar", {
-      scaleX: 0,
-      transformOrigin: "left center",
-      duration: 0.6
-    }, "-=0.3")
+      .from(".hero-accent-bar",{ scaleX:0, transformOrigin:"left center", duration:0.6 },"-=0.3")
+      .from(".hero-content h1",{ y:70, opacity:0, duration:0.8 },"-=0.3")
+      .from([".hero-copy",".hero-rule"],{ y:40, opacity:0, stagger:0.12, duration:0.6 },"-=0.5")
+  }
 
-    // headline rises
-    .from(".hero-content h1", {
-      y: 70,
-      opacity: 0,
-      duration: 0.8
-    }, "-=0.4")
-
-    // paragraph + rule
-    .from([".hero-copy", ".hero-rule"], {
-      y: 40,
-      opacity: 0,
-      stagger: 0.12,
-      duration: 0.6
-    }, "-=0.6");
+})
