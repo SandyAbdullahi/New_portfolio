@@ -69,15 +69,17 @@
   <section class="min-h-[80vh] flex items-center">
     <div class="px-8 md:pl-[55%] space-y-8">
 
-      <!-- Staggered headline -->
-      <h1 class="leading-none font-bold">
-        <span class="block text-[12vw] md:text-[7rem] text-lime-200 -translate-x-4">
-          ABDULL
-        </span>
-        <span class="block text-[12vw] md:text-[7rem] text-lime-200 translate-x-8">
-          AHINUR
-        </span>
-      </h1>
+<!-- HERO HEADLINE (responsive, no overflow) -->
+<h1 class="relative font-extrabold leading-none tracking-tight break-words
+           text-lime-200
+           text-[clamp(2.5rem,10vw,6rem)]">
+
+  ABDULLAHI<wbr>
+
+  <!-- accent bar -->
+  <span class="absolute bottom-1 md:bottom-2 left-1/4 w-1/2 h-1 bg-lime-200"></span>
+</h1>
+
 
       <!-- Copy -->
       <p class="text-lg md:text-xl text-lime-100 max-w-xl tracking-wide">
