@@ -8,16 +8,19 @@
   <meta name="theme-color" content="#1A2318" />
   <title>Abdulhilnur | Web Developer</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@400;500&display=swap"
+    rel="stylesheet">
   <style>
     body {
       font-family: 'Inter', sans-serif;
     }
+
     h1 {
       font-family: 'Playfair Display', serif;
     }
+
     .bg-hero {
-      background-image: url('hero1.png');
+      background-image: url('/hero1.png');
       background-size: cover;
       background-position: center;
     }
@@ -25,57 +28,144 @@
 </head>
 
 <body>
-<section class="text-white bg-hero">
+  <section class="text-white bg-hero">
 
-  <!-- Navbar -->
-  <header class="flex justify-between items-center px-10 py-6 uppercase text-sm tracking-wide relative">
-    <nav class="hidden md:flex space-x-8">
-      <a href="#work" class="hover:underline">Work</a>
-      <a href="#about" class="hover:underline">About</a>
-      <a href="#blog" class="hover:underline">Blog</a>
-      <a href="#contact" class="hover:underline">Contact</a>
-    </nav>
-    <div class="w-1/3 h-[1px] bg-white hidden md:block"></div>
+    <!-- Navbar -->
+    <header class="flex justify-between items-center px-10 py-6 uppercase text-sm tracking-wide relative">
+      <nav class="hidden md:flex space-x-8">
+        <a href="#work" class="hover:underline">Work</a>
+        <a href="#about" class="hover:underline">About</a>
+        <a href="#blog" class="hover:underline">Blog</a>
+        <a href="#contact" class="hover:underline">Contact</a>
+      </nav>
+      <div class="w-1/3 h-[1px] bg-white hidden md:block"></div>
 
-    <!-- Mobile Nav Button -->
-    <div class="md:hidden">
-      <button id="mobileMenuToggle" class="w-8 h-8 rounded-full bg-white"></button>
-    </div>
+      <!-- Mobile Nav Button -->
+      <div class="md:hidden">
+        <button id="mobileMenuToggle" class="w-8 h-8 rounded-full bg-white"></button>
+      </div>
 
-    <!-- Mobile Menu -->
-    <div id="mobileMenu" class="hidden absolute top-20 left-0 w-full bg-[#1A2318] text-white flex flex-col items-center space-y-4 py-4 md:hidden">
-      <a href="#work" class="hover:underline">Work</a>
-      <a href="#about" class="hover:underline">About</a>
-      <a href="#blog" class="hover:underline">Blog</a>
-      <a href="#contact" class="hover:underline">Contact</a>
-    </div>
-  </header>
+      <!-- Mobile Menu -->
+      <div id="mobileMenu"
+        class="hidden absolute top-20 left-0 w-full bg-[#1A2318] text-white flex flex-col items-center space-y-4 py-4 md:hidden">
+        <a href="#work" class="hover:underline">Work</a>
+        <a href="#about" class="hover:underline">About</a>
+        <a href="#blog" class="hover:underline">Blog</a>
+        <a href="#contact" class="hover:underline">Contact</a>
+      </div>
+    </header>
 
-  <!-- Hero Section -->
-  <section class="min-h-[80vh] flex items-center">
-    <div class="px-10 md:pl-[55%] space-y-6">
-      <h1 class="text-4xl md:text-7xl text-lime-200">ABDULLAHINUR</h1>
-      <p class="text-lg text-lime-100 max-w-xl">
-        A web developer and designer crafting modern, user-friendly websites.
-      </p>
-      <div class="w-2/3 h-[1px] bg-lime-100"></div>
+    <!-- Hero Section -->
+    <section class="min-h-[80vh] flex items-center">
+      <div class="px-10 md:pl-[55%] space-y-6">
+        <h1 class="text-4xl md:text-7xl text-lime-200">ABDULLAHINUR</h1>
+        <p class="text-lg text-lime-100 max-w-xl">
+          A web developer and designer crafting modern, user-friendly websites.
+        </p>
+        <div class="w-2/3 h-[1px] bg-lime-100"></div>
+      </div>
+    </section>
+  </section>
+
+  <!-- Bottom White Space -->
+  <section class="mt-[-5rem] h-[30vh] bg-[#1A2318] flex items-center justify-center">
+    <div class="w-1/2 h-[1px] bg-white"></div>
+  </section>
+
+  <!-- ABOUT SECTION (replace your current block with this) -->
+  <section id="about" class="bg-[#1A2318] text-white py-24 px-6 md:px-20">
+    <div class="max-w-6xl mx-auto grid md:grid-cols-2 gap-12 items-center">
+      <!-- Brutalist image -->
+      <figure class="relative h-[450px] md:h-[550px] overflow-hidden">
+        <img src="/brutalism1.png" alt="Brutalist building" class="w-full h-full object-cover grayscale contrast-90" />
+
+        <!-- Overlapping CTA button – updated style -->
+        <button class="absolute -right-6 bottom-8 
+         border-2 border-lime-200 text-lime-200
+         uppercase tracking-wider font-medium
+         px-10 py-3
+         transition-colors duration-300
+         hover:bg-lime-200 hover:text-[#1A2318]">
+          Who&nbsp;I&nbsp;Am
+        </button>
+
+      </figure>
+
+      <!-- Staggered text -->
+      <div class="space-y-8">
+        <!-- Staggered heading -->
+        <h2 class="text-5xl font-bold leading-none -translate-x-4">
+          About<br><span class="pl-20">Me</span>
+        </h2>
+
+        <!-- Staggered paragraphs -->
+        <p class="text-lg leading-relaxed max-w-prose translate-x-6">
+          I'm Abdullhinur, a Nairobi-based web engineer blending brutalist
+          influences with clean, performant code. I thrive on turning complex
+          problems into intuitive digital experiences.
+        </p>
+
+        <p class="text-lg leading-relaxed max-w-prose -translate-x-2">
+          Whether it's backend integrations, pixel-perfect UIs, or bold brand
+          identities, I craft solutions that are as practical as they are
+          visually striking.
+        </p>
+      </div>
     </div>
   </section>
+  <!-- WORK SECTION  ───────────────────────────────────────────── -->
+<section id="work" class="bg-[#E3E3CF] text-[#1A2318] py-28 px-6 md:px-20">
+  <div class="max-w-6xl mx-auto">
+
+    <!-- Staggered heading -->
+    <h2 class="text-5xl font-bold leading-none -translate-x-2 mb-14">
+      Selected<br><span class="pl-24">Work</span>
+    </h2>
+
+    <!-- Flat, brutalist cards -->
+    <div class="grid md:grid-cols-3 gap-10">
+      <!-- Card 1 -->
+      <a href="#" class="group relative border-2 border-lime-200 p-8 bg-[#1A2318] text-lime-100
+                        hover:bg-lime-200 hover:text-[#1A2318] transition-colors">
+        <h3 class="text-2xl font-semibold tracking-wide">E-Commerce&nbsp;Platform</h3>
+        <p class="mt-6 text-sm tracking-wider opacity-80">React • Node.js</p>
+
+        <!-- Little accent square -->
+        <span class="absolute top-6 right-6 w-4 h-4 bg-lime-200 group-hover:bg-[#1A2318]"></span>
+      </a>
+
+      <!-- Card 2 -->
+      <a href="#" class="group relative border-2 border-lime-200 p-8 bg-[#1A2318] text-lime-100
+                        hover:bg-lime-200 hover:text-[#1A2318] transition-colors">
+        <h3 class="text-2xl font-semibold tracking-wide">Portfolio&nbsp;Website</h3>
+        <p class="mt-6 text-sm tracking-wider opacity-80">HTML • CSS</p>
+        <span class="absolute top-6 right-6 w-4 h-4 bg-lime-200 group-hover:bg-[#1A2318]"></span>
+      </a>
+
+      <!-- Card 3 -->
+      <a href="#" class="group relative border-2 border-lime-200 p-8 bg-[#1A2318] text-lime-100
+                        hover:bg-lime-200 hover:text-[#1A2318] transition-colors">
+        <h3 class="text-2xl font-semibold tracking-wide">Task Manager&nbsp;App</h3>
+        <p class="mt-6 text-sm tracking-wider opacity-80">Vue • Firebase</p>
+        <span class="absolute top-6 right-6 w-4 h-4 bg-lime-200 group-hover:bg-[#1A2318]"></span>
+      </a>
+    </div>
+
+    <!-- Brutalist divider line -->
+    <div class="mt-24 border-t border-[#1A2318]"></div>
+  </div>
 </section>
 
-<!-- Bottom White Space -->
-<section class="mt-[-5rem] h-[30vh] bg-[#1A2318] flex items-center justify-center">
-  <div class="w-1/2 h-[1px] bg-white"></div>
-</section>
 
-<script>
-  const toggleBtn = document.getElementById('mobileMenuToggle');
-  const mobileMenu = document.getElementById('mobileMenu');
 
-  toggleBtn.addEventListener('click', () => {
-    mobileMenu.classList.toggle('hidden');
-  });
-</script>
+  <script>
+    const toggleBtn = document.getElementById('mobileMenuToggle');
+    const mobileMenu = document.getElementById('mobileMenu');
+
+    toggleBtn.addEventListener('click', () => {
+      mobileMenu.classList.toggle('hidden');
+    });
+  </script>
 
 </body>
 
