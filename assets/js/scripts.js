@@ -14,76 +14,45 @@
     toggleBtn.classList.toggle('bg-lime-200'); // optional circle fill
   });
 
-  // Smooth scroll (optional)
-  const lenis = new Lenis({
-    smooth: true,
-    lerp: 0.08 // damping
-  })
 
-  function raf(time) {
-    lenis.raf(time);
-    requestAnimationFrame(raf)
-  }
-  requestAnimationFrame(raf)
+  /* ─────────────────────────────
+     0.  SMOOTH SCROLL (Lenis)
+  ───────────────────────────────*/
+  const lenis = new Lenis({ smooth: true, lerp: 0.08 });
+  function raf(t) { lenis.raf(t); requestAnimationFrame(raf); }
+  requestAnimationFrame(raf);
 
-  // GSAP
+  /* ─────────────────────────────
+     1.  GSAP & SCROLLTRIGGER
+  ───────────────────────────────*/
+  gsap.registerPlugin(ScrollTrigger);
 
-  // Work section: vertical enter ➜ exit
-  gsap.timeline({
-    scrollTrigger: {
-      trigger: "#work",
-      start: "top 70%",
-      end: "bottom 30%",
-      scrub: true,          // link motion to scroll
-    }
-  })
-  // 🡅 Title slides in from below then exits up
-  .fromTo("#workHeading",
-    { yPercent: 100, opacity: 0 },
-    { yPercent: 0,   opacity: 1, ease: "power3.out" },
-    0)
-
-  .to("#workHeading",
-    { yPercent: -60, opacity: 0, ease: "power3.in" },
-    0.6)
-
-  // 🡅 Cards stagger up / down
-  .fromTo(".work-card",
-    { yPercent: 50, opacity: 0 },
-    { yPercent: 0,  opacity: 1, stagger: 0.15, ease: "power3.out" },
-    0.2)
-
-  .to(".work-card",
-    { yPercent: -40, opacity: 0, stagger: 0.15, ease: "power3.in" },
-    0.7);
-
-
-
+  /* ─────────────────────────────
+     2.  INTRO OVERLAY LOGIC
+  ───────────────────────────────*/
   ScrollTrigger.matchMedia({
 
-    // ≥ 768 px (Tailwind’s `md:` breakpoint)
+    /* 2A ▸ MOBILE (< 768 px)  — hide overlay immediately */
+    "(max-width: 767px)": () => {
+      gsap.set("#intro-overlay", { display: "none" });
+    },
+
+    /* 2B ▸ DESKTOP (≥ 768 px) — full intro timeline */
     "(min-width: 768px)": () => {
 
-      const introTL = gsap.timeline({
-        defaults: {
-          ease: "power4.inOut"
-        }
-      })
+      const introTL = gsap.timeline({ defaults: { ease: "power4.inOut" } });
 
       introTL
-        .to(".intro-stroke", {
-          width: "100%",
-          duration: 0.6
-        })
-        .to("#intro-overlay", {
-          yPercent: -100,
-          duration: 1
-        })
-        .set("#intro-overlay", {
-          display: "none"
-        })
+        /* lime stroke grows */
+        .to(".intro-stroke", { width: "100%", duration: 0.6 })
 
-        // ← nav links animate only on desktop now
+        /* overlay curtain slides up */
+        .to("#intro-overlay", { yPercent: -100, duration: 1 })
+
+        /* remove overlay from DOM flow */
+        .set("#intro-overlay", { display: "none" })
+
+        /* nav links fade-in */
         .from(".nav-link", {
           y: -20,
           opacity: 0,
@@ -92,6 +61,7 @@
           ease: "power3.out"
         })
 
+        /* hero elements */
         .from(".hero-accent-bar", {
           scaleX: 0,
           transformOrigin: "left center",
@@ -107,48 +77,52 @@
           opacity: 0,
           stagger: 0.12,
           duration: 0.6
-        }, "-=0.5")
+        }, "-=0.5");
     }
 
-  })
+  }); // end matchMedia for intro
 
-  gsap.registerPlugin(ScrollTrigger);
-
-  // Scroll-scrub animation for About
+  /* ─────────────────────────────
+     3.  ABOUT SECTION SCRUB
+  ───────────────────────────────*/
   gsap.timeline({
-      scrollTrigger: {
-        trigger: "#about",
-        start: "top 70%", // when 70% of viewport hits section top
-        end: "bottom 30%", // until bottom of section is 30% from top
-        scrub: true, // link progress to scroll
-      }
-    })
-    // enter
-    .fromTo(".about-img", {
-      xPercent: -50,
-      opacity: 0
-    }, {
-      xPercent: 0,
-      opacity: 1,
-      ease: "power3.out"
-    }, 0)
-    .fromTo(".about-text", {
-      xPercent: 50,
-      opacity: 0
-    }, {
-      xPercent: 0,
-      opacity: 1,
-      ease: "power3.out"
-    }, 0)
+    scrollTrigger: {
+      trigger: "#about",
+      start: "top 70%",
+      end:   "bottom 30%",
+      scrub: true,
+    }
+  })
+  .fromTo(".about-img",
+          { xPercent: -50, opacity: 0 },
+          { xPercent:   0, opacity: 1, ease: "power3.out" }, 0)
+  .fromTo(".about-text",
+          { xPercent:  50, opacity: 0 },
+          { xPercent:   0, opacity: 1, ease: "power3.out" }, 0)
+  .to(".about-img",
+      { xPercent:  40, opacity: 0, ease: "power3.in" }, 0.5)
+  .to(".about-text",
+      { xPercent: -40, opacity: 0, ease: "power3.in" }, 0.5);
 
-    // exit
-    .to(".about-img", {
-      xPercent: 40,
-      opacity: 0,
-      ease: "power3.in"
-    }, 0.5)
-    .to(".about-text", {
-      xPercent: -40,
-      opacity: 0,
-      ease: "power3.in"
-    }, 0.5);
+  /* ─────────────────────────────
+     4.  WORK SECTION SCRUB
+  ───────────────────────────────*/
+  gsap.timeline({
+    scrollTrigger: {
+      trigger: "#work",
+      start: "top 70%",
+      end:   "bottom 30%",
+      scrub: true,
+    }
+  })
+  .fromTo("#workHeading",
+          { yPercent: 100, opacity: 0 },
+          { yPercent:   0, opacity: 1, ease: "power3.out" }, 0)
+  .to("#workHeading",
+       { yPercent: -60, opacity: 0, ease: "power3.in" }, 0.6)
+  .fromTo(".work-card",
+          { yPercent:  50, opacity: 0 },
+          { yPercent:   0, opacity: 1, stagger: 0.15, ease: "power3.out" }, 0.2)
+  .to(".work-card",
+       { yPercent: -40, opacity: 0, stagger: 0.15, ease: "power3.in" }, 0.7);
+
