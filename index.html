@@ -1,154 +1,82 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Abdullahinur — Web Designer</title>
+  <meta name="description" content="Portfolio of Abdulhilnur - Web Developer & Designer" />
+  <meta name="theme-color" content="#1A2318" />
+  <title>Abdulhilnur | Web Developer</title>
   <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@400;500&display=swap" rel="stylesheet">
   <style>
-    :root {
-      --deep-blue: #0038a8;
-      --sky-blue: #07C7F2;
-      --sun-yellow: #F2E313;
-      --orange: #F29F05;
-      --red: #F20505;
-    }
     body {
       font-family: 'Inter', sans-serif;
     }
+    h1 {
+      font-family: 'Playfair Display', serif;
+    }
+    .bg-hero {
+      background-image: url('/hero1.png');
+      background-size: cover;
+      background-position: center;
+    }
   </style>
 </head>
-<body class=" text-white font-sans">
 
-  <!-- Hero with Fullscreen Background -->
-  <section class="relative h-screen w-full bg-cover bg-center bg-no-repeat" 
-           style="background-image: url('hero2.png');">
-    
-    <!-- Optional dark overlay for readability (can remove) -->
-    <!-- <div class="absolute inset-0 bg-black/20"></div> -->
+<body>
+<section class="text-white bg-hero">
 
-    <!-- Navbar -->
-    <nav class="relative z-10 flex justify-between items-center p-6 max-w-6xl mx-auto">
-      <div class="font-bold text-lg">LOGO</div>
-      <ul class="flex space-x-8 text-[var(--sun-yellow)] font-medium">
-        <li><a href="#about" class="hover:text-[var(--sky-blue)]">About</a></li>
-        <li><a href="#projects" class="hover:text-[var(--sky-blue)]">Work</a></li>
-        <li><a href="#contact" class="hover:text-[var(--sky-blue)]">Contact</a></li>
-      </ul>
+  <!-- Navbar -->
+  <header class="flex justify-between items-center px-10 py-6 uppercase text-sm tracking-wide relative">
+    <nav class="hidden md:flex space-x-8">
+      <a href="#work" class="hover:underline">Work</a>
+      <a href="#about" class="hover:underline">About</a>
+      <a href="#blog" class="hover:underline">Blog</a>
+      <a href="#contact" class="hover:underline">Contact</a>
     </nav>
+    <div class="w-1/3 h-[1px] bg-white hidden md:block"></div>
 
-<!-- Hero Text Content -->
-<div class="relative z-10 flex flex-col justify-center items-start max-w-6xl mx-auto h-[60vh] px-6 mt-10 md:mt-16">
-  <h1 class="text-5xl md:text-9xl font-extrabold text-[var(--sun-yellow)] leading-tight mb-4">
-    Hi, <br />I’m a Web Designer
-  </h1>
-  <p class="text-xl md:text-3xl mb-6 max-w-md">I craft responsive and engaging websites</p>
-  <a href="#projects"
-     class="inline-block bg-[var(--red)] text-white px-6 py-3 rounded-lg shadow-lg 
-            hover:bg-[var(--orange)] transition font-semibold">
-    View My Work
-  </a>
-</div>
-  </section>
-<!-- Bold Statement Section -->
-<section class="bg-[var(--red)] py-20 md:py-60">
-  <div class="max-w-7xl mx-auto flex flex-col md:flex-row">
-    <div class="md:w-7/10 w-full text-left md:pl-12 md:pr-24 px-6">
-      <h2 class="text-4xl md:text-8xl font-extrabold text-[#650f0f] leading-tight">
-Designing vibrant brands for Nairobi and beyond.
-      </h2>
+    <!-- Mobile Nav Button -->
+    <div class="md:hidden">
+      <button id="mobileMenuToggle" class="w-8 h-8 rounded-full bg-white"></button>
     </div>
-  </div>
-</section>
 
+    <!-- Mobile Menu -->
+    <div id="mobileMenu" class="hidden absolute top-20 left-0 w-full bg-[#1A2318] text-white flex flex-col items-center space-y-4 py-4 md:hidden">
+      <a href="#work" class="hover:underline">Work</a>
+      <a href="#about" class="hover:underline">About</a>
+      <a href="#blog" class="hover:underline">Blog</a>
+      <a href="#contact" class="hover:underline">Contact</a>
+    </div>
+  </header>
 
-  <!-- Projects Section -->
-  <section id="projects" class="bg-[#F5F0E1] text-black py-16">
-    <div class="max-w-6xl mx-auto px-6">
-      <h2 class="text-3xl font-bold text-[var(--red)] mb-10">Projects</h2>
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-        
-        <!-- Project 1 -->
-        <div class="bg-[var(--red)] text-white p-6 rounded-lg h-[50vh]">
-          <h3 class="text-2xl font-bold mb-2">Project One</h3>
-          <div class="space-x-2">
-            <span class="bg-[var(--sun-yellow)] text-black px-3 py-1 text-sm rounded">Unihoage</span>
-            <span class="bg-[var(--sun-yellow)] text-black px-3 py-1 text-sm rounded">Fromandi Development</span>
-          </div>
-        </div>
-
-        <!-- Project 2 -->
-        <div class="bg-[var(--deep-blue)] text-white p-6 rounded-lg h-[50vh]">
-          <h3 class="text-2xl font-bold mb-2">Project Two</h3>
-          <span class="bg-[var(--sky-blue)] text-black px-3 py-1 text-sm rounded">Fromandi Development</span>
-        </div>
-
-        <!-- Project 3 -->
-        <div class="bg-[var(--sun-yellow)] text-black p-6 rounded-lg h-[50vh]">
-          <h3 class="text-2xl font-bold mb-2">Project Three</h3>
-          <span class="bg-[var(--deep-blue)] text-white px-3 py-1 text-sm rounded">Fromandi Development</span>
-        </div>
-
-        <!-- Project 4 -->
-        <div class="bg-[var(--orange)] text-black p-6 rounded-lg h-[50vh]">
-          <h3 class="text-2xl font-bold mb-2">Project Four</h3>
-          <span class="bg-[var(--sun-yellow)] text-black px-3 py-1 text-sm rounded">Fromandi Development</span>
-        </div>
-      </div>
+  <!-- Hero Section -->
+  <section class="min-h-[80vh] flex items-center">
+    <div class="px-10 md:pl-[55%] space-y-6">
+      <h1 class="text-4xl md:text-7xl text-lime-200">ABDULLAHINUR</h1>
+      <p class="text-lg text-lime-100 max-w-xl">
+        A web developer and designer crafting modern, user-friendly websites.
+      </p>
+      <div class="w-2/3 h-[1px] bg-lime-100"></div>
     </div>
   </section>
-<section class="bg-[#fefefe] text-black py-16">
-  <div class="max-w-6xl mx-auto px-6 text-center">
-    <h3 class="text-2xl md:text-4xl font-semibold mb-8">Trusted by ambitious brands</h3>
-    <div class="flex flex-wrap justify-center gap-8">
-      <!-- Replace with real logos or styled name blocks -->
-      <div class="text-xl font-bold text-[var(--deep-blue)]">Mama Zaza’s</div>
-      <div class="text-xl font-bold text-[var(--orange)]">Yare Ltd</div>
-      <div class="text-xl font-bold text-[var(--sky-blue)]">Fromandi Dev</div>
-    </div>
-  </div>
 </section>
-  <!-- Impact Statement Section -->
-<section class="bg-[var(--deep-blue)] py-20 md:py-60">
-  <div class="max-w-7xl mx-auto px-6">
-    <div class="md:w-3/4">
-      <h2 class="text-4xl md:text-8xl font-extrabold tracking-tight leading-tight">
-        <span class="block text-white">Bold ideas. Real impact.</span>
-        <span class="block text-[var(--sun-yellow)]">Digital design with a purpose.</span>
-      </h2>
-    </div>
-  </div>
+
+<!-- Bottom White Space -->
+<section class="mt-[-5rem] h-[30vh] bg-[#1A2318] flex items-center justify-center">
+  <div class="w-1/2 h-[1px] bg-white"></div>
 </section>
-<section class="bg-[#fff8f2] py-20 text-black">
-  <div class="max-w-4xl mx-auto px-6 text-center">
-    <h3 class="text-2xl font-bold mb-10">Client Praise</h3>
-    <div class="grid md:grid-cols-2 gap-6">
-      <div class="p-6 rounded-lg shadow bg-white">
-        <p>"Abdullahinur captured our brand better than we imagined."</p>
-        <div class="mt-4 text-sm font-medium text-[var(--red)]">— Mama Zaza’s</div>
-      </div>
-      <div class="p-6 rounded-lg shadow bg-white">
-        <p>"Our site feels fresh, local, and incredibly professional."</p>
-        <div class="mt-4 text-sm font-medium text-[var(--orange)]">— Yare Ltd</div>
-      </div>
-    </div>
-  </div>
-</section>
-<section class="bg-[var(--red)] text-white py-20 text-center">
-  <div class="max-w-2xl mx-auto px-6">
-    <h3 class="text-3xl font-bold mb-6">Let’s make your brand unforgettable.</h3>
-    <p class="mb-6">Whether you're a Nairobi local or scaling globally, I design experiences that connect.</p>
-    <a href="#contact"
-       class="inline-block bg-[var(--sun-yellow)] text-black px-6 py-3 rounded-lg shadow-lg 
-              hover:bg-[var(--orange)] transition font-semibold">
-      Start Your Project
-    </a>
-  </div>
-</section>
-  <!-- Footer -->
-  <footer class="bg-[var(--red)] text-center py-6 text-slate-200">
-    &copy; 2025 Abdullahinur. Designed with love and TailwindCSS.
-  </footer>
+
+<script>
+  const toggleBtn = document.getElementById('mobileMenuToggle');
+  const mobileMenu = document.getElementById('mobileMenu');
+
+  toggleBtn.addEventListener('click', () => {
+    mobileMenu.classList.toggle('hidden');
+  });
+</script>
 
 </body>
+
 </html>
