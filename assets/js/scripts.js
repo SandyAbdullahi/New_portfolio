@@ -27,31 +27,36 @@
   requestAnimationFrame(raf)
 
   // GSAP
-  gsap.registerPlugin(ScrollTrigger)
-  gsap.from(".work-card", {
-    y: 60,
-    opacity: 0,
-    duration: 0.8,
-    stagger: 0.15,
-    ease: "power3.out",
+
+  // Work section: vertical enter ➜ exit
+  gsap.timeline({
     scrollTrigger: {
       trigger: "#work",
-      start: "top 70%", // when section enters viewport
+      start: "top 70%",
+      end: "bottom 30%",
+      scrub: true,          // link motion to scroll
     }
   })
+  // 🡅 Title slides in from below then exits up
+  .fromTo("#workHeading",
+    { yPercent: 100, opacity: 0 },
+    { yPercent: 0,   opacity: 1, ease: "power3.out" },
+    0)
 
+  .to("#workHeading",
+    { yPercent: -60, opacity: 0, ease: "power3.in" },
+    0.6)
 
-  gsap.utils.toArray(".reveal-up").forEach(el => {
-    gsap.from(el, {
-      y: 80,
-      opacity: 0,
-      duration: 0.6,
-      scrollTrigger: {
-        trigger: el,
-        start: "top 85%"
-      }
-    })
-  })
+  // 🡅 Cards stagger up / down
+  .fromTo(".work-card",
+    { yPercent: 50, opacity: 0 },
+    { yPercent: 0,  opacity: 1, stagger: 0.15, ease: "power3.out" },
+    0.2)
+
+  .to(".work-card",
+    { yPercent: -40, opacity: 0, stagger: 0.15, ease: "power3.in" },
+    0.7);
+
 
 
   ScrollTrigger.matchMedia({
