@@ -21,50 +21,73 @@
 
     .bg-hero {
       background-image: url('hero1.png');
-      background-size: cover;
+      /* background-size: cover; */
       background-position: center;
     }
   </style>
 </head>
 
 <body>
-  <section class="text-white bg-hero">
+<!-- HERO + NAV  ────────────────────────────────────────────── -->
+<section class="text-white bg-hero">
 
-    <!-- Navbar -->
-    <header class="flex justify-between items-center px-10 py-6 uppercase text-sm tracking-wide relative">
-      <nav class="hidden md:flex space-x-8">
-        <a href="#work" class="hover:underline">Work</a>
-        <a href="#about" class="hover:underline">About</a>
-        <a href="#blog" class="hover:underline">Blog</a>
-        <a href="#contact" class="hover:underline">Contact</a>
-      </nav>
-      <div class="w-1/3 h-[1px] bg-white hidden md:block"></div>
+  <!-- Navbar -->
+  <header class="flex justify-between items-center px-8 md:px-10 py-6 uppercase text-sm tracking-widest relative">
 
-      <!-- Mobile Nav Button -->
-      <div class="md:hidden">
-        <button id="mobileMenuToggle" class="w-8 h-8 rounded-full bg-white"></button>
-      </div>
+    <!-- Desktop nav -->
+    <nav class="hidden md:flex space-x-10">
+      <a href="#work"    class="hover:text-lime-200 transition">Work</a>
+      <a href="#about"   class="hover:text-lime-200 transition">About</a>
+      <a href="#blog"    class="hover:text-lime-200 transition">Blog</a>
+      <a href="#contact" class="hover:text-lime-200 transition">Contact</a>
+    </nav>
 
-      <!-- Mobile Menu -->
-      <div id="mobileMenu"
-        class="hidden absolute top-20 left-0 w-full bg-[#1A2318] text-white flex flex-col items-center space-y-4 py-4 md:hidden">
-        <a href="#work" class="hover:underline">Work</a>
-        <a href="#about" class="hover:underline">About</a>
-        <a href="#blog" class="hover:underline">Blog</a>
-        <a href="#contact" class="hover:underline">Contact</a>
-      </div>
-    </header>
+    <!-- Brutalist divider -->
+    <div class="hidden md:block w-1/4 h-0 border-t-2 border-lime-200"></div>
 
-    <!-- Hero Section -->
-    <section class="min-h-[80vh] flex items-center">
-      <div class="px-10 md:pl-[55%] space-y-6">
-        <h1 class="text-4xl md:text-7xl text-lime-200">ABDULLAHINUR</h1>
-        <p class="text-lg text-lime-100 max-w-xl">
-          A web developer and designer crafting modern, user-friendly websites.
-        </p>
-        <div class="w-2/3 h-[1px] bg-lime-100"></div>
-      </div>
-    </section>
+    <!-- Mobile toggle (lime outline circle) -->
+    <button id="mobileMenuToggle"
+            class="md:hidden w-9 h-9 rounded-full border-2 border-lime-200
+                   flex items-center justify-center
+                   transition-colors duration-300">
+      <!-- small dot for visual interest -->
+      <span class="w-1.5 h-1.5 bg-lime-200 rounded-full"></span>
+    </button>
+
+    <!-- Mobile menu -->
+    <div id="mobileMenu"
+         class="hidden absolute top-full left-0 w-full bg-[#1A2318] text-white
+                flex flex-col items-center space-y-6 py-8 md:hidden">
+      <a href="#work"    class="hover:text-lime-200">Work</a>
+      <a href="#about"   class="hover:text-lime-200">About</a>
+      <a href="#blog"    class="hover:text-lime-200">Blog</a>
+      <a href="#contact" class="hover:text-lime-200">Contact</a>
+    </div>
+  </header>
+
+  <!-- Hero -->
+  <section class="min-h-[80vh] flex items-center">
+    <div class="px-8 md:pl-[55%] space-y-8">
+
+      <!-- Staggered headline -->
+      <h1 class="leading-none font-bold">
+        <span class="block text-[12vw] md:text-[7rem] text-lime-200 -translate-x-4">
+          ABDULL
+        </span>
+        <span class="block text-[12vw] md:text-[7rem] text-lime-200 translate-x-8">
+          AHINUR
+        </span>
+      </h1>
+
+      <!-- Copy -->
+      <p class="text-lg md:text-xl text-lime-100 max-w-xl tracking-wide">
+        Web developer &amp; designer crafting modern, user-focused digital
+        experiences blending brutalist structure with flat-style clarity.
+      </p>
+
+      <!-- Lime rule -->
+      <div class="w-2/3 h-0 border-t-2 border-lime-200"></div>
+    </div>
   </section>
 
   <!-- Bottom White Space -->
@@ -113,58 +136,154 @@
       </div>
     </div>
   </section>
-  <!-- WORK SECTION  ───────────────────────────────────────────── -->
+<!-- WORK SECTION ───────────────────────────────────────────── -->
 <section id="work" class="bg-[#E3E3CF] text-[#1A2318] py-28 px-6 md:px-20">
   <div class="max-w-6xl mx-auto">
 
-    <!-- Staggered heading -->
-    <h2 class="text-5xl font-bold leading-none -translate-x-2 mb-14">
+    <!-- Heading -->
+    <h2 class="text-5xl font-bold leading-none -translate-x-2 mb-20">
       Selected<br><span class="pl-24">Work</span>
     </h2>
 
-    <!-- Flat, brutalist cards -->
-    <div class="grid md:grid-cols-3 gap-10">
-      <!-- Card 1 -->
-      <a href="#" class="group relative border-2 border-lime-200 p-8 bg-[#1A2318] text-lime-100
-                        hover:bg-lime-200 hover:text-[#1A2318] transition-colors">
-        <h3 class="text-2xl font-semibold tracking-wide">E-Commerce&nbsp;Platform</h3>
-        <p class="mt-6 text-sm tracking-wider opacity-80">React • Node.js</p>
+    <!-- Cards grid -->
+    <div class="grid md:grid-cols-3 gap-12">
 
-        <!-- Little accent square -->
-        <span class="absolute top-6 right-6 w-4 h-4 bg-lime-200 group-hover:bg-[#1A2318]"></span>
+      <!-- CARD ─ 01 -->
+      <a href="#" class="relative group border-2 border-lime-200 bg-[#1A2318] text-lime-100
+                         px-10 pt-14 pb-10 overflow-hidden
+                         hover:shadow-2xl transition-shadow duration-300">
+
+        <span class="absolute inset-y-0 left-0 w-2 bg-lime-200"></span>
+        <span class="absolute -top-4 -right-2 text-[10rem] font-bold
+                     text-lime-200/10 pointer-events-none select-none">01</span>
+
+        <h3 class="text-3xl font-extrabold uppercase tracking-tight">E-Commerce Platform</h3>
+        <p class="mt-8 text-sm tracking-widest opacity-80">React • Node.js</p>
       </a>
 
-      <!-- Card 2 -->
-      <a href="#" class="group relative border-2 border-lime-200 p-8 bg-[#1A2318] text-lime-100
-                        hover:bg-lime-200 hover:text-[#1A2318] transition-colors">
-        <h3 class="text-2xl font-semibold tracking-wide">Portfolio&nbsp;Website</h3>
-        <p class="mt-6 text-sm tracking-wider opacity-80">HTML • CSS</p>
-        <span class="absolute top-6 right-6 w-4 h-4 bg-lime-200 group-hover:bg-[#1A2318]"></span>
+      <!-- CARD ─ 02 -->
+      <a href="#" class="relative group border-2 border-lime-200 bg-[#1A2318] text-lime-100
+                         px-10 pt-14 pb-10 overflow-hidden
+                         hover:shadow-2xl transition-shadow duration-300">
+
+        <span class="absolute inset-y-0 left-0 w-2 bg-lime-200"></span>
+        <span class="absolute -top-4 -right-2 text-[10rem] font-bold
+                     text-lime-200/10 pointer-events-none select-none">02</span>
+
+        <h3 class="text-3xl font-extrabold uppercase tracking-tight">Portfolio Website</h3>
+        <p class="mt-8 text-sm tracking-widest opacity-80">HTML • CSS</p>
       </a>
 
-      <!-- Card 3 -->
-      <a href="#" class="group relative border-2 border-lime-200 p-8 bg-[#1A2318] text-lime-100
-                        hover:bg-lime-200 hover:text-[#1A2318] transition-colors">
-        <h3 class="text-2xl font-semibold tracking-wide">Task Manager&nbsp;App</h3>
-        <p class="mt-6 text-sm tracking-wider opacity-80">Vue • Firebase</p>
-        <span class="absolute top-6 right-6 w-4 h-4 bg-lime-200 group-hover:bg-[#1A2318]"></span>
+      <!-- CARD ─ 03 -->
+      <a href="#" class="relative group border-2 border-lime-200 bg-[#1A2318] text-lime-100
+                         px-10 pt-14 pb-10 overflow-hidden
+                         hover:shadow-2xl transition-shadow duration-300">
+
+        <span class="absolute inset-y-0 left-0 w-2 bg-lime-200"></span>
+        <span class="absolute -top-4 -right-2 text-[10rem] font-bold
+                     text-lime-200/10 pointer-events-none select-none">03</span>
+
+        <h3 class="text-3xl font-extrabold uppercase tracking-tight">Task Manager App</h3>
+        <p class="mt-8 text-sm tracking-widest opacity-80">Vue • Firebase</p>
       </a>
     </div>
 
-    <!-- Brutalist divider line -->
-    <div class="mt-24 border-t border-[#1A2318]"></div>
+    <!-- Divider -->
+    <div class="mt-24 border-t-2 border-[#1A2318]/30"></div>
   </div>
 </section>
+
+<!-- DESIGN MANIFESTO  ───────────────────────────────────────── -->
+<section id="manifesto"
+         class="bg-[#1A2318] text-lime-200 py-36 px-6 md:px-20 overflow-hidden">
+  <div class="max-w-6xl mx-auto relative">
+
+    <!-- Giant staggered headline -->
+    <h2 class="uppercase font-bold leading-none tracking-tight">
+      <span class="block text-[11vw] md:text-[10rem] -translate-x-6">
+        Design
+      </span>
+      <span class="block text-[#E3E3CF] text-[11vw] md:text-[10rem] translate-x-12">
+        Meets
+      </span>
+      <span class="block text-[11vw] md:text-[10rem] -translate-x-4 md:-translate-x-20">
+        Purpose
+      </span>
+    </h2>
+
+    <!-- Supporting copy -->
+    <p class="max-w-xl mt-16 ml-auto text-[#E3E3CF] text-lg tracking-wide">
+      I build experiences where brutalist structure and flat-style clarity
+      converge—clean code, daring visuals, and interfaces that get straight
+      to the point.
+    </p>
+
+    <!-- Subtle brutalist divider line -->
+    <div class="absolute top-1/2 left-0 w-full border-t-2 border-lime-200/15"></div>
+  </div>
+</section>
+<!-- FOOTER ─────────────────────────────────────────────────── -->
+<footer class="bg-[#E3E3CF] text-[#1A2318] pt-24 pb-16 px-6 md:px-20 overflow-hidden">
+
+  <div class="max-w-6xl mx-auto grid md:grid-cols-2 gap-16">
+
+    <!-- Staggered headline / CTA -->
+    <h2 class="uppercase font-bold leading-none tracking-tight">
+      <!-- first word in dark green -->
+      <span class="block text-[14vw] md:text-[8rem] -translate-x-3">
+        Let’s
+      </span>
+      <!-- second word in lime accent -->
+      <span class="block text-lime-200 text-[14vw] md:text-[8rem] translate-x-16">
+        Talk
+      </span>
+    </h2>
+
+    <!-- Contact & social -->
+    <div class="flex flex-col justify-end space-y-8">
+
+      <p class="text-lg max-w-sm tracking-wide">
+        Ready to collaborate? I’m just an email away—let’s build something
+        bold and purposeful.
+      </p>
+
+      <!-- Email CTA -->
+      <a href="mailto:hello@abdullhinur.dev"
+         class="inline-block border-2 border-lime-200 text-[#1A2318]
+                px-8 py-3 uppercase tracking-wider font-medium
+                transition-colors duration-300
+                hover:bg-lime-200 hover:text-[#1A2318]">
+        hello@abdullhinur.dev
+      </a>
+
+      <!-- Social links -->
+      <nav class="flex space-x-6 text-sm uppercase tracking-widest">
+        <a href="https://github.com/abdullhinur"  class="hover:text-lime-200">GitHub</a>
+        <a href="https://linkedin.com/in/abdullhinur" class="hover:text-lime-200">LinkedIn</a>
+        <a href="https://x.com/abdullhinur"       class="hover:text-lime-200">X</a>
+      </nav>
+    </div>
+  </div>
+
+  <!-- Divider + copyright -->
+  <div class="mt-24 border-t-2 border-[#1A2318]/20 pt-6 text-center text-xs tracking-widest">
+    © 2025 Abdullhinur Abdullahi. All rights reserved.
+  </div>
+</footer>
 
 
 
   <script>
-    const toggleBtn = document.getElementById('mobileMenuToggle');
-    const mobileMenu = document.getElementById('mobileMenu');
+  const toggleBtn  = document.getElementById('mobileMenuToggle');
+  const mobileMenu = document.getElementById('mobileMenu');
 
-    toggleBtn.addEventListener('click', () => {
-      mobileMenu.classList.toggle('hidden');
-    });
+  toggleBtn.addEventListener('click', () => {
+    mobileMenu.classList.toggle('hidden');
+    // circle fill effect
+    toggleBtn.classList.toggle('bg-lime-200');
+    toggleBtn.classList.toggle('border-lime-200');
+    toggleBtn.classList.toggle('text-[#1A2318]');
+  });
   </script>
 
 </body>
