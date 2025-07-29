@@ -1,81 +1,85 @@
-    body {
-        font-family: 'Inter', sans-serif;
-    }
+  html {
+      overflow-x: hidden;
+  }
 
-    h1 {
-        font-family: 'Playfair Display', serif;
-    }
+  body {
+      font-family: 'Inter', sans-serif;
+  }
 
-    .bg-hero {
-        background-image: url('../images/hero1.png');
-        /* background-size: cover; */
-        background-position: center;
-        /* background-repeat: no-repeat; */
-    }
+  h1 {
+      font-family: 'Playfair Display', serif;
+  }
 
-    /* quick utility (add in <style>) */
-    .nav-toggle.open .bar:first-child {
-        transform: rotate(45deg);
-    }
+  .bg-hero {
+      background-image: url('../images/hero1.png');
+      /* background-size: cover; */
+      background-position: center;
+      /* background-repeat: no-repeat; */
+  }
 
-    .nav-toggle.open .bar:last-child {
-        transform: rotate(-45deg);
-    }
+  /* quick utility (add in <style>) */
+  .nav-toggle.open .bar:first-child {
+      transform: rotate(45deg);
+  }
 
-    .nav-toggle.open .bar:last-child {
-        top: 0;
-    }
+  .nav-toggle.open .bar:last-child {
+      transform: rotate(-45deg);
+  }
 
-    .nav-toggle.open .bar:first-child {
-        top: 0;
-    }
+  .nav-toggle.open .bar:last-child {
+      top: 0;
+  }
 
-    .nav-toggle.open {
-        background: #C6E376;
-        border-color: #C6E376;
-    }
+  .nav-toggle.open .bar:first-child {
+      top: 0;
+  }
 
-    /* toggle icon */
-    .line,
-    .line::before,
-    .line::after {
-        position: absolute;
-        width: 16px;
-        /* bar length */
-        height: 2px;
-        /* bar thickness */
-        background: #C6E376;
-        /* lime-200 */
-        transition: transform 0.3s;
-        left: 50%;
-        top: 50%;
-        transform: translate(-50%, -50%);
-    }
+  .nav-toggle.open {
+      background: #C6E376;
+      border-color: #C6E376;
+  }
 
-    /* create the two extra bars with pseudo-elements */
-    .line::before,
-    .line::after {
-        content: '';
-    }
+  /* toggle icon */
+  .line,
+  .line::before,
+  .line::after {
+      position: absolute;
+      width: 16px;
+      /* bar length */
+      height: 2px;
+      /* bar thickness */
+      background: #C6E376;
+      /* lime-200 */
+      transition: transform 0.3s;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+  }
 
-    /* default (circle state) – we show just one small dot */
-    .line {
-        width: 4px;
-        height: 4px;
-        border-radius: 50%;
-    }
+  /* create the two extra bars with pseudo-elements */
+  .line::before,
+  .line::after {
+      content: '';
+  }
 
-    /* OPEN STATE */
-    .nav-open .line {
-        width: 16px;
-        height: 2px;
-        border-radius: 0;
-    }
+  /* default (circle state) – we show just one small dot */
+  .line {
+      width: 4px;
+      height: 4px;
+      border-radius: 50%;
+  }
 
-    .nav-open .line::before {
-        transform: translate(-50%, -50%) rotate(45deg);
-    }
+  /* OPEN STATE */
+  .nav-open .line {
+      width: 16px;
+      height: 2px;
+      border-radius: 0;
+  }
 
-    .nav-open .line::after {
-        transform: translate(-50%, -50%) rotate(-45deg);
-    }
+  .nav-open .line::before {
+      transform: translate(-50%, -50%) rotate(45deg);
+  }
+
+  .nav-open .line::after {
+      transform: translate(-50%, -50%) rotate(-45deg);
+  }
