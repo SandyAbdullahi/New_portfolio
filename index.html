@@ -1,77 +1,150 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Abdullahinur — Portfolio</title>
   <meta name="theme-color" content="#1A2318" />
+  <meta name="description" content="Abdullahinur — Web Developer & Designer" />
 
   <!-- Tailwind (CDN) -->
   <script src="https://cdn.tailwindcss.com"></script>
 
   <!-- Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Playfair+Display:wght@700;800&display=swap" rel="stylesheet">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Playfair+Display:wght@700;800&display=swap"
+    rel="stylesheet">
 
   <style>
-    :root{
-      --green:#1A2318;   /* deep brutalist green */
-      --lime:#C6E376;    /* accent lime */
-      --cream:#EDEBDD;   /* soft neutral */
-      --white:#FFFFFF;
+    :root {
+      --green: #1A2318;
+      --lime: #C6E376;
+      --cream: #EDEBDD;
+      --white: #FFFFFF;
     }
 
-    html, body { overflow-x:hidden; background:var(--white); }
-    body{ font-family:"Inter", system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial; color:var(--green); }
-
-    /* Minimal nav underline */
-    .nav-a{ position:relative; }
-    .nav-a::after{
-      content:""; position:absolute; left:0; bottom:-6px; height:2px; width:0;
-      background:var(--green); transition:width .25s ease;
-    }
-    .nav-a:hover::after{ width:100%; }
-
-    /* 3D canvases fill parent */
-    canvas.webgl{ display:block; width:100%; height:100%; }
-
-    /* GLOBAL film grain overlay */
-    .grain{
-      position:fixed; inset:0; width:100%; height:100%;
-      opacity:.085; mix-blend-mode:multiply; pointer-events:none; z-index:50;
-    }
-    @media (prefers-reduced-motion: reduce){
-      .grain{ opacity:.05; }
+    html,
+    body {
+      overflow-x: hidden;
+      background: var(--white);
     }
 
-    /* hide vertical scrollbar but keep scrolling */
-    .no-scrollbar::-webkit-scrollbar { display: none; }
-    .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    body {
+      font-family: "Inter", system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial;
+      color: var(--green);
+    }
 
-    /* Panels dissolve */
-    .panel{
+    /* nav underline */
+    .nav-a {
+      position: relative;
+    }
+
+    .nav-a::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      bottom: -6px;
+      height: 2px;
+      width: 0;
+      background: var(--green);
+      transition: width .25s ease;
+    }
+
+    .nav-a:hover::after {
+      width: 100%;
+    }
+
+    /* film grain */
+    .grain {
+      position: fixed;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      opacity: .45;
+      mix-blend-mode: multiply;
+      pointer-events: none;
+      z-index: 50;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .grain {
+        opacity: .05;
+      }
+    }
+
+    /* make sure the WebGL canvas fills and is centered with the section grid */
+    #hero3d {
+      position: relative;
+      display: grid;
+      place-items: center;
+    }
+
+    canvas.webgl {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+
+    /* Center hero phrases */
+    .hero-phrases {
+      display: grid;
+      place-items: center;
+      /* centers inner content */
+      text-align: center;
+    }
+
+    /* Phrases overlap at the center */
+    .phrase {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      opacity: 0;
+      filter: blur(10px);
+      transform-origin: center;
+    }
+
+
+    /* left list scroller look */
+    .no-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+
+    .no-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+
+    /* PANELS: we don’t animate the shell, only the text inside */
+    .panel {
+      display: none;
+    }
+
+    .panel.active {
+      display: block;
+    }
+
+    /* dissolve only text inside panels */
+    .panel-text {
       opacity: 0;
       filter: blur(10px);
       transform: translateY(8px);
-      transition: opacity .45s ease, filter .45s ease, transform .45s ease;
-      pointer-events: none;
-    }
-    .panel.active{
-      opacity: 1;
-      filter: blur(0);
-      transform: translateY(0);
-      pointer-events: auto;
     }
   </style>
 </head>
+
 <body class="overflow-x-hidden">
 
   <!-- Global Film Grain -->
   <svg class="grain" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
     <filter id="noiseFilter">
       <feTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="4" stitchTiles="stitch">
-        <animate attributeName="baseFrequency" values="0.65;0.9;0.65" dur="6s" repeatCount="indefinite"/>
+        <animate attributeName="baseFrequency" values="0.65;0.9;0.65" dur="6s" repeatCount="indefinite" />
       </feTurbulence>
-      <feColorMatrix type="saturate" values="0"/>
+      <feColorMatrix type="saturate" values="0" />
     </filter>
     <rect width="100%" height="100%" filter="url(#noiseFilter)"></rect>
   </svg>
@@ -81,7 +154,8 @@
     <div class="max-w-6xl mx-auto flex items-center justify-between px-6 md:px-10 py-5">
       <div class="uppercase tracking-widest text-sm">Portfolio</div>
       <nav class="hidden md:flex gap-8 uppercase tracking-widest text-sm">
-        <a href="#showcase" class="nav-a">Work</a>
+        <a href="#work" class="nav-a">Work</a>
+        <a href="#about" class="nav-a">About</a>
         <a href="#contact" class="nav-a">Contact</a>
       </nav>
       <div class="md:hidden w-3 h-3 rounded-full" style="background:var(--green)"></div>
@@ -91,56 +165,55 @@
     </div>
   </header>
 
-  <!-- HERO: Orbiting dot rings + dissolving centered phrases -->
-  <section id="hero3d" class="relative min-h-[90vh] bg-white overflow-hidden">
+  <!-- HERO: Orbiting rings + dissolving phrases -->
+  <section id="hero3d" class="relative min-h-[90vh] bg-white overflow-hidden grid place-items-center">
     <canvas id="ringsCanvas" class="webgl absolute inset-0"></canvas>
 
-    <!-- Center phrases -->
-    <div class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-20 pointer-events-none">
-      <span class="phrase block text-[clamp(2rem,6vw,4rem)] font-extrabold text-[var(--green)]" style="font-family:'Playfair Display',serif">Brutalist&nbsp;Developer</span>
-      <span class="phrase block text-[clamp(2rem,6vw,4rem)] font-extrabold text-[var(--green)]" style="font-family:'Playfair Display',serif">UI&nbsp;/&nbsp;UX&nbsp;Designer</span>
-      <span class="phrase block text-[clamp(2rem,6vw,4rem)] font-extrabold text-[var(--green)]" style="font-family:'Playfair Display',serif">Performance-First</span>
-      <span class="phrase block text-[clamp(2rem,6vw,4rem)] font-extrabold text-[var(--green)]" style="font-family:'Playfair Display',serif">Web&nbsp;Engineer</span>
+    <!-- Centered via grid -->
+    <div class="hero-phrases relative z-20 w-full text-center">
+      <span class="phrase text-[clamp(2rem,6vw,4rem)] font-extrabold text-[var(--green)]"
+        style="font-family:'Playfair Display',serif">Brutalist&nbsp;Developer</span>
+      <span class="phrase text-[clamp(2rem,6vw,4rem)] font-extrabold text-[var(--green)]"
+        style="font-family:'Playfair Display',serif">UI&nbsp;/&nbsp;UX&nbsp;Designer</span>
+      <span class="phrase text-[clamp(2rem,6vw,4rem)] font-extrabold text-[var(--green)]"
+        style="font-family:'Playfair Display',serif">Performance-First</span>
+      <span class="phrase text-[clamp(2rem,6vw,4rem)] font-extrabold text-[var(--green)]"
+        style="font-family:'Playfair Display',serif">Web&nbsp;Engineer</span>
     </div>
   </section>
 
-  <!-- SHOWCASE: each word = full viewport height + dissolving panels + 3D models -->
+
+  <!-- SHOWCASE: full-viewport words (left) + sticky panels (right) with 3D -->
   <section id="showcase" class="bg-[var(--cream)] text-[var(--green)] p-0 m-0 overflow-x-hidden">
     <div class="w-full grid md:grid-cols-12 gap-0">
 
-      <!-- LEFT: full-bleed list (words render under the panels) -->
+      <!-- LEFT: full-bleed list -->
       <div class="md:col-span-5 relative z-0 overflow-visible">
-        <ul id="topicList"
-            class="no-scrollbar h-screen overflow-y-scroll snap-y snap-mandatory
+        <ul id="topicList" class="no-scrollbar h-screen overflow-y-scroll snap-y snap-mandatory
                    w-screen pl-0 ml-0">
 
-          <!-- Each item = 100vh -->
-          <li class="scroll-item snap-start h-screen m-0 p-0 select-none flex items-center"
-              data-panel="p1">
+          <li class="scroll-item snap-start h-screen m-0 p-0 select-none flex items-center" data-panel="p1">
             <span class="block font-extrabold uppercase tracking-tight whitespace-nowrap
                          text-[100vh] leading-[0.62] -mt-[0.04em] -mb-[0.04em]">
               Design
             </span>
           </li>
 
-          <li class="scroll-item snap-start h-screen m-0 p-0 select-none flex items-center"
-              data-panel="p2">
+          <li class="scroll-item snap-start h-screen m-0 p-0 select-none flex items-center" data-panel="p2">
             <span class="block font-extrabold uppercase tracking-tight whitespace-nowrap
                          text-[100vh] leading-[0.62] -mt-[0.04em] -mb-[0.04em]">
               Build
             </span>
           </li>
 
-          <li class="scroll-item snap-start h-screen m-0 p-0 select-none flex items-center"
-              data-panel="p3">
+          <li class="scroll-item snap-start h-screen m-0 p-0 select-none flex items-center" data-panel="p3">
             <span class="block font-extrabold uppercase tracking-tight whitespace-nowrap
                          text-[100vh] leading-[0.62] -mt-[0.04em] -mb-[0.04em]">
               Motion
             </span>
           </li>
 
-          <li class="scroll-item snap-start h-screen m-0 p-0 select-none flex items-center"
-              data-panel="p4">
+          <li class="scroll-item snap-start h-screen m-0 p-0 select-none flex items-center" data-panel="p4">
             <span class="block font-extrabold uppercase tracking-tight whitespace-nowrap
                          text-[100vh] leading-[0.62] -mt-[0.04em] -mb-[0.04em]">
               Ship
@@ -149,254 +222,378 @@
         </ul>
       </div>
 
-      <!-- RIGHT: panels (on top of the big words) with 3D viewers -->
-      <div class="md:col-span-7 relative z-10 px-6 md:px-10">
-        <div class="min-h-[420px] space-y-10">
+      <!-- RIGHT: sticky wrapper (panel shell stays; only text dissolves) -->
+      <div class="md:col-span-7 relative z-10">
+        <!-- no outer padding; panel borders hug the column edges -->
+        <div class="sticky top-0 bg-[var(--cream)] p-0">
+          <div class="min-h-[0px] space-y-0">
 
-          <!-- DESIGN -->
-          <article id="p1" class="panel active">
-            <div class="border-2 border-[var(--green)] p-8 md:p-10 bg-white">
-              <h3 class="text-3xl md:text-4xl font-extrabold uppercase mb-4">Design</h3>
-              <div class="grid md:grid-cols-2 gap-6 items-stretch">
-                <p class="max-w-prose text-black/80">
-                  Type-led systems, grids, and intent. Replace the demo model with an
-                  <strong>architect’s table</strong> or a <strong>painter at work</strong> (.glb).
-                </p>
-                <!-- 3D container -->
-                <div class="panel-3d relative h-56 md:h-64 lg:h-72 border-2 border-[var(--green)]/20"
-                     data-model="assets/3d_objects/ReciprocatingSaw.glb"
-                     data-autorotate="false">
-                  <canvas class="webgl absolute inset-0"></canvas>
+            <!-- DESIGN -->
+            <article id="p1" class="panel active">
+              <!-- keep internal padding; outside is now zero -->
+              <div class="border-2 border-[var(--green)] p-8 md:p-10 bg-white">
+                <div class="grid md:grid-cols-2 gap-6 items-stretch">
+                  <div class="panel-copy">
+                    <h3 class="panel-text text-3xl md:text-4xl font-extrabold uppercase mb-4">Design</h3>
+                    <p class="panel-text max-w-prose text-black/80">
+                      Type-led systems, grids, and intent. Replace the demo with a painter/architect-table model (.glb)
+                      anytime.
+                    </p>
+                    <div class="panel-text mt-8 h-0 border-t-2 border-[var(--green)]/30"></div>
+                  </div>
+                  <!-- 3D -->
+                  <div class="panel-3d relative h-56 md:h-64 lg:h-72 border-2 border-[var(--green)]/20"
+                    data-model="assets/3d_objects/ReciprocatingSaw.glb" data-autorotate="true">
+                    <canvas class="webgl absolute inset-0"></canvas>
+                  </div>
                 </div>
               </div>
-            </div>
-          </article>
+            </article>
 
-          <!-- BUILD / ENGINEERING -->
-          <article id="p2" class="panel">
-            <div class="border-2 border-[var(--green)] p-8 md:p-10 bg-white">
-              <h3 class="text-3xl md:text-4xl font-extrabold uppercase mb-4">Engineering</h3>
-              <div class="grid md:grid-cols-2 gap-6 items-stretch">
-                <p class="max-w-prose text-black/80">
-                  Robust front-ends with clean, accessible UI; solid APIs and integrations.
-                </p>
-                <div class="panel-3d relative h-56 md:h-64 lg:h-72 border-2 border-[var(--green)]/20"
-                     data-model="https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/master/2.0/DamagedHelmet/glTF-Binary/DamagedHelmet.glb"
-                     data-autorotate="true">
-                  <canvas class="webgl absolute inset-0"></canvas>
+            <!-- ENGINEERING -->
+            <article id="p2" class="panel">
+              <div class="border-2 border-[var(--green)] p-8 md:p-10 bg-white">
+                <div class="grid md:grid-cols-2 gap-6 items-stretch">
+                  <div class="panel-copy">
+                    <h3 class="panel-text text-3xl md:text-4xl font-extrabold uppercase mb-4">Engineering</h3>
+                    <p class="panel-text max-w-prose text-black/80">Robust front-ends, solid APIs, clean integrations.
+                    </p>
+                    <div class="panel-text mt-8 h-0 border-t-2 border-[var(--green)]/30"></div>
+                  </div>
+                  <div class="panel-3d relative h-56 md:h-64 lg:h-72 border-2 border-[var(--green)]/20"
+                    data-model="assets/3d_objects/Avocado.glb" data-autorotate="true">
+                    <canvas class="webgl absolute inset-0"></canvas>
+                  </div>
                 </div>
               </div>
-            </div>
-          </article>
+            </article>
 
-          <!-- MOTION & 3D -->
-          <article id="p3" class="panel">
-            <div class="border-2 border-[var(--green)] p-8 md:p-10 bg-white">
-              <h3 class="text-3xl md:text-4xl font-extrabold uppercase mb-4">Motion & 3D</h3>
-              <div class="grid md:grid-cols-2 gap-6 items-stretch">
-                <p class="max-w-prose text-black/80">
-                  GSAP & Three.js sequences, scroll-driven reveals, tasteful depth.
-                </p>
-                <div class="panel-3d relative h-56 md:h-64 lg:h-72 border-2 border-[var(--green)]/20"
-                     data-model="https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/master/2.0/Fox/glTF-Binary/Fox.glb"
-                     data-autorotate="false">
-                  <canvas class="webgl absolute inset-0"></canvas>
+            <!-- MOTION & 3D -->
+            <article id="p3" class="panel">
+              <div class="border-2 border-[var(--green)] p-8 md:p-10 bg-white">
+                <div class="grid md:grid-cols-2 gap-6 items-stretch">
+                  <div class="panel-copy">
+                    <h3 class="panel-text text-3xl md:text-4xl font-extrabold uppercase mb-4">Motion & 3D</h3>
+                    <p class="panel-text max-w-prose text-black/80">GSAP & Three.js sequences, scroll-driven reveals,
+                      tasteful depth.</p>
+                    <div class="panel-text mt-8 h-0 border-t-2 border-[var(--green)]/30"></div>
+                  </div>
+                  <div class="panel-3d relative h-56 md:h-64 lg:h-72 border-2 border-[var(--green)]/20"
+                    data-model="https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/master/2.0/Avocado/glTF-Binary/Avocado.glb"
+                    data-autorotate="false">
+                    <canvas class="webgl absolute inset-0"></canvas>
+                  </div>
                 </div>
               </div>
-            </div>
-          </article>
+            </article>
 
-          <!-- DELIVERY -->
-          <article id="p4" class="panel">
-            <div class="border-2 border-[var(--green)] p-8 md:p-10 bg-white">
-              <h3 class="text-3xl md:text-4xl font-extrabold uppercase mb-4">Delivery</h3>
-              <div class="grid md:grid-cols-2 gap-6 items-stretch">
-                <p class="max-w-prose text-black/80">
-                  CI/CD, budgets, analytics; shipping with intent and velocity.
-                </p>
-                <div class="panel-3d relative h-56 md:h-64 lg:h-72 border-2 border-[var(--green)]/20"
-                     data-model="https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/master/2.0/Avocado/glTF-Binary/Avocado.glb"
-                     data-autorotate="true">
-                  <canvas class="webgl absolute inset-0"></canvas>
+            <!-- DELIVERY -->
+            <article id="p4" class="panel">
+              <div class="border-2 border-[var(--green)] p-8 md:p-10 bg-white">
+                <div class="grid md:grid-cols-2 gap-6 items-stretch">
+                  <div class="panel-copy">
+                    <h3 class="panel-text text-3xl md:text-4xl font-extrabold uppercase mb-4">Delivery</h3>
+                    <p class="panel-text max-w-prose text-black/80">CI/CD, analytics, performance budgets—ship with
+                      intent.</p>
+                    <div class="panel-text mt-8 h-0 border-t-2 border-[var(--green)]/30"></div>
+                  </div>
+                  <div class="panel-3d relative h-56 md:h-64 lg:h-72 border-2 border-[var(--green)]/20"
+                    data-model="https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/master/2.0/Avocado/glTF-Binary/Avocado.glb"
+                    data-autorotate="true">
+                    <canvas class="webgl absolute inset-0"></canvas>
+                  </div>
                 </div>
               </div>
-            </div>
-          </article>
+            </article>
 
+          </div>
         </div>
       </div>
+
     </div>
   </section>
 
-  <!-- CONTACT -->
+  <!-- CTA / CONTACT -->
   <section id="contact" class="bg-white text-[var(--green)] py-24 md:py-32 px-6 md:px-10">
     <div class="max-w-6xl mx-auto">
-      <h3 class="text-5xl md:text-6xl font-extrabold leading-none">
-        Let’s<br><span class="pl-24">Talk</span>
-      </h3>
-      <p class="mt-6 max-w-md text-black/80">
-        Ready to collaborate? I’m an email away—let’s build something bold and purposeful.
-      </p>
+      <h3 class="text-5xl md:text-6xl font-extrabold leading-none">Let’s<br><span class="pl-24">Talk</span></h3>
+      <p class="mt-6 max-w-md text-black/80">Ready to collaborate? I’m an email away—let’s build something bold and
+        purposeful.</p>
       <a href="mailto:hello@abdullahinur.dev"
-         class="mt-8 inline-block border-2 border-[var(--green)] text-[var(--green)]
-                px-8 py-3 uppercase tracking-wider font-medium
-                transition-colors duration-300 hover:bg-[var(--green)] hover:text-white">
+        class="mt-8 inline-block border-2 border-[var(--green)] text-[var(--green)] px-8 py-3 uppercase tracking-wider font-medium transition-colors duration-300 hover:bg-[var(--green)] hover:text-white">
         hello@abdullahinur.dev
       </a>
       <div class="mt-12 h-0 border-t-2 border-[var(--green)]/20"></div>
     </div>
   </section>
 
-  <!-- FOOTER -->
-  <footer class="bg-[var(--cream)] text-[var(--green)] pt-16 pb-10 px-6 md:px-10">
-    <div class="max-w-6xl mx-auto flex flex-col md:flex-row items-center md:items-end justify-between gap-8">
-      <div class="uppercase tracking-widest text-sm">© 2025 Abdullahinur</div>
-      <div class="h-0 border-t-2 w-full md:w-1/2" style="border-color:var(--green)"></div>
-    </div>
-  </footer>
-
-  <!-- Three.js + GSAP + GLTFLoader -->
-  <script src="https://cdn.jsdelivr.net/npm/three@0.159.0/build/three.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/three@0.159.0/examples/js/loaders/GLTFLoader.js"></script>
+  <!-- Three.js (global) + GLTFLoader (global) + GSAP -->
+  <!-- GSAP (keep) -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.13.0/gsap.min.js"></script>
 
-  <script>
-  /* ---------- HERO (rings) ---------- */
-  (()=>{
-    const canvas = document.getElementById('ringsCanvas');
-    const scene  = new THREE.Scene(); scene.background = new THREE.Color('#ffffff');
-    const camera = new THREE.PerspectiveCamera(45, 1, 0.1, 100); camera.position.set(0, 0, 7.2);
-    const renderer = new THREE.WebGLRenderer({ canvas, antialias:true, alpha:false });
+  <!-- Import map for Three.js ESM -->
+  <script type="importmap">
+    {
+  "imports": {
+    "three": "https://cdn.jsdelivr.net/npm/three@0.159.0/build/three.module.js",
+    "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.159.0/examples/jsm/"
+  }
+}
+</script>
 
-    function setSize(){ const p=canvas.parentElement, w=p.clientWidth, h=p.clientHeight;
-      renderer.setSize(w,h,false); renderer.setPixelRatio(Math.min(devicePixelRatio||1,1.5));
-      camera.aspect=w/h; camera.updateProjectionMatrix(); }
-    setSize(); addEventListener('resize', setSize);
+  <!-- App code (ES modules) -->
+  <script type="module">
+    import * as THREE from 'three';
+  import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+
+  /* ---------- HERO rings (unchanged) ---------- */
+   (() => {
+    const canvas = document.getElementById('ringsCanvas');
+    const hero   = document.getElementById('hero3d');
+
+    const scene = new THREE.Scene();
+    scene.background = new THREE.Color('#ffffff');
+
+    const camera = new THREE.PerspectiveCamera(45, 1, 0.1, 100);
+    camera.position.set(0, 0, 7.2);
+    camera.lookAt(0, 0, 0);             // ⟵ make sure we’re aimed at the center
+
+    const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: false });
+
+    function setSize() {
+      const { width, height } = hero.getBoundingClientRect();
+      renderer.setSize(width, height, false);
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.5));
+      camera.aspect = width / height;
+      camera.updateProjectionMatrix();
+    }
+    setSize();
+    addEventListener('resize', setSize);
+
     scene.add(new THREE.AmbientLight(0xffffff, 0.95));
 
-    function ring({radius,count,dotRadius,color,tiltX,tiltY}){
-      const mat=new THREE.MeshStandardMaterial({color,roughness:.35,metalness:.25});
-      const geom=new THREE.SphereGeometry(dotRadius,16,16); const g=new THREE.Group();
-      g.rotation.x=tiltX; g.rotation.y=tiltY;
-      for(let i=0;i<count;i++){ const a=i/count*Math.PI*2; const m=new THREE.Mesh(geom,mat);
-        m.position.set(Math.cos(a)*radius, Math.sin(a)*radius, 0); g.add(m); }
-      scene.add(g); return g;
-    }
-    const inner = ring({radius:2.1,count:20,dotRadius:.036,color:'#1A2318',tiltX:Math.PI*.22,tiltY:Math.PI*.15});
-    const mid   = ring({radius:2.7,count:20,dotRadius:.034,color:'#6E8256',tiltX:Math.PI*.62,tiltY:-Math.PI*.18});
-    const outer = ring({radius:3.3,count:20,dotRadius:.032,color:'#C6E376',tiltX:Math.PI*.40,tiltY:-Math.PI*1.0});
+    // single centered pivot for all rings (easy to nudge if needed)
+    const orbitRoot = new THREE.Group();
+    orbitRoot.position.set(0, 0, 0);    // ⟵ adjust here if you ever want a tiny visual nudge
+    scene.add(orbitRoot);
+
+    const makeDotRing = ({ radius, count, dotRadius, color, tiltX, tiltY }) => {
+      const mat  = new THREE.MeshStandardMaterial({ color, roughness: .35, metalness: .25 });
+      const geom = new THREE.SphereGeometry(dotRadius, 16, 16);
+      const ring = new THREE.Group();
+      ring.rotation.x = tiltX;
+      ring.rotation.y = tiltY;
+
+      for (let i = 0; i < count; i++) {
+        const a = (i / count) * Math.PI * 2;
+        const m = new THREE.Mesh(geom, mat);
+        m.position.set(Math.cos(a) * radius, Math.sin(a) * radius, 0);
+        ring.add(m);
+      }
+      orbitRoot.add(ring);
+      return ring;
+    };
+
+    const ringInner  = makeDotRing({ radius: 2.1, count: 20, dotRadius: .036, color: '#1A2318', tiltX: Math.PI * .22, tiltY: Math.PI * .15 });
+    const ringMiddle = makeDotRing({ radius: 2.7, count: 20, dotRadius: .034, color: '#6E8256', tiltX: Math.PI * .62, tiltY: -Math.PI * .18 });
+    const ringOuter  = makeDotRing({ radius: 4, count: 20, dotRadius: .032, color: '#C6E376', tiltX: Math.PI * .40, tiltY: -Math.PI * 1.00 });
 
     const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
-    const clock = new THREE.Clock();
-    (function tick(){
-      if(!reduce){ const t=clock.getElapsedTime();
-        inner.rotation.z= t*.42; mid.rotation.z= -t*.34; outer.rotation.z= t*.28; }
-      renderer.render(scene,camera); requestAnimationFrame(tick);
+    const clock  = new THREE.Clock();
+
+    (function tick() {
+      if (!reduce) {
+        const t = clock.getElapsedTime();
+        ringInner.rotation.z  =  t * .42;
+        ringMiddle.rotation.z = -t * .34;
+        ringOuter.rotation.z  =  t * .28;
+      }
+      renderer.render(scene, camera);
+      requestAnimationFrame(tick);
     })();
   })();
 
-  /* ---------- Center phrases dissolve ---------- */
-  (()=>{
-    const phrases = gsap.utils.toArray(".phrase");
-    gsap.set(phrases, { opacity:0, filter:"blur(10px)", y:10, zIndex:(i)=>100-i });
-    const tl = gsap.timeline({ repeat: -1, repeatDelay: 0.2 });
-    phrases.forEach(el=>{
-      tl.to(el,{opacity:1,filter:"blur(0px)",y:0,duration:.9,ease:"power3.out"})
-        .to(el,{opacity:0,filter:"blur(12px)",y:-10,duration:.8,ease:"power3.in"}, "+=0.9");
+  /* ---------- Hero phrases dissolve (loop) ---------- */
+(() => {
+  const phrases = gsap.utils.toArray(".phrase");
+  // ❌ remove this if you had it:
+  // gsap.set(".hero-phrases", { position: "absolute" });
+
+  gsap.set(phrases, { opacity: 0, filter: "blur(10px)", y: 10, zIndex: (i) => 100 - i });
+
+  const tl = gsap.timeline({ repeat: -1, repeatDelay: 0.2 });
+  phrases.forEach((el) => {
+    tl.to(el, { opacity: 1, filter: "blur(0px)", y: 0, duration: 0.9, ease: "power3.out" })
+      .to(el, { opacity: 0, filter: "blur(12px)", y: -10, duration: 0.8, ease: "power3.in" }, "+=0.9");
+  });
+})();
+
+/* ---------- Showcase: activate + text-only dissolve (with viewer resize) ---------- */
+(() => {
+  const list   = document.getElementById('topicList');
+  const items  = [...list.querySelectorAll('.scroll-item')];
+  const panels = [...document.querySelectorAll('#showcase .panel')];
+
+  // expose a hook we can call after activation
+  const ensurePanel3DReady = (panelEl) => {
+    panelEl.querySelectorAll('.panel-3d').forEach(c => {
+      // will init if needed, then resize
+      window.__initViewerIfNeeded && window.__initViewerIfNeeded(c, /*forceResize*/true);
     });
-  })();
+  };
 
-  /* ---------- Showcase: activate panels via hover + scroll ---------- */
-  (()=>{
-    const list   = document.getElementById('topicList');
-    const items  = [...list.querySelectorAll('.scroll-item')];
-    const panels = [...document.querySelectorAll('#showcase .panel')];
+  function activate(id){
+    panels.forEach(p => {
+      const active = (p.id === id);
+      p.classList.toggle('active', active);
 
-    function activate(id){ panels.forEach(p=>p.classList.toggle('active', p.id===id)); }
-    items.forEach(li=>{
-      li.addEventListener('mouseenter', ()=>activate(li.dataset.panel));
-      li.addEventListener('focus',     ()=>activate(li.dataset.panel));
-    });
-    const io = new IntersectionObserver(entries=>{
-      entries.forEach(e=>{ if(e.isIntersecting) activate(e.target.dataset.panel); });
-    }, { root:list, threshold: 0.8 });
-    items.forEach(el=>io.observe(el));
-  })();
+      if (active) {
+        // initialize/resize any viewers in this panel
+        ensurePanel3DReady(p);
 
-  /* ---------- Panel 3D loaders (GLTF) ---------- */
-  (()=>{
-    const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
-    const viewers = [];
-
-    document.querySelectorAll('.panel-3d').forEach(container=>{
-      const canvas = container.querySelector('canvas');
-      const url    = container.dataset.model;
-      const autorotate = container.dataset.autorotate === 'true';
-
-      const scene = new THREE.Scene(); // transparent
-      const camera = new THREE.PerspectiveCamera(45, 1, 0.01, 1000);
-      const renderer = new THREE.WebGLRenderer({ canvas, antialias:true, alpha:true });
-      renderer.setClearColor(0x000000, 0);
-
-      const hemi = new THREE.HemisphereLight(0xffffff, 0x444444, 0.9);
-      const dir  = new THREE.DirectionalLight(0xffffff, 0.9); dir.position.set(3,4,6);
-      scene.add(hemi, dir);
-
-      function setSize(){
-        const w = container.clientWidth, h = container.clientHeight;
-        renderer.setSize(w, h, false);
-        renderer.setPixelRatio(Math.min(devicePixelRatio||1, 1.5));
-        camera.aspect = w / h; camera.updateProjectionMatrix();
+        // dissolve only the text inside the active panel
+        const texts = p.querySelectorAll('.panel-text');
+        gsap.fromTo(texts,
+          { opacity:0, filter:"blur(10px)", y:8 },
+          { opacity:1, filter:"blur(0px)", y:0, stagger:0.08, duration:.55, ease:"power3.out" }
+        );
       }
-      setSize(); addEventListener('resize', setSize);
+    });
+  }
 
-      let mixer=null, root=null, auto=autorotate;
-      const loader = new THREE.GLTFLoader();
-      loader.load(url, (gltf)=>{
+  items.forEach(li=>{
+    li.addEventListener('mouseenter', ()=>activate(li.dataset.panel));
+    li.addEventListener('focus',      ()=>activate(li.dataset.panel));
+  });
+
+  const io = new IntersectionObserver(entries=>{
+    entries.forEach(e=>{ if (e.isIntersecting) activate(e.target.dataset.panel); });
+  }, { root:list, threshold: 0.8 });
+  items.forEach(el=>io.observe(el));
+})();
+
+/* ---------- Panel 3D viewers (lazy init + robust sizing) ---------- */
+(() => {
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const viewers = [];
+  const viewerMap = new WeakMap(); // container -> viewer
+
+  function initViewer(container) {
+    if (viewerMap.has(container)) return viewerMap.get(container);
+
+    const canvas     = container.querySelector('canvas');
+    const url        = container.dataset.model;
+    const autorotate = container.dataset.autorotate === 'true';
+
+    const scene    = new THREE.Scene(); // transparent
+    const camera   = new THREE.PerspectiveCamera(45, 1, 0.01, 1000);
+    const renderer = new THREE.WebGLRenderer({ canvas, antialias:true, alpha:true });
+    renderer.setClearColor(0x000000, 0);
+
+    const hemi = new THREE.HemisphereLight(0xffffff, 0x444444, 0.9);
+    const dir  = new THREE.DirectionalLight(0xffffff, 0.9); dir.position.set(3,4,6);
+    scene.add(hemi, dir);
+
+    const setSize = () => {
+      const w = container.clientWidth || 1;
+      const h = container.clientHeight || 1;
+      renderer.setSize(w, h, false);
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.5));
+      camera.aspect = w / h;
+      camera.updateProjectionMatrix();
+    };
+    setSize();
+
+    // Resize when container box changes (e.g., panel becomes visible)
+    const ro = new ResizeObserver(() => setSize());
+    ro.observe(container);
+
+    const loader = new GLTFLoader();
+    let mixer = null, root = null, auto = autorotate;
+
+    loader.load(
+      url,
+      (gltf) => {
         root = gltf.scene;
         scene.add(root);
 
-        // Frame model nicely
-        const box = new THREE.Box3().setFromObject(root);
-        const size = box.getSize(new THREE.Vector3()).length();
+        // Frame nicely
+        const box    = new THREE.Box3().setFromObject(root);
+        const size   = box.getSize(new THREE.Vector3()).length();
         const center = box.getCenter(new THREE.Vector3());
         root.position.sub(center);
 
         const fov = camera.fov * (Math.PI/180);
         let dist = (size/2) / Math.tan(fov/2);
-        dist *= 1.2; // padding
+        dist *= 1.25;
         camera.position.set(0, 0, dist);
         camera.near = size/1000; camera.far = size*10; camera.updateProjectionMatrix();
 
         if (gltf.animations && gltf.animations.length){
           mixer = new THREE.AnimationMixer(root);
           gltf.animations.forEach(clip => mixer.clipAction(clip).play());
-          auto = false; // let the animation do the motion
+          auto = false; // let animation drive motion
+        }
+      },
+      undefined,
+      (err) => {
+        console.warn('GLTF load error:', url, err);
+      }
+    );
+
+    const state = { visible:false };
+    const viewer = {
+      renderer, scene, camera, state,
+      get mixer(){ return mixer; },
+      get root(){  return root;  },
+      get auto(){  return auto;  },
+      resize: setSize,
+    };
+
+    viewerMap.set(container, viewer);
+    viewers.push(viewer);
+    return viewer;
+  }
+
+  // Make init accessible to activate()
+  window.__initViewerIfNeeded = (container, forceResize=false) => {
+    const v = initViewer(container);
+    if (forceResize) v.resize();
+    return v;
+  };
+
+  // Observe visibility: init on first intersect, toggle render flag thereafter
+  document.querySelectorAll('.panel-3d').forEach(container => {
+    const obs = new IntersectionObserver(entries => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          const v = initViewer(container);
+          v.state.visible = true;
+          v.resize(); // ensure proper size when it becomes visible
+        } else {
+          const v = viewerMap.get(container);
+          if (v) v.state.visible = false;
         }
       });
+    }, { threshold: 0.01 });
+    obs.observe(container);
+  });
 
-      const state = { visible:false };
-      viewers.push({ renderer, scene, camera, mixer, state, rootRef: ()=>root, autoRef: ()=>auto });
-
-      const obs = new IntersectionObserver(entries=>{
-        entries.forEach(e=> state.visible = e.isIntersecting);
-      }, { threshold: 0.1 });
-      obs.observe(container);
+  // Render loop
+  const clock = new THREE.Clock();
+  (function loop(){
+    const dt = clock.getDelta();
+    viewers.forEach(v => {
+      if (!v.state.visible) return;
+      if (v.mixer) v.mixer.update(dt);
+      if (v.root && v.auto && !reduce) v.root.rotation.y += 0.6 * dt;
+      v.renderer.render(v.scene, v.camera);
     });
-
-    const clock = new THREE.Clock();
-    (function loop(){
-      const dt = clock.getDelta();
-      viewers.forEach(v=>{
-        if(!v.state.visible) return;
-        if (v.mixer) v.mixer.update(dt);
-        const root = v.rootRef && v.rootRef();
-        if (root && v.autoRef && v.autoRef()) root.rotation.y += 0.6 * dt;
-        v.renderer.render(v.scene, v.camera);
-      });
-      requestAnimationFrame(loop);
-    })();
+    requestAnimationFrame(loop);
   })();
-  </script>
+})();
+</script>
+
 </body>
+
 </html>
