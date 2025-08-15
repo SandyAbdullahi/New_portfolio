@@ -1,284 +1,169 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="Portfolio of Abdulhilnur - Web Developer & Designer" />
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Abdullahinur — Orbit Hero</title>
   <meta name="theme-color" content="#1A2318" />
-  <title>Abdulhilnur | Web Developer</title>
+
+  <!-- Tailwind (CDN) -->
   <script src="https://cdn.tailwindcss.com"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@400;500&display=swap"
-    rel="stylesheet">
-  <link rel="stylesheet" href="assets/css/styles.css">
+
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      --green:#1A2318;  /* deep brutalist green */
+      --lime: #C6E376;  /* accent lime */
+    }
+    html, body { overflow-x:hidden; background:#fff; }
+    body { font-family: "Inter", system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial; color: var(--green); }
+
+    /* minimal nav underline */
+    .nav-a{ position:relative; }
+    .nav-a::after{
+      content:""; position:absolute; left:0; bottom:-6px; height:2px; width:0;
+      background:var(--green); transition: width .25s ease;
+    }
+    .nav-a:hover::after{ width:100%; }
+
+    /* canvas fills hero */
+    #ringsCanvas{ display:block; width:100%; height:100%; }
+  </style>
 </head>
+<body>
 
-<body class="overflow-x-hidden">
-
-  <!-- ⬇︎  NEW overlay (put it just after <body>) -->
-  <div id="intro-overlay" class="fixed inset-0 z-50 bg-[#1A2318] flex items-center justify-center">
-    <!-- lime bar grows then acts as “wipe” -->
-    <div class="intro-stroke h-1 bg-lime-200 w-0"></div>
-  </div>
-  <!-- HERO + NAV  ────────────────────────────────────────────── -->
-  <section class="text-white bg-hero">
-
-    <!-- Navbar -->
-    <header class="flex justify-between items-center px-8 md:px-10 py-6 uppercase text-sm tracking-widest relative">
-
-      <!-- Desktop nav -->
-      <nav class="hidden md:flex space-x-10">
-        <a href="#work" class="hover:text-lime-200 transition">Work</a>
-        <a href="#about" class="hover:text-lime-200 transition">About</a>
-        <a href="#blog" class="hover:text-lime-200 transition">Blog</a>
-        <a href="#contact" class="hover:text-lime-200 transition">Contact</a>
+  <!-- ── Navbar (as before) -->
+  <header class="relative z-10">
+    <div class="max-w-6xl mx-auto flex items-center justify-between px-6 md:px-10 py-5">
+      <div class="uppercase tracking-widest text-sm">Portfolio</div>
+      <nav class="hidden md:flex gap-8 uppercase tracking-widest text-sm">
+        <a href="#work" class="nav-a">Work</a>
+        <a href="#about" class="nav-a">About</a>
+        <a href="#contact" class="nav-a">Contact</a>
       </nav>
+      <!-- mobile dot (decorative) -->
+      <div class="md:hidden w-3 h-3 rounded-full" style="background:var(--green)"></div>
+    </div>
+    <div class="max-w-6xl mx-auto px-6 md:px-10">
+      <div class="h-0 border-t-2" style="border-color:var(--green)"></div>
+    </div>
+  </header>
 
-      <!-- Brutalist divider -->
-      <div class="hidden md:block w-1/4 h-0 border-t-2 border-lime-200"></div>
+  <!-- ── HERO: Two centered orbiting dot rings -->
+  <section id="hero3d" class="relative min-h-[90vh] bg-white overflow-hidden">
+    <canvas id="ringsCanvas" class="absolute inset-0 w-full h-full pointer-events-none"></canvas>
+  </section>
 
-      <!-- Mobile toggle (lime outline circle) -->
-      <!-- Mobile toggle -->
-      <button id="mobileMenuToggle" class="md:hidden w-9 h-9 rounded-full border-2 border-lime-200
-               grid place-content-center relative overflow-hidden transition">
+  <!-- filler section to show continuation -->
+  <section class="py-24 md:py-36">
+    <div class="max-w-6xl mx-auto px-6 md:px-10">
+      <h2 class="text-2xl md:text-3xl font-semibold">Next Section</h2>
+      <p class="mt-4 max-w-2xl text-black/70">
+        Add your About / Work sections here. The hero is pure WebGL and won’t affect layout.
+      </p>
+      <div class="mt-10 h-0 border-t" style="border-color:#ddd"></div>
+    </div>
+  </section>
 
-        <span class="line before after"></span>
-      </button>
+  <!-- Three.js -->
+  <script src="https://cdn.jsdelivr.net/npm/three@0.159.0/build/three.min.js"></script>
 
+  <script>
+  (() => {
+    const canvas = document.getElementById('ringsCanvas');
+    const scene  = new THREE.Scene();
+    scene.background = new THREE.Color('#ffffff');
 
+    const camera = new THREE.PerspectiveCamera(45, 1, 0.1, 100);
+    camera.position.set(0, 0, 6);
 
-      <!-- Mobile menu -->
-      <div id="mobileMenu" class="hidden absolute top-full left-0 w-full bg-[#1A2318] text-white
-                flex flex-col items-center space-y-6 py-8 md:hidden">
-        <a href="#work" class="hover:text-lime-200">Work</a>
-        <a href="#about" class="hover:text-lime-200">About</a>
-        <a href="#blog" class="hover:text-lime-200">Blog</a>
-        <a href="#contact" class="hover:text-lime-200">Contact</a>
-      </div>
-    </header>
+    const renderer = new THREE.WebGLRenderer({ canvas, antialias:true, alpha:false });
+    function setSize(){
+      const parent = canvas.parentElement;
+      const w = parent.clientWidth;
+      const h = parent.clientHeight;
+      renderer.setSize(w, h, false);
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.5));
+      camera.aspect = w / h;
+      camera.updateProjectionMatrix();
+    }
+    setSize();
+    window.addEventListener('resize', setSize);
 
-    <!-- Hero -->
-    <section class="min-h-[80vh] flex items-center">
-      <!-- added hero-content wrapper -->
-      <div class="hero-content px-8 md:pl-[55%] space-y-8">
+    // Lighting (soft ambient so spheres have gentle shading)
+    scene.add(new THREE.AmbientLight(0xffffff, 0.95));
 
-        <!-- HEADLINE -->
-        <h1 class="relative font-extrabold leading-none tracking-tight break-words
-               text-lime-200 text-[clamp(2.5rem,10vw,6rem)]">
+    // Create a ring of small dot spheres orbiting the center
+    function makeDotRing({
+      radius = 2.0,
+      count = 10,                 // << 10 dots per ring
+      dotRadius = 0.045,          // small dot size
+      color = '#1A2318',
+      tiltX = Math.PI * 0.35,
+      tiltY = Math.PI * 0.08
+    } = {}) {
 
-          ABDULLAHI<wbr>
+      const mat = new THREE.MeshStandardMaterial({
+        color,
+        roughness: 0.35,
+        metalness: 0.25
+      });
+      const geom = new THREE.SphereGeometry(dotRadius, 16, 16);
 
-          <!-- accent bar (now centred & classed) -->
-          <span class="hero-accent-bar absolute bottom-1 md:bottom-2
-                   left-1/2 -translate-x-1/2 w-[60%] h-1 bg-lime-200"></span>
-        </h1>
+      const group = new THREE.Group();
+      group.rotation.x = tiltX;
+      group.rotation.y = tiltY;
 
-        <!-- Copy -->
-        <p class="hero-copy text-lg md:text-xl text-lime-100 max-w-xl tracking-wide">
-          Web developer&nbsp;&amp;&nbsp;designer crafting modern, user-focused digital
-          experiences that blend brutalist structure with flat-style clarity.
-        </p>
+      for (let i = 0; i < count; i++) {
+        const a = (i / count) * Math.PI * 2;
+        const x = Math.cos(a) * radius;
+        const y = Math.sin(a) * radius;
+        const dot = new THREE.Mesh(geom, mat);
+        dot.position.set(x, y, 0);
+        group.add(dot);
+      }
 
-        <!-- Lime rule -->
-        <div class="hero-rule w-2/3 h-0 border-t-2 border-lime-200"></div>
-      </div>
-    </section>
+      scene.add(group);
+      return group;
+    }
 
+    // Two rings: inner deep-green, outer lime; counter-rotating
+    const ringInner = makeDotRing({
+      radius: 1.6,
+      count: 10,
+      dotRadius: 0.045,
+      color: '#1A2318',
+      tiltX: Math.PI * 0.30,
+      tiltY: Math.PI * 0.05
+    });
 
-    <!-- Bottom White Space -->
-    <section class="mt-[-5rem] h-[30vh] bg-[#1A2318] flex items-center justify-center">
-      <div class="w-1/2 h-[1px] bg-white"></div>
-    </section>
+    const ringOuter = makeDotRing({
+      radius: 2.4,
+      count: 10,
+      dotRadius: 0.04,
+      color: '#C6E376',
+      tiltX: Math.PI * 0.44,
+      tiltY: -Math.PI * 0.06
+    });
 
-    <!-- ABOUT SECTION (replace your current block with this) -->
-    <section id="about" class="bg-[#1A2318] text-white py-24 px-6 md:px-20">
-      <div class="max-w-6xl mx-auto grid md:grid-cols-2 gap-12 items-center">
+    // Respect reduced motion
+    const prefersReduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-        <!-- Brutalist image -->
-        <figure class="about-img relative h-[450px] md:h-[550px] overflow-hidden">
-          <img src="assets/images/profile.png" alt="Brutalist building"
-            class="w-full h-full object-cover contrast-90" />
-
-          <!-- Overlapping CTA button – updated style -->
-          <button class="absolute -right-6 bottom-8 
-         border-2 border-lime-200 text-lime-200
-         uppercase tracking-wider font-medium
-         px-10 py-3
-         transition-colors duration-300
-         hover:bg-lime-200 hover:text-[#1A2318]">
-            Who&nbsp;I&nbsp;Am
-          </button>
-
-        </figure>
-
-        <!-- Staggered text -->
-        <div class="about-text space-y-8">
-          <!-- Staggered heading -->
-          <h2 class="text-5xl font-bold leading-none -translate-x-4">
-            About<br><span class="pl-20">Me</span>
-          </h2>
-
-          <!-- Staggered paragraphs -->
-          <p class="text-lg leading-relaxed max-w-prose translate-x-6">
-            I'm Abdullhinur, a Nairobi-based web engineer blending brutalist
-            influences with clean, performant code. I thrive on turning complex
-            problems into intuitive digital experiences.
-          </p>
-
-          <p class="text-lg leading-relaxed max-w-prose -translate-x-2">
-            Whether it's backend integrations, pixel-perfect UIs, or bold brand
-            identities, I craft solutions that are as practical as they are
-            visually striking.
-          </p>
-        </div>
-      </div>
-    </section>
-    <!-- WORK SECTION ───────────────────────────────────────────── -->
-    <section id="work" class="bg-[#E3E3CF] text-[#1A2318] py-28 px-6 md:px-20">
-      <div class="max-w-6xl mx-auto">
-
-        <!-- Heading -->
- <h2 id="workHeading" class="text-5xl font-bold leading-none -translate-x-2 mb-20">
-  Selected<br><span class="pl-24">Work</span>
-</h2>
-        <!-- Cards grid -->
-        <div class="work-grid grid md:grid-cols-3 gap-12">
-
-          <!-- CARD ─ 01 -->
-          <a href="#" class="work-card [will-change:transform] relative group border-2 border-lime-200 bg-[#1A2318] text-lime-100
-                         px-10 pt-14 pb-10 overflow-hidden
-                         hover:shadow-2xl transition-shadow duration-300">
-
-            <span class="absolute inset-y-0 left-0 w-2 bg-lime-200"></span>
-            <span class="absolute -top-4 -right-2 text-[10rem] font-bold
-                     text-lime-200/10 pointer-events-none select-none">01</span>
-
-            <h3 class="text-3xl font-extrabold uppercase tracking-tight">E-Commerce Platform</h3>
-            <p class="mt-8 text-sm tracking-widest opacity-80">React • Node.js</p>
-          </a>
-
-          <!-- CARD ─ 02 -->
-          <a href="#" class="work-card [will-change:transform] relative group border-2 border-lime-200 bg-[#1A2318] text-lime-100
-                         px-10 pt-14 pb-10 overflow-hidden
-                         hover:shadow-2xl transition-shadow duration-300">
-
-            <span class="absolute inset-y-0 left-0 w-2 bg-lime-200"></span>
-            <span class="absolute -top-4 -right-2 text-[10rem] font-bold
-                     text-lime-200/10 pointer-events-none select-none">02</span>
-
-            <h3 class="text-3xl font-extrabold uppercase tracking-tight">Portfolio Website</h3>
-            <p class="mt-8 text-sm tracking-widest opacity-80">HTML • CSS</p>
-          </a>
-
-          <!-- CARD ─ 03 -->
-          <a href="#" class="work-card [will-change:transform] relative group border-2 border-lime-200 bg-[#1A2318] text-lime-100
-                         px-10 pt-14 pb-10 overflow-hidden
-                         hover:shadow-2xl transition-shadow duration-300">
-
-            <span class="absolute inset-y-0 left-0 w-2 bg-lime-200"></span>
-            <span class="absolute -top-4 -right-2 text-[10rem] font-bold
-                     text-lime-200/10 pointer-events-none select-none">03</span>
-
-            <h3 class="text-3xl font-extrabold uppercase tracking-tight">Task Manager App</h3>
-            <p class="mt-8 text-sm tracking-widest opacity-80">Vue • Firebase</p>
-          </a>
-        </div>
-
-        <!-- Divider -->
-        <div class="mt-24 border-t-2 border-[#1A2318]/30"></div>
-      </div>
-    </section>
-
-    <!-- DESIGN MANIFESTO  ───────────────────────────────────────── -->
-    <section id="manifesto" class="bg-[#1A2318] text-lime-200 py-36 px-6 md:px-20 overflow-hidden">
-      <div class="max-w-6xl mx-auto relative">
-
-        <!-- Giant staggered headline -->
-        <h2 class="uppercase font-bold leading-none tracking-tight">
-          <span class="block text-[11vw] md:text-[10rem] -translate-x-6">
-            Design
-          </span>
-          <span class="block text-[#E3E3CF] text-[11vw] md:text-[10rem] translate-x-12">
-            Meets
-          </span>
-          <span class="block text-[11vw] md:text-[10rem] -translate-x-4 md:-translate-x-20">
-            Purpose
-          </span>
-        </h2>
-
-        <!-- Supporting copy -->
-        <p class="max-w-xl mt-16 ml-auto text-[#E3E3CF] text-lg tracking-wide">
-          I build experiences where brutalist structure and flat-style clarity
-          converge—clean code, daring visuals, and interfaces that get straight
-          to the point.
-        </p>
-
-        <!-- Subtle brutalist divider line -->
-        <div class="absolute top-1/2 left-0 w-full border-t-2 border-lime-200/15"></div>
-      </div>
-    </section>
-    <!-- FOOTER ─────────────────────────────────────────────────── -->
-    <footer class="bg-[#E3E3CF] text-[#1A2318] pt-24 pb-16 px-6 md:px-20 overflow-hidden">
-
-      <div class="max-w-6xl mx-auto grid md:grid-cols-2 gap-16">
-
-        <!-- Staggered headline / CTA -->
-        <h2 class="uppercase font-bold leading-none tracking-tight">
-          <!-- first word in dark green -->
-          <span class="block text-[14vw] md:text-[8rem] -translate-x-3">
-            Let’s
-          </span>
-          <!-- second word in lime accent -->
-          <span class="block text-lime-200 text-[14vw] md:text-[8rem] translate-x-16">
-            Talk
-          </span>
-        </h2>
-
-        <!-- Contact & social -->
-        <div class="flex flex-col justify-end space-y-8">
-
-          <p class="text-lg max-w-sm tracking-wide">
-            Ready to collaborate? I’m just an email away—let’s build something
-            bold and purposeful.
-          </p>
-
-          <!-- Email CTA -->
-          <a href="mailto:hello@abdullhinur.dev" class="inline-block border-2 border-lime-200 text-[#1A2318]
-                px-8 py-3 uppercase tracking-wider font-medium
-                transition-colors duration-300
-                hover:bg-lime-200 hover:text-[#1A2318]">
-            hello@abdullhinur.dev
-          </a>
-
-          <!-- Social links -->
-          <nav class="flex space-x-6 text-sm uppercase tracking-widest">
-            <a href="https://github.com/abdullhinur" class="hover:text-lime-200">GitHub</a>
-            <a href="https://linkedin.com/in/abdullhinur" class="hover:text-lime-200">LinkedIn</a>
-            <a href="https://x.com/abdullhinur" class="hover:text-lime-200">X</a>
-          </nav>
-        </div>
-      </div>
-
-      <!-- Divider + copyright -->
-      <div class="mt-24 border-t-2 border-[#1A2318]/20 pt-6 text-center text-xs tracking-widest">
-        © 2025 Abdullhinur Abdullahi. All rights reserved.
-      </div>
-    </footer>
-
-
-    <!-- GSAP core -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.13.0/gsap.min.js"></script>
-
-    <!-- ScrollTrigger plugin -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.13.0/ScrollTrigger.min.js"></script>
-
-    <!-- Lenis (smooth scroll, optional) -->
-    <script src="https://cdn.jsdelivr.net/npm/@studio-freight/lenis@1.0.42/dist/lenis.min.js"></script>
-
-
-    <script src="assets/js/scripts.js"></script>
-
-
+    const clock = new THREE.Clock();
+    function tick(){
+      if (!prefersReduced) {
+        const t = clock.getElapsedTime();
+        // Orbit around the center (counter-rotating)
+        ringInner.rotation.z =  t * 0.45;
+        ringOuter.rotation.z = -t * 0.30;
+      }
+      renderer.render(scene, camera);
+      requestAnimationFrame(tick);
+    }
+    tick();
+  })();
+  </script>
 </body>
-
 </html>
