@@ -36,11 +36,11 @@
       position:fixed; inset:0; width:100%; height:100%;
       opacity:.7; mix-blend-mode:multiply; pointer-events:none; z-index:50;
     }
-    @media (prefers-reduced-motion: reduce){ .grain{ opacity:.06; } }
+    @media (prefers-reduced-motion: reduce){ .grain{ opacity:.7; } }
 
     /* iOS/Safari paint fix: disable blending on phones */
     @media (max-width: 767px){
-      .grain{ mix-blend-mode:normal; opacity:.08; }
+      .grain{ mix-blend-mode:normal; opacity:.4; }
     }
 
     /* hero canvas fill */
@@ -123,7 +123,7 @@
     <canvas id="ringsCanvas" class="webgl absolute inset-0"></canvas>
 
     <div class="hero-phrases relative z-20 w-full text-center">
-      <span class="phrase leading-[.9] text-[clamp(2.6rem,10.5vw,8rem)] font-extrabold text-[var(--green)]" style="font-family:'Playfair Display',serif">Brutalist&nbsp;Developer</span>
+      <span class="phrase leading-[.9] text-[clamp(2.6rem,10.5vw,8rem)] font-extrabold text-[var(--green)]" style="font-family:'Playfair Display',serif">Brutalist&nbsp;<br />Developer</span>
       <span class="phrase leading-[.9] text-[clamp(2.6rem,10.5vw,8rem)] font-extrabold text-[var(--green)]" style="font-family:'Playfair Display',serif">Python&nbsp;<br />Programmer</span>
       <span class="phrase leading-[.9] text-[clamp(2.6rem,10.5vw,8rem)] font-extrabold text-[var(--green)]" style="font-family:'Playfair Display',serif">Performance-First</span>
       <span class="phrase leading-[.9] text-[clamp(2.6rem,10.5vw,8rem)] font-extrabold text-[var(--green)]" style="font-family:'Playfair Display',serif">Web&nbsp;Engineer</span>
