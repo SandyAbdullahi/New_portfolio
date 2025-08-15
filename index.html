@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -12,187 +11,93 @@
   <script src="https://cdn.tailwindcss.com"></script>
 
   <!-- Fonts -->
-  <link
-    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Playfair+Display:wght@700;800&display=swap"
-    rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Playfair+Display:wght@700;800&display=swap" rel="stylesheet">
 
   <style>
-    :root {
-      --green: #1A2318;
-      --lime: #C6E376;
-      --cream: #EDEBDD;
-      --white: #FFFFFF;
+    :root{
+      --green:#1A2318;
+      --lime:#C6E376;
+      --cream:#EDEBDD;
+      --white:#FFFFFF;
     }
 
-    html,
-    body {
-      overflow-x: hidden;
-      background: var(--white);
-    }
-
-    body {
-      font-family: "Inter", system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial;
-      color: var(--green);
-    }
+    html, body{ overflow-x:hidden; background:var(--white); }
+    body{ font-family:"Inter", system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial; color:var(--green); }
 
     /* nav underline */
-    .nav-a {
-      position: relative;
+    .nav-a{ position:relative; }
+    .nav-a::after{
+      content:""; position:absolute; left:0; bottom:-6px; height:2px; width:0; background:var(--green); transition:width .25s ease;
     }
-
-    .nav-a::after {
-      content: "";
-      position: absolute;
-      left: 0;
-      bottom: -6px;
-      height: 2px;
-      width: 0;
-      background: var(--green);
-      transition: width .25s ease;
-    }
-
-    .nav-a:hover::after {
-      width: 100%;
-    }
+    .nav-a:hover::after{ width:100%; }
 
     /* film grain */
-    .grain {
-      position: fixed;
-      inset: 0;
-      width: 100%;
-      height: 100%;
-      opacity: .45;
-      mix-blend-mode: multiply;
-      pointer-events: none;
-      z-index: 50;
+    .grain{
+      position:fixed; inset:0; width:100%; height:100%;
+      opacity:.18; mix-blend-mode:multiply; pointer-events:none; z-index:50;
+    }
+    @media (prefers-reduced-motion: reduce){ .grain{ opacity:.06; } }
+
+    /* iOS/Safari paint fix: disable blending on phones */
+    @media (max-width: 767px){
+      .grain{ mix-blend-mode:normal; opacity:.08; }
     }
 
-    @media (prefers-reduced-motion: reduce) {
-      .grain {
-        opacity: .05;
-      }
-    }
+    /* hero canvas fill */
+    #hero3d{ position:relative; display:grid; place-items:center; }
+    canvas.webgl{ position:absolute; inset:0; width:100%; height:100%; display:block; }
 
-    /* make sure the WebGL canvas fills and is centered with the section grid */
-    #hero3d {
-      position: relative;
-      display: grid;
-      place-items: center;
+    /* hero phrases centered */
+    .hero-phrases{ display:grid; place-items:center; text-align:center; }
+    .phrase{
+      position:absolute; left:50%; top:50%; transform:translate(-50%,-50%);
+      opacity:0; filter:blur(10px); transform-origin:center;
     }
-
-    canvas.webgl {
-      position: absolute;
-      inset: 0;
-      width: 100%;
-      height: 100%;
-      display: block;
-    }
-
-    /* Center hero phrases */
-    .hero-phrases {
-      display: grid;
-      place-items: center;
-      /* centers inner content */
-      text-align: center;
-    }
-
-    /* Phrases overlap at the center */
-    .phrase {
-      position: absolute;
-      left: 50%;
-      top: 50%;
-      transform: translate(-50%, -50%);
-      opacity: 0;
-      filter: blur(10px);
-      transform-origin: center;
-    }
-
 
     /* left list scroller look */
-    .no-scrollbar::-webkit-scrollbar {
-      display: none;
-    }
+    .no-scrollbar::-webkit-scrollbar{ display:none; }
+    .no-scrollbar{ -ms-overflow-style:none; scrollbar-width:none; }
 
-    .no-scrollbar {
-      -ms-overflow-style: none;
-      scrollbar-width: none;
-    }
+    /* panels: show/hide shell via .active; dissolve only inner text */
+    .panel{ display:none; }
+    .panel.active{ display:block; }
 
-    /* PANELS: we don’t animate the shell, only the text inside */
-    .panel {
-      display: none;
-    }
+    .panel-3d canvas{ cursor:grab; touch-action:none; }
+    .panel-3d.grabbing canvas{ cursor:grabbing; }
 
-    .panel.active {
-      display: block;
-    }
-
-    .panel-3d canvas {
-      cursor: grab;
-      touch-action: none;
-    }
-
-    .panel-3d.grabbing canvas {
-      cursor: grabbing;
-    }
-
-    /* dissolve only text inside panels */
-    .panel-text {
-      opacity: 0;
-      filter: blur(10px);
-      transform: translateY(8px);
-    }
+    .panel-text{ opacity:0; filter:blur(10px); transform:translateY(8px); }
 
     /* showcase word hover/active */
-    .scroll-item {
-      position: relative;
+    .scroll-item{ position:relative; }
+    .big-word{
+      position:relative; z-index:1;
+      transition:transform .28s cubic-bezier(.2,.8,.2,1), color .2s ease;
+      will-change:transform;
     }
-
-    .big-word {
-      position: relative;
-      z-index: 1;
-      transition: transform .28s cubic-bezier(.2, .8, .2, 1), color .2s ease;
-      will-change: transform;
+    .scroll-item::before{
+      content:""; position:absolute; inset:0; top:20%; height:60%;
+      background:rgba(198,227,118,0.18);
+      transform:scaleX(0); transform-origin:left center; transition:transform .35s ease; z-index:0;
     }
+    .scroll-item:hover::before, .scroll-item.is-active::before{ transform:scaleX(1); }
+    .scroll-item:hover .big-word, .scroll-item.is-active .big-word{ color:var(--lime); transform:translateX(.2vw) skewX(-1.2deg); }
 
-    /* lime highlight bar behind the word */
-    .scroll-item::before {
-      content: "";
-      position: absolute;
-      inset: 0;
-      top: 20%;
-      height: 60%;
-      background: rgba(198, 227, 118, 0.18);
-      /* --lime at low alpha */
-      transform: scaleX(0);
-      transform-origin: left center;
-      transition: transform .35s ease;
-      z-index: 0;
-    }
-
-    /* hover & active states */
-    .scroll-item:hover::before,
-    .scroll-item.is-active::before {
-      transform: scaleX(1);
-    }
-
-    .scroll-item:hover .big-word,
-    .scroll-item.is-active .big-word {
-      color: var(--lime);
-      transform: translateX(.2vw) skewX(-1.2deg);
+    /* ensure mobile scroller paints correctly on iOS */
+    #showcase .md\:hidden ul{
+      -webkit-overflow-scrolling:touch;
+      position:relative; z-index:1; background:var(--cream);
     }
   </style>
 </head>
-
 <body class="overflow-x-hidden">
 
   <!-- Global Film Grain -->
   <svg class="grain" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
     <filter id="noiseFilter">
       <feTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="4" stitchTiles="stitch">
-        <animate attributeName="baseFrequency" values="0.65;0.9;0.65" dur="6s" repeatCount="indefinite" />
+        <animate attributeName="baseFrequency" values="0.65;0.9;0.65" dur="6s" repeatCount="indefinite"/>
       </feTurbulence>
-      <feColorMatrix type="saturate" values="0" />
+      <feColorMatrix type="saturate" values="0"/>
     </filter>
     <rect width="100%" height="100%" filter="url(#noiseFilter)"></rect>
   </svg>
@@ -213,93 +118,60 @@
     </div>
   </header>
 
-<!-- HERO: Orbiting rings + dissolving phrases -->
-<section id="hero3d" class="relative min-h-[90vh] bg-white overflow-hidden grid place-items-center">
-  <canvas id="ringsCanvas" class="webgl absolute inset-0"></canvas>
+  <!-- HERO: Orbiting rings + dissolving phrases -->
+  <section id="hero3d" class="relative min-h-[90vh] bg-white overflow-hidden grid place-items-center">
+    <canvas id="ringsCanvas" class="webgl absolute inset-0"></canvas>
 
-  <div class="hero-phrases relative z-20 w-full text-center">
-    <span class="phrase leading-[.9] text-[clamp(2.6rem,10.5vw,8rem)] font-extrabold text-[var(--green)]" style="font-family:'Playfair Display',serif">
-      Brutalist&nbsp;Developer
-    </span>
-    <span class="phrase leading-[.9] text-[clamp(2.6rem,10.5vw,8rem)] font-extrabold text-[var(--green)]" style="font-family:'Playfair Display',serif">
-      Python&nbsp;Programmer
-    </span>
-    <span class="phrase leading-[.9] text-[clamp(2.6rem,10.5vw,8rem)] font-extrabold text-[var(--green)]" style="font-family:'Playfair Display',serif">
-      Performance-First
-    </span>
-    <span class="phrase leading-[.9] text-[clamp(2.6rem,10.5vw,8rem)] font-extrabold text-[var(--green)]" style="font-family:'Playfair Display',serif">
-      Web&nbsp;Engineer
-    </span>
-  </div>
-</section>
+    <div class="hero-phrases relative z-20 w-full text-center">
+      <span class="phrase leading-[.9] text-[clamp(2.6rem,10.5vw,8rem)] font-extrabold text-[var(--green)]" style="font-family:'Playfair Display',serif">Brutalist&nbsp;Developer</span>
+      <span class="phrase leading-[.9] text-[clamp(2.6rem,10.5vw,8rem)] font-extrabold text-[var(--green)]" style="font-family:'Playfair Display',serif">Python&nbsp;Programmer</span>
+      <span class="phrase leading-[.9] text-[clamp(2.6rem,10.5vw,8rem)] font-extrabold text-[var(--green)]" style="font-family:'Playfair Display',serif">Performance-First</span>
+      <span class="phrase leading-[.9] text-[clamp(2.6rem,10.5vw,8rem)] font-extrabold text-[var(--green)]" style="font-family:'Playfair Display',serif">Web&nbsp;Engineer</span>
+    </div>
+  </section>
 
-
-
-  <!-- SHOWCASE: full-viewport words (left) + sticky panels (right) with 3D -->
+  <!-- SHOWCASE -->
   <section id="showcase" class="bg-[var(--cream)] text-[var(--green)] p-0 m-0 overflow-x-hidden">
-    <div class="w-full grid md:grid-cols-12 gap-0">
 
-      <!-- LEFT: full-bleed list -->
+    <!-- DESKTOP -->
+    <div class="hidden md:grid w-full md:grid-cols-12 gap-0">
+      <!-- LEFT -->
       <div class="md:col-span-5 relative z-0 overflow-visible">
-        <ul id="topicList" class="no-scrollbar h-screen overflow-y-scroll snap-y snap-mandatory
-                   w-screen pl-0 ml-0">
-
+        <ul id="topicList" class="no-scrollbar h-screen overflow-y-scroll snap-y snap-mandatory w-screen pl-0 ml-0">
           <li class="scroll-item snap-start h-screen m-0 p-0 select-none flex items-center" data-panel="p1">
-            <span class="big-word block font-extrabold uppercase tracking-tight whitespace-nowrap
-                         text-[100vh] leading-[0.62] -mt-[0.04em] -mb-[0.04em]">
-              Design
-            </span>
+            <span class="big-word block font-extrabold uppercase tracking-tight whitespace-nowrap text-[100vh] leading-[0.62] -mt-[0.04em] -mb-[0.04em]">Design</span>
           </li>
-
           <li class="scroll-item snap-start h-screen m-0 p-0 select-none flex items-center" data-panel="p2">
-            <span class="big-word block font-extrabold uppercase tracking-tight whitespace-nowrap
-                         text-[100vh] leading-[0.62] -mt-[0.04em] -mb-[0.04em]">
-              Build
-            </span>
+            <span class="big-word block font-extrabold uppercase tracking-tight whitespace-nowrap text-[100vh] leading-[0.62] -mt-[0.04em] -mb-[0.04em]">Build</span>
           </li>
-
           <li class="scroll-item snap-start h-screen m-0 p-0 select-none flex items-center" data-panel="p3">
-            <span class="big-word block font-extrabold uppercase tracking-tight whitespace-nowrap
-                         text-[100vh] leading-[0.62] -mt-[0.04em] -mb-[0.04em]">
-              Motion
-            </span>
+            <span class="big-word block font-extrabold uppercase tracking-tight whitespace-nowrap text-[100vh] leading-[0.62] -mt-[0.04em] -mb-[0.04em]">Motion</span>
           </li>
-
           <li class="scroll-item snap-start h-screen m-0 p-0 select-none flex items-center" data-panel="p4">
-            <span class="big-word block font-extrabold uppercase tracking-tight whitespace-nowrap
-                         text-[100vh] leading-[0.62] -mt-[0.04em] -mb-[0.04em]">
-              Ship
-            </span>
+            <span class="big-word block font-extrabold uppercase tracking-tight whitespace-nowrap text-[100vh] leading-[0.62] -mt-[0.04em] -mb-[0.04em]">Ship</span>
           </li>
         </ul>
       </div>
 
-      <!-- RIGHT: sticky wrapper (panel shell stays; only text dissolves) -->
+      <!-- RIGHT (sticky panels) -->
       <div class="md:col-span-7 relative z-10">
-        <!-- no outer padding; panel borders hug the column edges -->
         <div class="sticky top-0 bg-[var(--cream)] p-0">
           <div class="min-h-[0px] space-y-0">
 
             <!-- DESIGN -->
             <article id="p1" class="panel active">
-              <!-- keep internal padding; outside is now zero -->
               <div class="border-2 border-[var(--green)] p-8 md:p-10 bg-white">
                 <div class="grid md:grid-cols-2 gap-6 items-stretch">
                   <div class="panel-copy">
                     <h3 class="panel-text text-3xl md:text-4xl font-extrabold uppercase mb-4">Design</h3>
-                    <p class="panel-text max-w-prose text-black/80">
-                      Type-led systems, grids, and intent. Replace the demo with a painter/architect-table model (.glb)
-                      anytime.
-                    </p>
+                    <p class="panel-text max-w-prose text-black/80">Type-led systems, grids, and intent. Replace the demo with a painter/architect-table model (.gltf/.glb) anytime.</p>
                     <div class="panel-text mt-8 h-0 border-t-2 border-[var(--green)]/30"></div>
                   </div>
-                  <!-- 3D -->
                   <div class="panel-3d relative h-56 md:h-64 lg:h-72 border-2 border-[var(--green)]/20"
-                     data-model="assets/3d_objects/person.glb"
-                    data-bg-color="rgb(237,235,221)" data-bg-alpha="1"
-                    data-env-hdr="https://github.com/pmndrs/drei-assets/tree/master/hdri/studio_small_08_1k.hdr"
-                    data-shadow="true" data-ground="true" data-ground-color="#ffffff" data-ground-opacity="0.25"
-                    data-autorotate="true">
+                       data-model="/assets/3d_objects/person.glb"
+                       data-bg-color="rgb(237,235,221)" data-bg-alpha="1"
+                       data-shadow="true" data-ground="true" data-ground-opacity="0.25"
+                       data-autorotate="true">
                     <canvas class="webgl absolute inset-0"></canvas>
                   </div>
                 </div>
@@ -312,16 +184,14 @@
                 <div class="grid md:grid-cols-2 gap-6 items-stretch">
                   <div class="panel-copy">
                     <h3 class="panel-text text-3xl md:text-4xl font-extrabold uppercase mb-4">Engineering</h3>
-                    <p class="panel-text max-w-prose text-black/80">Robust front-ends, solid APIs, clean integrations.
-                    </p>
+                    <p class="panel-text max-w-prose text-black/80">Robust front-ends, solid APIs, clean integrations.</p>
                     <div class="panel-text mt-8 h-0 border-t-2 border-[var(--green)]/30"></div>
                   </div>
                   <div class="panel-3d relative h-56 md:h-64 lg:h-72 border-2 border-[var(--green)]/20"
-                    data-model="assets/3d_objects/room.glb"
-                     data-bg-color="#C6E376" data-bg-alpha="1"
-                    data-env-hdr="https://cdn.jsdelivr.net/gh/pmndrs/drei-assets@master/hdri/studio_small_08_1k.hdr"
-                    data-shadow="false" data-ground="true" data-ground-color="#ffffff" data-ground-opacity="0.25"
-                    data-autorotate="true">
+                       data-model="/assets/3d_objects/room.glb"
+                       data-bg-color="#C6E376" data-bg-alpha="1"
+                       data-shadow="false" data-ground="true" data-ground-opacity="0.25"
+                       data-autorotate="true">
                     <canvas class="webgl absolute inset-0"></canvas>
                   </div>
                 </div>
@@ -334,16 +204,15 @@
                 <div class="grid md:grid-cols-2 gap-6 items-stretch">
                   <div class="panel-copy">
                     <h3 class="panel-text text-3xl md:text-4xl font-extrabold uppercase mb-4">Motion & 3D</h3>
-                    <p class="panel-text max-w-prose text-black/80">GSAP & Three.js sequences, scroll-driven reveals,
-                      tasteful depth.</p>
+                    <p class="panel-text max-w-prose text-black/80">GSAP & Three.js sequences, scroll-driven reveals, tasteful depth.</p>
                     <div class="panel-text mt-8 h-0 border-t-2 border-[var(--green)]/30"></div>
                   </div>
                   <div class="panel-3d relative h-56 md:h-64 lg:h-72 border-2 border-[var(--green)]/20"
-                    data-model="assets/3d_objects/moon.glb"
-                    data-stars="true" data-stars-count="900" data-stars-color="#C6E376"
-     data-stars-size="0.9" data-stars-radius="60"
-     data-shadow="true" data-ground="true" data-ground-opacity="0.22"
-     data-autorotate="true">
+                       data-model="/assets/3d_objects/moon.glb"
+                       data-stars="true" data-stars-count="900" data-stars-color="#C6E376"
+                       data-stars-size="0.9" data-stars-radius="60"
+                       data-shadow="true" data-ground="true" data-ground-opacity="0.22"
+                       data-autorotate="true">
                     <canvas class="webgl absolute inset-0"></canvas>
                   </div>
                 </div>
@@ -356,16 +225,14 @@
                 <div class="grid md:grid-cols-2 gap-6 items-stretch">
                   <div class="panel-copy">
                     <h3 class="panel-text text-3xl md:text-4xl font-extrabold uppercase mb-4">Delivery</h3>
-                    <p class="panel-text max-w-prose text-black/80">CI/CD, analytics, performance budgets—ship with
-                      intent.</p>
+                    <p class="panel-text max-w-prose text-black/80">CI/CD, analytics, performance budgets—ship with intent.</p>
                     <div class="panel-text mt-8 h-0 border-t-2 border-[var(--green)]/30"></div>
                   </div>
                   <div class="panel-3d relative h-56 md:h-64 lg:h-72 border-2 border-[var(--green)]/20"
-                    data-model="assets/3d_objects/cardbox.gltf"      
-                    data-bg-color="rgb(237,235,221)" data-bg-alpha="1"
-                    data-env-hdr="https://cdn.jsdelivr.net/gh/pmndrs/drei-assets@master/hdri/studio_small_08_1k.hdr"
-                    data-shadow="true" data-ground="true" data-ground-color="#ffffff" data-ground-opacity="0.25"
-                    data-autorotate="true">
+                       data-model="/assets/3d_objects/cardbox.gltf"
+                       data-bg-color="rgb(237,235,221)" data-bg-alpha="1"
+                       data-shadow="true" data-ground="true" data-ground-opacity="0.25"
+                       data-autorotate="true">
                     <canvas class="webgl absolute inset-0"></canvas>
                   </div>
                 </div>
@@ -375,7 +242,96 @@
           </div>
         </div>
       </div>
+    </div><!-- end DESKTOP -->
 
+    <!-- MOBILE (stacked slides) -->
+    <div class="block md:hidden">
+      <ul class="snap-y snap-mandatory h-screen h-[100svh] min-h-[100svh] overflow-y-auto no-scrollbar">
+        <!-- Slide 1 -->
+        <li class="snap-start min-h-screen relative">
+          <div class="absolute inset-0 flex items-center justify-start pointer-events-none">
+            <span class="font-extrabold uppercase tracking-tight text-[clamp(6rem,22vh,26vh)] leading-[0.8] pl-2 opacity-[0.08]">Design</span>
+          </div>
+          <div id="p1m" class="relative z-10 px-4 pt-6">
+            <div class="border-2 border-[var(--green)] p-6 bg-white">
+              <h3 class="text-2xl font-extrabold uppercase mb-3">Design</h3>
+              <p class="text-black/80">Type-led systems, grids, and intent.</p>
+              <div class="mt-6 h-0 border-t-2 border-[var(--green)]/30"></div>
+              <div class="panel-3d mt-4 relative h-56 border-2 border-[var(--green)]/20"
+                   data-model="/assets/3d_objects/person.glb"
+                   data-bg-color="rgb(237,235,221)" data-bg-alpha="1"
+                   data-shadow="true" data-ground="true" data-ground-opacity="0.25"
+                   data-autorotate="true">
+                <canvas class="webgl absolute inset-0"></canvas>
+              </div>
+            </div>
+          </div>
+        </li>
+
+        <!-- Slide 2 -->
+        <li class="snap-start min-h-screen relative">
+          <div class="absolute inset-0 flex items-center justify-start pointer-events-none">
+            <span class="font-extrabold uppercase tracking-tight text-[clamp(6rem,22vh,26vh)] leading-[0.8] pl-2 opacity-[0.08]">Build</span>
+          </div>
+          <div id="p2m" class="relative z-10 px-4 pt-6">
+            <div class="border-2 border-[var(--green)] p-6 bg-white">
+              <h3 class="text-2xl font-extrabold uppercase mb-3">Engineering</h3>
+              <p class="text-black/80">Robust front-ends, solid APIs, clean integrations.</p>
+              <div class="mt-6 h-0 border-t-2 border-[var(--green)]/30"></div>
+              <div class="panel-3d mt-4 relative h-56 border-2 border-[var(--green)]/20"
+                   data-model="/assets/3d_objects/room.glb"
+                   data-bg-color="#C6E376" data-bg-alpha="1"
+                   data-shadow="false" data-ground="true" data-ground-opacity="0.25"
+                   data-autorotate="true">
+                <canvas class="webgl absolute inset-0"></canvas>
+              </div>
+            </div>
+          </div>
+        </li>
+
+        <!-- Slide 3 -->
+        <li class="snap-start min-h-screen relative">
+          <div class="absolute inset-0 flex items-center justify-start pointer-events-none">
+            <span class="font-extrabold uppercase tracking-tight text-[clamp(6rem,22vh,26vh)] leading-[0.8] pl-2 opacity-[0.08]">Motion</span>
+          </div>
+          <div id="p3m" class="relative z-10 px-4 pt-6">
+            <div class="border-2 border-[var(--green)] p-6 bg-white">
+              <h3 class="text-2xl font-extrabold uppercase mb-3">Motion & 3D</h3>
+              <p class="text-black/80">GSAP & Three.js sequences, scroll-driven reveals, tasteful depth.</p>
+              <div class="mt-6 h-0 border-t-2 border-[var(--green)]/30"></div>
+              <div class="panel-3d mt-4 relative h-56 border-2 border-[var(--green)]/20"
+                   data-model="/assets/3d_objects/moon.glb"
+                   data-stars="true" data-stars-count="900" data-stars-color="#C6E376"
+                   data-stars-size="0.9" data-stars-radius="60"
+                   data-shadow="true" data-ground="true" data-ground-opacity="0.22"
+                   data-autorotate="true">
+                <canvas class="webgl absolute inset-0"></canvas>
+              </div>
+            </div>
+          </div>
+        </li>
+
+        <!-- Slide 4 -->
+        <li class="snap-start min-h-screen relative">
+          <div class="absolute inset-0 flex items-center justify-start pointer-events-none">
+            <span class="font-extrabold uppercase tracking-tight text-[clamp(6rem,22vh,26vh)] leading-[0.8] pl-2 opacity-[0.08]">Ship</span>
+          </div>
+          <div id="p4m" class="relative z-10 px-4 pt-6">
+            <div class="border-2 border-[var(--green)] p-6 bg-white">
+              <h3 class="text-2xl font-extrabold uppercase mb-3">Delivery</h3>
+              <p class="text-black/80">CI/CD, analytics, performance budgets—ship with intent.</p>
+              <div class="mt-6 h-0 border-t-2 border-[var(--green)]/30"></div>
+              <div class="panel-3d mt-4 relative h-56 border-2 border-[var(--green)]/20"
+                   data-model="/assets/3d_objects/cardbox.gltf"
+                   data-bg-color="rgb(237,235,221)" data-bg-alpha="1"
+                   data-shadow="true" data-ground="true" data-ground-opacity="0.25"
+                   data-autorotate="true">
+                <canvas class="webgl absolute inset-0"></canvas>
+              </div>
+            </div>
+          </div>
+        </li>
+      </ul>
     </div>
   </section>
 
@@ -383,562 +339,393 @@
   <section id="contact" class="bg-white text-[var(--green)] py-24 md:py-32 px-6 md:px-10">
     <div class="max-w-6xl mx-auto">
       <h3 class="text-5xl md:text-6xl font-extrabold leading-none">Let’s<br><span class="pl-24">Talk</span></h3>
-      <p class="mt-6 max-w-md text-black/80">Ready to collaborate? I’m an email away—let’s build something bold and
-        purposeful.</p>
-      <a href="mailto:hello@abdullahinur.dev"
-        class="mt-8 inline-block border-2 border-[var(--green)] text-[var(--green)] px-8 py-3 uppercase tracking-wider font-medium transition-colors duration-300 hover:bg-[var(--green)] hover:text-white">
+      <p class="mt-6 max-w-md text-black/80">Ready to collaborate? I’m an email away—let’s build something bold and purposeful.</p>
+      <a href="mailto:hello@abdullahinur.dev" class="mt-8 inline-block border-2 border-[var(--green)] text-[var(--green)] px-8 py-3 uppercase tracking-wider font-medium transition-colors duration-300 hover:bg-[var(--green)] hover:text-white">
         hello@abdullahinur.dev
       </a>
       <div class="mt-12 h-0 border-t-2 border-[var(--green)]/20"></div>
     </div>
   </section>
 
-  <!-- Three.js (global) + GLTFLoader (global) + GSAP -->
-  <!-- GSAP (keep) -->
+  <!-- GSAP -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.13.0/gsap.min.js"></script>
 
   <!-- Import map for Three.js ESM -->
-<script type="importmap">
-{
-  "imports": {
-    "three": "https://cdn.jsdelivr.net/npm/three@0.159.0/build/three.module.js",
-    "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.159.0/examples/jsm/"
-  }
-}
-</script>
-
-
+  <script type="importmap">
+    {
+      "imports": {
+        "three": "https://cdn.jsdelivr.net/npm/three@0.159.0/build/three.module.js",
+        "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.159.0/examples/jsm/"
+      }
+    }
+  </script>
 
   <!-- App code (ES modules) -->
   <script type="module">
     import * as THREE from 'three';
-    import { GLTFLoader }        from 'three/addons/loaders/GLTFLoader.js';
-    import { DRACOLoader }       from 'three/addons/loaders/DRACOLoader.js';
-    import { KTX2Loader }        from 'three/addons/loaders/KTX2Loader.js';
-    import { OrbitControls }     from 'three/addons/controls/OrbitControls.js';
-    import { RGBELoader }        from 'three/addons/loaders/RGBELoader.js';
-/* ---------- HERO rings (centered + morphing paths + dot SHAPE swaps) ---------- */
-(() => {
-  const canvas = document.getElementById('ringsCanvas');
-  const hero   = document.getElementById('hero3d');
+    import { GLTFLoader }  from 'three/addons/loaders/GLTFLoader.js';
+    import { DRACOLoader } from 'three/addons/loaders/DRACOLoader.js';
+    import { KTX2Loader }  from 'three/addons/loaders/KTX2Loader.js';
+    import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+    import { RGBELoader }  from 'three/addons/loaders/RGBELoader.js';
 
-  const scene = new THREE.Scene();
-  scene.background = new THREE.Color('#ffffff');
+    /* ---------- HERO rings (centered + morphing + shape swap) ---------- */
+    (() => {
+      const canvas = document.getElementById('ringsCanvas');
+      const hero   = document.getElementById('hero3d');
 
-  const camera = new THREE.PerspectiveCamera(45, 1, 0.1, 100);
-  camera.position.set(0, 0, 7.2);
-  camera.lookAt(0, 0, 0);
+      const scene = new THREE.Scene();
+      scene.background = new THREE.Color('#ffffff');
 
-  const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: false });
+      const camera = new THREE.PerspectiveCamera(45, 1, 0.1, 100);
+      camera.position.set(0, 0, 7.2);
+      camera.lookAt(0, 0, 0);
 
-  function setSize() {
-    const { width, height } = hero.getBoundingClientRect();
-    renderer.setSize(width, height, false);
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.5));
-    camera.aspect = width / height;
-    camera.updateProjectionMatrix();
-  }
-  setSize(); addEventListener('resize', setSize);
+      const renderer = new THREE.WebGLRenderer({ canvas, antialias:true, alpha:false });
 
-  scene.add(new THREE.AmbientLight(0xffffff, 0.95));
-
-  const orbitRoot = new THREE.Group();
-  scene.add(orbitRoot);
-
-  // ---------- SHAPE PATHS (same as before; trimmed for brevity) ----------
-  const V = (x,y)=>new THREE.Vector3(x,y,0);
-  const makeCircle  = (n, r)=>Array.from({length:n},(_,i)=>{const a=i/n*2*Math.PI;return V(Math.cos(a)*r,Math.sin(a)*r)});
-  const makeEllipse = (n, rx,ry)=>Array.from({length:n},(_,i)=>{const a=i/n*2*Math.PI;return V(Math.cos(a)*rx,Math.sin(a)*ry)});
-  const makeHeart = (n, s)=>{
-    const pts=[]; let maxR=0;
-    for(let i=0;i<n;i++){
-      const t=i/n*2*Math.PI;
-      const x=16*Math.sin(t)**3;
-      const y=13*Math.cos(t)-5*Math.cos(2*t)-2*Math.cos(3*t)-Math.cos(4*t);
-      maxR=Math.max(maxR,Math.hypot(x,y)); pts.push(V(x,y));
-    }
-    const k=s/(maxR||1); return pts.map(p=>p.multiplyScalar(k));
-  };
-  const makeStar = (n,r1,r2,points=5)=>{
-    const m=Math.max(n,points*2), tmp=[];
-    for(let i=0;i<m;i++){ const a=i/m*2*Math.PI, r=(i%2? r2:r1); tmp.push(V(Math.cos(a)*r,Math.sin(a)*r)); }
-    return Array.from({length:n},(_,i)=>{ const t=i/(n-1)*(m-1), i0=Math.floor(t), i1=Math.min(m-1,i0+1), f=t-i0; return new THREE.Vector3().lerpVectors(tmp[i0],tmp[i1],f); });
-  };
-  const makeLissajous=(n,ax,ay,ph,s)=>Array.from({length:n},(_,i)=>{const t=i/n*2*Math.PI;return V(Math.sin(ax*t+ph)*s,Math.sin(ay*t)*s)});
-  const makeSuperellipse=(n,a,b,pow=4)=>Array.from({length:n},(_,i)=>{const t=i/n*2*Math.PI,ct=Math.cos(t),st=Math.sin(t);return V(Math.sign(ct)*a*Math.abs(ct)**(2/pow),Math.sign(st)*b*Math.abs(st)**(2/pow))});
-  const makeLemniscate=(n,s)=>Array.from({length:n},(_,i)=>{const t=i/n*2*Math.PI,d=1+Math.sin(t)**2;return V((s*Math.SQRT2*Math.cos(t))/d,(s*Math.SQRT2*Math.cos(t)*Math.sin(t))/d)});
-  const makeSpiro=(n,R,r,d,k=1)=>Array.from({length:n},(_,i)=>{const t=i/n*2*Math.PI;return V(((R-r)*Math.cos(t)+d*Math.cos((R-r)/r*t))*k,((R-r)*Math.sin(t)-d*Math.sin((R-r)/r*t))*k)});
-
-  // ---------- DOT GEOMETRIES (actual mesh shapes) ----------
-  function makeDotGeometries(dotRadius){
-    return {
-      sphere:   new THREE.SphereGeometry(dotRadius, 16, 16),
-      box:      new THREE.BoxGeometry(dotRadius*2, dotRadius*2, dotRadius*2),
-      octa:     new THREE.OctahedronGeometry(dotRadius, 0),
-      icosa:    new THREE.IcosahedronGeometry(dotRadius, 0),
-      cone:     new THREE.ConeGeometry(dotRadius, dotRadius*2, 16),
-      capsule:  new THREE.CapsuleGeometry(dotRadius*0.75, dotRadius*1.2, 6, 12)
-    };
-  }
-
-  // ---------- RING FACTORY ----------
-  function makeDotRing({ radius, count, dotRadius, color, tiltX, tiltY, initialShape='sphere' }) {
-    const mat  = new THREE.MeshStandardMaterial({ color, roughness:.35, metalness:.25, flatShading:true });
-    const geos = makeDotGeometries(dotRadius);
-
-    const ring = new THREE.Group();
-    ring.rotation.x = tiltX;
-    ring.rotation.y = tiltY;
-
-    // place dots on a circle initially
-    const base = makeCircle(count, radius);
-    for (let i=0;i<count;i++){
-      const m = new THREE.Mesh(geos[initialShape], mat);
-      m.position.copy(base[i]);
-      ring.add(m);
-    }
-    orbitRoot.add(ring);
-
-    // morph positions (unchanged)
-    ring.morphTo = (targets, dur=2.2) => {
-      const kids = ring.children; const N = Math.min(kids.length, targets.length);
-      gsap.killTweensOf(kids.map(k=>k.position));
-      gsap.to(kids.map(k=>k.position), {
-        x:(i)=>targets[i].x, y:(i)=>targets[i].y, z:(i)=>targets[i].z,
-        duration:dur, ease:"power3.inOut",
-        stagger:{ each:.012, from:"center" }
-      });
-    };
-
-    // NEW: swap dot geometry with a quick scale-in/out so it feels like a morph
-    ring.swapShape = (shape='sphere', dur=0.45) => {
-      const g = geos[shape] || geos.sphere;
-      ring.children.forEach((m, i) => {
-        gsap.to(m.scale, {
-          x:0.001, y:0.001, z:0.001,
-          duration: dur*0.5, ease:"power2.in",
-          delay: i*0.003,
-          onComplete: () => {
-            m.geometry = g;
-            gsap.to(m.scale, { x:1, y:1, z:1, duration: dur*0.5, ease:"power2.out" });
-          }
-        });
-      });
-    };
-
-    return ring;
-  }
-
-  // rings (your palette/tilts)
-  const inner = makeDotRing({ radius:2.1, count:20, dotRadius:.036, color:'#1A2318', tiltX:Math.PI*.22, tiltY:Math.PI*.15 });
-  const mid   = makeDotRing({ radius:2.7, count:20, dotRadius:.034, color:'#6E8256', tiltX:Math.PI*.62, tiltY:-Math.PI*.18 });
-  const outer = makeDotRing({ radius:3.3, count:20, dotRadius:.032, color:'#C6E376', tiltX:Math.PI*.40, tiltY:-Math.PI*1.0 });
-
-  // PATH programs + SHAPE programs
-  const pathPrograms = [
-    (c)=>[ makeCircle(c,2.1),                 makeCircle(c,2.7),                makeCircle(c,3.3) ],
-    (c)=>[ makeEllipse(c,2.4,1.6),            makeEllipse(c,3.0,2.0),           makeEllipse(c,3.7,2.2) ],
-    (c)=>[ makeLissajous(c,3,2,Math.PI/2,1.8),makeLissajous(c,5,4,Math.PI/3,2.4),makeLissajous(c,4,3,Math.PI/4,3.0) ],
-    (c)=>[ makeHeart(c,2.2),                  makeHeart(c,2.8),                 makeHeart(c,3.4) ],
-    (c)=>[ makeStar(c,2.3,1.2,5),             makeStar(c,3.0,1.5,5),            makeStar(c,3.8,1.8,5) ],
-    (c)=>[ makeSuperellipse(c,2.1,2.1,3.6),   makeSuperellipse(c,2.7,2.4,3.6),  makeSuperellipse(c,3.4,2.9,3.6) ],
-    (c)=>[ makeLemniscate(c,2.2),             makeLemniscate(c,2.7),            makeLemniscate(c,3.2) ],
-    (c)=>[ makeSpiro(c,5,3,4,.35),            makeSpiro(c,7,3,5,.36),           makeSpiro(c,9,4,5,.37) ],
-  ];
-
-  const dotShapeCycle = ['sphere','box','octa','icosa','cone','capsule']; // cycles per morph
-
-  const reduce   = matchMedia('(prefers-reduced-motion: reduce)').matches;
-  const MORPH_D  = 2.4, HOLD_D = 1.1;
-
-  if (!reduce){
-    let i=0;
-    const cycle = ()=>{
-      // morph paths
-      const [a,b,c] = pathPrograms[i % pathPrograms.length](inner.children.length);
-      inner.morphTo(a, MORPH_D);
-      mid.morphTo(b, MORPH_D);
-      outer.morphTo(c, MORPH_D);
-
-      // swap dot geometry (all rings share the same next shape for cohesion)
-      const nextDotShape = dotShapeCycle[i % dotShapeCycle.length];
-      inner.swapShape(nextDotShape, 0.42);
-      mid.swapShape(nextDotShape,   0.42);
-      outer.swapShape(nextDotShape, 0.42);
-
-      // subtle tilt change
-      const tiltPresets = [
-        { x:Math.PI*.22, y: Math.PI*.15 },
-        { x:Math.PI*.35, y: Math.PI*.05 },
-        { x:Math.PI*.55, y:-Math.PI*.10 },
-        { x:Math.PI*.25, y:-Math.PI*.25 },
-        { x:Math.PI*.42, y:-Math.PI*.90 },
-      ][i % 5];
-
-      gsap.to([inner.rotation, mid.rotation, outer.rotation], {
-        x:(idx)=> tiltPresets.x + (idx-1)*0.06,
-        y:(idx)=> tiltPresets.y - (idx-1)*0.08,
-        duration:MORPH_D, ease:"power2.inOut"
-      });
-
-      i++; gsap.delayedCall(MORPH_D + HOLD_D, cycle);
-    };
-    cycle();
-  }
-
-  // gentle overall spin
-  const clock = new THREE.Clock();
-  (function tick(){
-    if (!reduce){
-      inner.rotation.z +=  0.0055;
-      mid.rotation.z   += -0.0045;
-      outer.rotation.z +=  0.0038;
-    }
-    renderer.render(scene, camera);
-    requestAnimationFrame(tick);
-  })();
-})();
-
-
-
-
-  /* ---------- Hero phrases dissolve (loop) ---------- */
-(() => {
-  const phrases = gsap.utils.toArray(".phrase");
-  // ❌ remove this if you had it:
-  // gsap.set(".hero-phrases", { position: "absolute" });
-
-  gsap.set(phrases, { opacity: 0, filter: "blur(10px)", y: 10, zIndex: (i) => 100 - i });
-
-  const tl = gsap.timeline({ repeat: -1, repeatDelay: 0.2 });
-  phrases.forEach((el) => {
-    tl.to(el, { opacity: 1, filter: "blur(0px)", y: 0, duration: 0.9, ease: "power3.out" })
-      .to(el, { opacity: 0, filter: "blur(12px)", y: -10, duration: 0.8, ease: "power3.in" }, "+=0.9");
-  });
-})();
-
-/* ---------- Showcase: activate + text-only dissolve (with active word) ---------- */
-(() => {
-  const list   = document.getElementById('topicList');
-  const items  = [...list.querySelectorAll('.scroll-item')];
-  const panels = [...document.querySelectorAll('#showcase .panel')];
-
-  // map panel id -> li element
-  const itemByPanel = items.reduce((m, li) => (m.set(li.dataset.panel, li), m), new Map());
-
-  const ensurePanel3DReady = (panelEl) => {
-    panelEl.querySelectorAll('.panel-3d').forEach(c => {
-      window.__initViewerIfNeeded && window.__initViewerIfNeeded(c, /*forceResize*/true);
-    });
-  };
-
-  function activate(id){
-    // panels
-    panels.forEach(p => {
-      const active = (p.id === id);
-      p.classList.toggle('active', active);
-      if (active) {
-        ensurePanel3DReady(p);
-        const texts = p.querySelectorAll('.panel-text');
-        gsap.fromTo(texts,
-          { opacity:0, filter:"blur(10px)", y:8 },
-          { opacity:1, filter:"blur(0px)", y:0, stagger:0.08, duration:.55, ease:"power3.out" }
-        );
+      function setSize(){
+        const {width, height} = hero.getBoundingClientRect();
+        renderer.setSize(width, height, false);
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.5));
+        camera.aspect = width/height; camera.updateProjectionMatrix();
       }
-    });
+      setSize(); addEventListener('resize', setSize);
 
-    // words (left list)
-    items.forEach(li => li.classList.toggle('is-active', li.dataset.panel === id));
-  }
+      scene.add(new THREE.AmbientLight(0xffffff, 0.95));
+      const orbitRoot = new THREE.Group(); scene.add(orbitRoot);
 
-  items.forEach(li=>{
-    li.addEventListener('mouseenter', ()=>activate(li.dataset.panel));
-    li.addEventListener('focus',      ()=>activate(li.dataset.panel));
-  });
+      const V=(x,y)=>new THREE.Vector3(x,y,0);
+      const makeCircle  =(n,r)=>Array.from({length:n},(_,i)=>{const a=i/n*2*Math.PI;return V(Math.cos(a)*r,Math.sin(a)*r)});
+      const makeEllipse =(n,rx,ry)=>Array.from({length:n},(_,i)=>{const a=i/n*2*Math.PI;return V(Math.cos(a)*rx,Math.sin(a)*ry)});
+      const makeHeart =(n,s)=>{const pts=[];let maxR=0;for(let i=0;i<n;i++){const t=i/n*2*Math.PI;const x=16*Math.sin(t)**3;const y=13*Math.cos(t)-5*Math.cos(2*t)-2*Math.cos(3*t)-Math.cos(4*t);maxR=Math.max(maxR,Math.hypot(x,y));pts.push(V(x,y));}const k=s/(maxR||1);return pts.map(p=>p.multiplyScalar(k));};
+      const makeStar=(n,r1,r2,points=5)=>{const m=Math.max(n,points*2),tmp=[];for(let i=0;i<m;i++){const a=i/m*2*Math.PI,r=(i%2?r2:r1);tmp.push(V(Math.cos(a)*r,Math.sin(a)*r));}return Array.from({length:n},(_,i)=>{const t=i/(n-1)*(m-1),i0=Math.floor(t),i1=Math.min(m-1,i0+1),f=t-i0;return new THREE.Vector3().lerpVectors(tmp[i0],tmp[i1],f);});};
+      const makeLissajous=(n,ax,ay,ph,s)=>Array.from({length:n},(_,i)=>{const t=i/n*2*Math.PI;return V(Math.sin(ax*t+ph)*s,Math.sin(ay*t)*s)});
+      const makeSuperellipse=(n,a,b,pow=4)=>Array.from({length:n},(_,i)=>{const t=i/n*2*Math.PI,ct=Math.cos(t),st=Math.sin(t);return V(Math.sign(ct)*a*Math.abs(ct)**(2/pow),Math.sign(st)*b*Math.abs(st)**(2/pow))});
+      const makeLemniscate=(n,s)=>Array.from({length:n},(_,i)=>{const t=i/n*2*Math.PI,d=1+Math.sin(t)**2;return V((s*Math.SQRT2*Math.cos(t))/d,(s*Math.SQRT2*Math.cos(t)*Math.sin(t))/d)});
+      const makeSpiro=(n,R,r,d,k=1)=>Array.from({length:n},(_,i)=>{const t=i/n*2*Math.PI;return V(((R-r)*Math.cos(t)+d*Math.cos((R-r)/r*t))*k,((R-r)*Math.sin(t)-d*Math.sin((R-r)/r*t))*k)});
 
-  const io = new IntersectionObserver(entries=>{
-    entries.forEach(e=>{ if (e.isIntersecting) activate(e.target.dataset.panel); });
-  }, { root:list, threshold: 0.8 });
-  items.forEach(el=>io.observe(el));
-})();
-
-/* ---------- Panel 3D viewers (stars bg + RGB bg + shadows + lazy init) ---------- */
-(() => {
-  const reduce   = matchMedia('(prefers-reduced-motion: reduce)').matches;
-  const viewers  = [];
-  const viewerOf = new WeakMap(); // container -> viewer
-
-  function makeStars({ count=900, radius=50, size=0.8, color='#FFFFFF' }) {
-    // sample on a spherical shell (outer space look, not clustered center)
-    const g = new THREE.BufferGeometry();
-    const pos = new Float32Array(count * 3);
-    for (let i=0; i<count; i++){
-      // random direction
-      const u = Math.random(), v = Math.random();
-      const theta = 2*Math.PI*u;
-      const phi   = Math.acos(2*v-1);
-      const r     = radius * (0.85 + Math.random()*0.15); // shell thickness
-      const x = r * Math.sin(phi) * Math.cos(theta);
-      const y = r * Math.sin(phi) * Math.sin(theta);
-      const z = r * Math.cos(phi);
-      pos[i*3+0] = x; pos[i*3+1] = y; pos[i*3+2] = z;
-    }
-    g.setAttribute('position', new THREE.BufferAttribute(pos, 3));
-    const m = new THREE.PointsMaterial({
-      color, size, sizeAttenuation: true,
-      transparent: true, opacity: 0.9,
-      depthWrite: false // avoids z-fighting sparkles
-    });
-    return new THREE.Points(g, m);
-  }
-
-  function initViewer(container) {
-    if (viewerOf.has(container)) return viewerOf.get(container);
-
-    // DATA ATTRS
-    const modelURL     = container.dataset.model;
-    const autoRotate   = container.dataset.autorotate === 'true';
-
-    const bgColorStr   = container.dataset.bgColor;        // e.g. "#000000" or "rgb(0,0,0)"
-    const bgAlphaStr   = container.dataset.bgAlpha;        // "0".."1"
-    const envHdrURL    = container.dataset.envHdr;         // ignored if stars enabled
-    const envAsBg      = container.dataset.envBackground === 'true';
-
-    const withShadows  = container.dataset.shadow === 'true' || container.dataset.shadows === 'true';
-    const withGround   = container.dataset.ground === 'true';
-    const groundColor  = container.dataset.groundColor || '#ffffff';
-    const groundOpStr  = container.dataset.groundOpacity;  // default 0.25
-    const exposureStr  = container.dataset.exposure;       // default 1.0
-
-    // ⭐ NEW: stars controls
-    const withStars      = container.dataset.stars === 'true';
-    const starsCount     = parseInt(container.dataset.starsCount || '900', 10);
-    const starsColor     = container.dataset.starsColor || '#FFFFFF';
-    const starsSize      = parseFloat(container.dataset.starsSize || '0.8');
-    const starsRadius    = parseFloat(container.dataset.starsRadius || '50');
-
-    const canvas   = container.querySelector('canvas');
-
-    // THREE core
-    const scene    = new THREE.Scene();
-    const camera   = new THREE.PerspectiveCamera(45, 1, 0.01, 2000);
-    const renderer = new THREE.WebGLRenderer({ canvas, antialias:true, alpha:true });
-
-    renderer.outputColorSpace    = THREE.SRGBColorSpace;
-    renderer.toneMapping         = THREE.ACESFilmicToneMapping;
-    renderer.toneMappingExposure = parseFloat(exposureStr ?? '1');
-
-    // Background
-    if (bgColorStr) {
-      renderer.setClearColor(new THREE.Color(bgColorStr), isFinite(bgAlphaStr) ? parseFloat(bgAlphaStr) : 1);
-    } else if (withStars) {
-      renderer.setClearColor(0x000000, 1); // solid black behind stars
-    } else {
-      renderer.setClearColor(0x000000, 0); // transparent (CSS can show through)
-    }
-
-    // Lights
-    const hemi = new THREE.HemisphereLight(0xffffff, 0x444444, 0.9);
-    const dir  = new THREE.DirectionalLight(0xffffff, 0.9);
-    dir.position.set(3,4,6);
-    scene.add(hemi, dir);
-
-    // Shadows
-    if (withShadows) {
-      renderer.shadowMap.enabled = true;
-      renderer.shadowMap.type    = THREE.PCFSoftShadowMap;
-      dir.castShadow = true;
-      dir.shadow.mapSize.set(2048, 2048);
-      dir.shadow.camera.near = 0.1;
-      dir.shadow.camera.far  = 80;
-      dir.shadow.bias        = -0.00015;
-    }
-
-    // OrbitControls
-    const controls = new OrbitControls(camera, renderer.domElement);
-    controls.enableDamping      = true;
-    controls.dampingFactor      = 0.08;
-    controls.enablePan          = true;
-    controls.screenSpacePanning = true;
-    controls.panSpeed           = 0.9;
-    controls.rotateSpeed        = 0.7;
-    controls.zoomSpeed          = 0.9;
-    controls.minPolarAngle      = 0.05;
-    controls.maxPolarAngle      = Math.PI - 0.05;
-    if ('zoomToCursor' in controls) controls.zoomToCursor = true;
-
-    // Size / resize
-    const setSize = () => {
-      const w = container.clientWidth || 1;
-      const h = container.clientHeight || 1;
-      renderer.setSize(w, h, false);
-      renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.5));
-      camera.aspect = w / h;
-      camera.updateProjectionMatrix();
-    };
-    setSize();
-    const ro = new ResizeObserver(setSize); ro.observe(container);
-
-    // ⭐ STARFIELD (ignores HDR if stars requested)
-    let starGroup = null;
-    if (withStars) {
-      starGroup = new THREE.Group();
-      const layer1 = makeStars({ count: starsCount, radius: starsRadius,   size: starsSize,     color: starsColor });
-      const layer2 = makeStars({ count: Math.floor(starsCount*0.4), radius: starsRadius*0.65, size: starsSize*0.7, color: starsColor });
-      starGroup.add(layer1, layer2);
-      scene.add(starGroup);
-    } else if (envHdrURL) {
-      // optional HDR environment if not using stars
-      new RGBELoader().setCrossOrigin('anonymous').load(envHdrURL, (hdr) => {
-        hdr.mapping = THREE.EquirectangularReflectionMapping;
-        scene.environment = hdr;
-        if (envAsBg) scene.background = hdr;
-      });
-    }
-
-    // Loaders
-    const loader = new GLTFLoader().setCrossOrigin('anonymous');
-    const draco  = new DRACOLoader();
-    draco.setDecoderPath('https://www.gstatic.com/draco/v1/decoders/');
-    loader.setDRACOLoader(draco);
-
-    const ktx2   = new KTX2Loader();
-    ktx2.setTranscoderPath('https://cdn.jsdelivr.net/npm/three@0.159.0/examples/jsm/libs/basis/');
-    ktx2.detectSupport(renderer);
-    loader.setKTX2Loader(ktx2);
-
-    // Model state
-    let mixer = null, root = null, auto = autoRotate;
-    let reEnableAutoTO = null;
-
-    loader.load(
-      modelURL,
-      (gltf) => {
-        root = gltf.scene;
-        scene.add(root);
-
-        // shadows
-        root.traverse(o => {
-          if (o.isMesh) {
-            o.castShadow = !!withShadows;
-            o.receiveShadow = false;
-          }
-        });
-
-        // center & frame
-        const box = new THREE.Box3().setFromObject(root);
-        const size = box.getSize(new THREE.Vector3()).length();
-        const center = box.getCenter(new THREE.Vector3());
-        root.position.sub(center);
-
-        const fov  = camera.fov * (Math.PI/180);
-        let dist   = (size/2) / Math.tan(fov/2);
-        dist      *= 1.25;
-        camera.position.set(0, 0, dist);
-        camera.near = size/1000; camera.far = Math.max(2000, size*10);
-        camera.updateProjectionMatrix();
-
-        controls.minDistance = dist * 0.6;
-        controls.maxDistance = dist * 4.0;
-        controls.target.set(0,0,0);
-        controls.update();
-
-        // ground shadow catcher (optional)
-        if (withShadows && withGround) {
-          const centeredBox = new THREE.Box3().setFromObject(root);
-          const groundY = centeredBox.min.y - 0.02 * size;
-          const groundMat = new THREE.ShadowMaterial({ opacity: parseFloat(groundOpStr ?? '0.25') });
-          const ground = new THREE.Mesh(new THREE.PlaneGeometry(size*4, size*4), groundMat);
-          ground.rotation.x = -Math.PI/2;
-          ground.position.y = groundY;
-          ground.receiveShadow = true;
-          scene.add(ground);
-        }
-
-        // animations
-        if (gltf.animations && gltf.animations.length) {
-          mixer = new THREE.AnimationMixer(root);
-          gltf.animations.forEach(clip => mixer.clipAction(clip).play());
-          auto = false;
-        }
-      },
-      undefined,
-      (err) => console.warn('GLTF load error:', modelURL, err)
-    );
-
-    // interaction pauses auto-rotate
-    const startUser = () => { auto = false; clearTimeout(reEnableAutoTO); container.classList.add('grabbing'); };
-    const endUser   = () => {
-      container.classList.remove('grabbing');
-      reEnableAutoTO = setTimeout(() => {
-        if (!mixer && (container.dataset.autorotate === 'true') && !reduce) auto = true;
-      }, 1800);
-    };
-    renderer.domElement.addEventListener('pointerdown', startUser);
-    addEventListener('pointerup', endUser, { passive:true });
-    renderer.domElement.addEventListener('wheel', startUser, { passive:true });
-
-    const state = { visible:false };
-    const viewer = {
-      renderer, scene, camera, controls, state, starGroup,
-      get mixer(){ return mixer; },
-      get root(){  return root;  },
-      get auto(){  return auto;  },
-      resize: setSize
-    };
-
-    viewerOf.set(container, viewer);
-    viewers.push(viewer);
-    return viewer;
-  }
-
-  // allow external activate() to force init/resize
-  window.__initViewerIfNeeded = (container, forceResize=false) => {
-    const v = initViewer(container);
-    if (forceResize) v.resize();
-    return v;
-  };
-
-  // lazy init on visibility
-  document.querySelectorAll('.panel-3d').forEach(container => {
-    const obs = new IntersectionObserver(entries => {
-      entries.forEach(e => {
-        if (e.isIntersecting) {
-          const v = initViewer(container);
-          v.state.visible = true;
-          v.resize();
-        } else {
-          const v = viewerOf.get(container);
-          if (v) v.state.visible = false;
-        }
-      });
-    }, { threshold: 0.01 });
-    obs.observe(container);
-  });
-
-  // render loop
-  const clock = new THREE.Clock();
-  (function loop(){
-    const dt = clock.getDelta();
-    viewers.forEach(v => {
-      if (!v.state.visible) return;
-
-      // subtle star drift for life
-      if (v.starGroup && !reduce) {
-        v.starGroup.rotation.y += 0.0015;
-        v.starGroup.rotation.x += 0.0006;
+      function makeDotGeometries(dotRadius){
+        return {
+          sphere:new THREE.SphereGeometry(dotRadius,16,16),
+          box:new THREE.BoxGeometry(dotRadius*2,dotRadius*2,dotRadius*2),
+          octa:new THREE.OctahedronGeometry(dotRadius,0),
+          icosa:new THREE.IcosahedronGeometry(dotRadius,0),
+          cone:new THREE.ConeGeometry(dotRadius,dotRadius*2,16),
+          capsule:new THREE.CapsuleGeometry(dotRadius*0.75,dotRadius*1.2,6,12)
+        };
       }
 
-      if (v.mixer) v.mixer.update(dt);
-      if (v.root && v.auto && !reduce) v.root.rotation.y += 0.6 * dt;
-      v.controls.update();
-      v.renderer.render(v.scene, v.camera);
-    });
-    requestAnimationFrame(loop);
-  })();
-})();
-</script>
+      function makeDotRing({radius,count,dotRadius,color,tiltX,tiltY,initialShape='sphere'}){
+        const mat=new THREE.MeshStandardMaterial({color,roughness:.35,metalness:.25,flatShading:true});
+        const geos=makeDotGeometries(dotRadius);
+        const ring=new THREE.Group(); ring.rotation.x=tiltX; ring.rotation.y=tiltY;
+        const base=makeCircle(count,radius);
+        for(let i=0;i<count;i++){ const m=new THREE.Mesh(geos[initialShape],mat); m.position.copy(base[i]); ring.add(m); }
+        orbitRoot.add(ring);
+        ring.morphTo=(targets,dur=2.2)=>{ const kids=ring.children; gsap.killTweensOf(kids.map(k=>k.position)); gsap.to(kids.map(k=>k.position),{ x:(i)=>targets[i].x,y:(i)=>targets[i].y,z:(i)=>targets[i].z, duration:dur,ease:"power3.inOut",stagger:{each:.012,from:"center"}}); };
+        ring.swapShape=(shape='sphere',dur=0.45)=>{ const g=geos[shape]||geos.sphere; ring.children.forEach((m,i)=>{ gsap.to(m.scale,{x:0.001,y:0.001,z:0.001,duration:dur*0.5,ease:"power2.in",delay:i*0.003,onComplete:()=>{m.geometry=g; gsap.to(m.scale,{x:1,y:1,z:1,duration:dur*0.5,ease:"power2.out"});}}); }); };
+        return ring;
+      }
 
+      const inner=makeDotRing({radius:2.1,count:20,dotRadius:.036,color:'#1A2318',tiltX:Math.PI*.22,tiltY:Math.PI*.15});
+      const mid  =makeDotRing({radius:2.7,count:20,dotRadius:.034,color:'#6E8256',tiltX:Math.PI*.62,tiltY:-Math.PI*.18});
+      const outer=makeDotRing({radius:3.3,count:20,dotRadius:.032,color:'#C6E376',tiltX:Math.PI*.40,tiltY:-Math.PI*1.0});
+
+      const pathPrograms=[
+        (c)=>[makeCircle(c,2.1),makeCircle(c,2.7),makeCircle(c,3.3)],
+        (c)=>[makeEllipse(c,2.4,1.6),makeEllipse(c,3.0,2.0),makeEllipse(c,3.7,2.2)],
+        (c)=>[makeLissajous(c,3,2,Math.PI/2,1.8),makeLissajous(c,5,4,Math.PI/3,2.4),makeLissajous(c,4,3,Math.PI/4,3.0)],
+        (c)=>[makeHeart(c,2.2),makeHeart(c,2.8),makeHeart(c,3.4)],
+        (c)=>[makeStar(c,2.3,1.2,5),makeStar(c,3.0,1.5,5),makeStar(c,3.8,1.8,5)],
+        (c)=>[makeSuperellipse(c,2.1,2.1,3.6),makeSuperellipse(c,2.7,2.4,3.6),makeSuperellipse(c,3.4,2.9,3.6)],
+        (c)=>[makeLemniscate(c,2.2),makeLemniscate(c,2.7),makeLemniscate(c,3.2)],
+        (c)=>[makeSpiro(c,5,3,4,.35),makeSpiro(c,7,3,5,.36),makeSpiro(c,9,4,5,.37)],
+      ];
+      const dotShapeCycle=['sphere','box','octa','icosa','cone','capsule'];
+      const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+      const MORPH_D=2.4, HOLD_D=1.1;
+
+      if(!reduce){
+        let i=0;
+        const cycle=()=>{
+          const [a,b,c]=pathPrograms[i%pathPrograms.length](inner.children.length);
+          inner.morphTo(a,MORPH_D); mid.morphTo(b,MORPH_D); outer.morphTo(c,MORPH_D);
+          const next=dotShapeCycle[i%dotShapeCycle.length];
+          inner.swapShape(next,0.42); mid.swapShape(next,0.42); outer.swapShape(next,0.42);
+          const tilt=[ {x:Math.PI*.22,y:Math.PI*.15},{x:Math.PI*.35,y:Math.PI*.05},{x:Math.PI*.55,y:-Math.PI*.10},{x:Math.PI*.25,y:-Math.PI*.25},{x:Math.PI*.42,y:-Math.PI*.90} ][i%5];
+          gsap.to([inner.rotation,mid.rotation,outer.rotation],{
+            x:(idx)=>tilt.x+(idx-1)*0.06, y:(idx)=>tilt.y-(idx-1)*0.08, duration:MORPH_D, ease:"power2.inOut"
+          });
+          i++; gsap.delayedCall(MORPH_D+HOLD_D,cycle);
+        };
+        cycle();
+      }
+
+      const clock=new THREE.Clock();
+      (function tick(){
+        if(!reduce){ inner.rotation.z+=0.0055; mid.rotation.z+=-0.0045; outer.rotation.z+=0.0038; }
+        renderer.render(scene,camera); requestAnimationFrame(tick);
+      })();
+    })();
+
+    /* ---------- Hero phrases dissolve (loop) ---------- */
+    (() => {
+      const phrases = gsap.utils.toArray(".phrase");
+      gsap.set(phrases, { opacity:0, filter:"blur(10px)", y:10, zIndex:(i)=>100-i });
+      const tl = gsap.timeline({ repeat:-1, repeatDelay:0.2 });
+      phrases.forEach(el=>{
+        tl.to(el,{ opacity:1, filter:"blur(0px)", y:0, duration:0.9, ease:"power3.out" })
+          .to(el,{ opacity:0, filter:"blur(12px)", y:-10, duration:0.8, ease:"power3.in" }, "+=0.9");
+      });
+    })();
+
+    /* ===== SHOWCASE LOGIC (desktop vs mobile) ===== */
+    (() => {
+      const mq = window.matchMedia('(min-width: 768px)');
+      let cleanup = () => {};
+
+      function initDesktop(){
+        const list   = document.getElementById('topicList');
+        const panels = Array.from(document.querySelectorAll('#showcase .panel'));
+        if(!list || !panels.length) return;
+        const items  = Array.from(list.querySelectorAll('.scroll-item'));
+        const onEnterHandlers = new Map();
+
+        const activate = (id) => {
+          panels.forEach(p => p.classList.toggle('active', p.id === id));
+          if (window.gsap){
+            const activeSel = `#${CSS.escape(id)} .panel-text`;
+            const othersSel = panels.filter(p=>p.id!==id).map(p=>`#${CSS.escape(p.id)} .panel-text`).join(',');
+            gsap.fromTo(activeSel, {y:10,opacity:0,filter:'blur(8px)'}, {y:0,opacity:1,filter:'blur(0px)',duration:0.5,ease:'power2.out',stagger:0.06});
+            if(othersSel){ gsap.to(othersSel,{y:-6,opacity:0,filter:'blur(8px)',duration:0.35,ease:'power2.in'}); }
+          }
+        };
+
+        items.forEach(li=>{
+          const enter=()=>activate(li.dataset.panel);
+          li.addEventListener('mouseenter', enter);
+          li.addEventListener('focus', enter);
+          onEnterHandlers.set(li, enter);
+        });
+
+        const io = new IntersectionObserver((entries)=>{
+          entries.forEach(e=>{ if(e.isIntersecting) activate(e.target.dataset.panel); });
+        }, { root:list, threshold:0.8 });
+        items.forEach(el=>io.observe(el));
+
+        activate(items[0]?.dataset.panel || panels[0]?.id);
+
+        cleanup = () => {
+          io.disconnect();
+          items.forEach(li=>{
+            const h=onEnterHandlers.get(li);
+            if(h){ li.removeEventListener('mouseenter',h); li.removeEventListener('focus',h); }
+          });
+          onEnterHandlers.clear();
+        };
+      }
+
+      function initMobile(){
+        const mobileContainer = document.querySelector('#showcase .md\\:hidden ul');
+        if(!mobileContainer){ cleanup=()=>{}; return; }
+        const cards = mobileContainer.querySelectorAll('.border-2.bg-white');
+        const io = new IntersectionObserver((entries)=>{
+          entries.forEach(e=>{
+            if(e.isIntersecting && window.gsap){
+              gsap.fromTo(e.target, {y:16,opacity:0,filter:'blur(8px)'}, {y:0,opacity:1,filter:'blur(0px)',duration:0.45,ease:'power2.out'});
+            }
+          });
+        }, { root:mobileContainer, threshold:0.2 });
+        cards.forEach(c=>io.observe(c));
+        cleanup=()=>io.disconnect();
+      }
+
+      function boot(){ cleanup(); if(mq.matches) initDesktop(); else initMobile(); }
+      if(mq.addEventListener) mq.addEventListener('change', boot); else mq.addListener(boot);
+      boot();
+    })();
+
+    /* ---------- Panel 3D viewers (stars bg + RGB bg + shadows + lazy init) ---------- */
+    (() => {
+      const reduce   = matchMedia('(prefers-reduced-motion: reduce)').matches;
+      const viewers  = [];
+      const viewerOf = new WeakMap();
+
+      function makeStars({ count=900, radius=50, size=0.8, color='#FFFFFF' }){
+        const g=new THREE.BufferGeometry(); const pos=new Float32Array(count*3);
+        for(let i=0;i<count;i++){
+          const u=Math.random(), v=Math.random(); const theta=2*Math.PI*u; const phi=Math.acos(2*v-1);
+          const r=radius*(0.85+Math.random()*0.15);
+          pos[i*3+0]=r*Math.sin(phi)*Math.cos(theta);
+          pos[i*3+1]=r*Math.sin(phi)*Math.sin(theta);
+          pos[i*3+2]=r*Math.cos(phi);
+        }
+        g.setAttribute('position', new THREE.BufferAttribute(pos,3));
+        const m=new THREE.PointsMaterial({ color, size, sizeAttenuation:true, transparent:true, opacity:0.9, depthWrite:false });
+        return new THREE.Points(g, m);
+      }
+
+      function initViewer(container){
+        if(viewerOf.has(container)) return viewerOf.get(container);
+
+        const modelURL     = container.dataset.model;
+        const autoRotate   = container.dataset.autorotate === 'true';
+
+        const bgColorStr   = container.dataset.bgColor;
+        const bgAlphaStr   = container.dataset.bgAlpha;
+        const envHdrURL    = container.dataset.envHdr;
+        const envAsBg      = container.dataset.envBackground === 'true';
+
+        const withShadows  = container.dataset.shadow === 'true' || container.dataset.shadows === 'true';
+        const withGround   = container.dataset.ground === 'true';
+        const groundColor  = container.dataset.groundColor || '#ffffff';
+        const groundOpStr  = container.dataset.groundOpacity;
+        const exposureStr  = container.dataset.exposure;
+
+        const withStars    = container.dataset.stars === 'true';
+        const starsCount   = parseInt(container.dataset.starsCount || '900',10);
+        const starsColor   = container.dataset.starsColor || '#FFFFFF';
+        const starsSize    = parseFloat(container.dataset.starsSize || '0.8');
+        const starsRadius  = parseFloat(container.dataset.starsRadius || '50');
+
+        const canvas   = container.querySelector('canvas');
+        const scene    = new THREE.Scene();
+        const camera   = new THREE.PerspectiveCamera(45, 1, 0.01, 2000);
+        const renderer = new THREE.WebGLRenderer({ canvas, antialias:true, alpha:true });
+
+        renderer.outputColorSpace    = THREE.SRGBColorSpace;
+        renderer.toneMapping         = THREE.ACESFilmicToneMapping;
+        renderer.toneMappingExposure = parseFloat(exposureStr ?? '1');
+
+        if(bgColorStr){
+          renderer.setClearColor(new THREE.Color(bgColorStr), isFinite(bgAlphaStr) ? parseFloat(bgAlphaStr) : 1);
+        }else if(withStars){
+          renderer.setClearColor(0x000000, 1);
+        }else{
+          renderer.setClearColor(0x000000, 0);
+        }
+
+        const hemi=new THREE.HemisphereLight(0xffffff,0x444444,0.9);
+        const dir=new THREE.DirectionalLight(0xffffff,0.9); dir.position.set(3,4,6);
+        scene.add(hemi,dir);
+
+        if(withShadows){
+          renderer.shadowMap.enabled=true;
+          renderer.shadowMap.type=THREE.PCFSoftShadowMap;
+          dir.castShadow=true;
+          dir.shadow.mapSize.set(2048,2048);
+          dir.shadow.camera.near=0.1; dir.shadow.camera.far=80; dir.shadow.bias=-0.00015;
+        }
+
+        const controls=new OrbitControls(camera,renderer.domElement);
+        controls.enableDamping=true; controls.dampingFactor=0.08;
+        controls.enablePan=true; controls.screenSpacePanning=true; controls.panSpeed=0.9;
+        controls.rotateSpeed=0.7; controls.zoomSpeed=0.9;
+        controls.minPolarAngle=0.05; controls.maxPolarAngle=Math.PI-0.05;
+        if('zoomToCursor' in controls) controls.zoomToCursor=true;
+
+        const setSize=()=>{ const w=container.clientWidth||1, h=container.clientHeight||1;
+          renderer.setSize(w,h,false);
+          renderer.setPixelRatio(Math.min(window.devicePixelRatio||1,1.5));
+          camera.aspect=w/h; camera.updateProjectionMatrix();
+        };
+        setSize();
+        const ro=new ResizeObserver(setSize); ro.observe(container);
+
+        let starGroup=null;
+        if(withStars){
+          starGroup=new THREE.Group();
+          starGroup.add(
+            makeStars({count:starsCount, radius:starsRadius, size:starsSize, color:starsColor}),
+            makeStars({count:Math.floor(starsCount*0.4), radius:starsRadius*0.65, size:starsSize*0.7, color:starsColor})
+          );
+          scene.add(starGroup);
+        }else if(envHdrURL){
+          new RGBELoader().setCrossOrigin('anonymous').load(envHdrURL,(hdr)=>{
+            hdr.mapping=THREE.EquirectangularReflectionMapping;
+            scene.environment=hdr; if(envAsBg) scene.background=hdr;
+          });
+        }
+
+        const loader=new GLTFLoader().setCrossOrigin('anonymous');
+        const draco =new DRACOLoader(); draco.setDecoderPath('https://www.gstatic.com/draco/v1/decoders/'); loader.setDRACOLoader(draco);
+        const ktx2  =new KTX2Loader();  ktx2.setTranscoderPath('https://cdn.jsdelivr.net/npm/three@0.159.0/examples/jsm/libs/basis/'); ktx2.detectSupport(renderer); loader.setKTX2Loader(ktx2);
+
+        let mixer=null, root=null, auto=autoRotate;
+        let reEnableAutoTO=null;
+
+        loader.load(modelURL, (gltf)=>{
+          root=gltf.scene; scene.add(root);
+          root.traverse(o=>{ if(o.isMesh){ o.castShadow=!!withShadows; o.receiveShadow=false; } });
+
+          const box=new THREE.Box3().setFromObject(root);
+          const size=box.getSize(new THREE.Vector3()).length();
+          const center=box.getCenter(new THREE.Vector3());
+          root.position.sub(center);
+
+          const fov=camera.fov*(Math.PI/180);
+          let dist=(size/2)/Math.tan(fov/2); dist*=1.25;
+          camera.position.set(0,0,dist);
+          camera.near=size/1000; camera.far=Math.max(2000,size*10); camera.updateProjectionMatrix();
+
+          controls.minDistance=dist*0.6; controls.maxDistance=dist*4.0;
+          controls.target.set(0,0,0); controls.update();
+
+          if(withShadows && container.dataset.ground==='true'){
+            const centeredBox=new THREE.Box3().setFromObject(root);
+            const groundY=centeredBox.min.y - 0.02*size;
+            const groundMat=new THREE.ShadowMaterial({ opacity: parseFloat(container.dataset.groundOpacity ?? '0.25') });
+            const ground=new THREE.Mesh(new THREE.PlaneGeometry(size*4,size*4), groundMat);
+            ground.rotation.x=-Math.PI/2; ground.position.y=groundY; ground.receiveShadow=true; scene.add(ground);
+          }
+
+          if(gltf.animations && gltf.animations.length){
+            mixer=new THREE.AnimationMixer(root);
+            gltf.animations.forEach(clip=>mixer.clipAction(clip).play());
+            auto=false;
+          }
+        }, undefined, (err)=>console.warn('GLTF load error:', modelURL, err));
+
+        const startUser=()=>{ auto=false; clearTimeout(reEnableAutoTO); container.classList.add('grabbing'); };
+        const endUser=()=>{ container.classList.remove('grabbing'); reEnableAutoTO=setTimeout(()=>{ if(!mixer && (container.dataset.autorotate==='true') && !reduce) auto=true; },1800); };
+        renderer.domElement.addEventListener('pointerdown', startUser);
+        addEventListener('pointerup', endUser, {passive:true});
+        renderer.domElement.addEventListener('wheel', startUser, {passive:true});
+
+        const state={ visible:false };
+        const viewer={ renderer, scene, camera, controls, state, starGroup,
+          get mixer(){return mixer;}, get root(){return root;}, get auto(){return auto;}, resize:setSize
+        };
+        viewerOf.set(container, viewer); viewers.push(viewer);
+        return viewer;
+      }
+
+      window.__initViewerIfNeeded=(container,forceResize=false)=>{ const v=initViewer(container); if(forceResize) v.resize(); return v; };
+
+      document.querySelectorAll('.panel-3d').forEach(container=>{
+        const obs=new IntersectionObserver(entries=>{
+          entries.forEach(e=>{
+            if(e.isIntersecting){ const v=initViewer(container); v.state.visible=true; v.resize(); }
+            else{ const v=viewerOf.get(container); if(v) v.state.visible=false; }
+          });
+        }, { threshold:0.01 });
+        obs.observe(container);
+      });
+
+      const clock=new THREE.Clock();
+      (function loop(){
+        const dt=clock.getDelta();
+        viewers.forEach(v=>{
+          if(!v.state.visible) return;
+          if(v.starGroup && !reduce){ v.starGroup.rotation.y+=0.0015; v.starGroup.rotation.x+=0.0006; }
+          if(v.mixer) v.mixer.update(dt);
+          if(v.root && v.auto && !reduce) v.root.rotation.y += 0.6*dt;
+          v.controls.update();
+          v.renderer.render(v.scene, v.camera);
+        });
+        requestAnimationFrame(loop);
+      })();
+    })();
+  </script>
 </body>
-
 </html>
