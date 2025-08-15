@@ -126,6 +126,8 @@
     .panel.active {
       display: block;
     }
+     .panel-3d canvas { cursor: grab; touch-action: none; }
+  .panel-3d.grabbing canvas { cursor: grabbing; }
 
     /* dissolve only text inside panels */
     .panel-text {
@@ -332,8 +334,8 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.13.0/gsap.min.js"></script>
 
   <!-- Import map for Three.js ESM -->
-  <script type="importmap">
-    {
+<script type="importmap">
+{
   "imports": {
     "three": "https://cdn.jsdelivr.net/npm/three@0.159.0/build/three.module.js",
     "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.159.0/examples/jsm/"
@@ -341,10 +343,12 @@
 }
 </script>
 
+
   <!-- App code (ES modules) -->
   <script type="module">
     import * as THREE from 'three';
   import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+  import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 
   /* ---------- HERO rings (unchanged) ---------- */
    (() => {
@@ -472,126 +476,159 @@
   items.forEach(el=>io.observe(el));
 })();
 
-/* ---------- Panel 3D viewers (lazy init + robust sizing) ---------- */
-(() => {
-  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
-  const viewers = [];
-  const viewerMap = new WeakMap(); // container -> viewer
+ /* ---------- Panel 3D viewers (lazy init + OrbitControls) ---------- */
+  (() => {
+    const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const viewers = [];
+    const viewerMap = new WeakMap(); // container -> viewer
 
-  function initViewer(container) {
-    if (viewerMap.has(container)) return viewerMap.get(container);
+    function initViewer(container) {
+      if (viewerMap.has(container)) return viewerMap.get(container);
 
-    const canvas     = container.querySelector('canvas');
-    const url        = container.dataset.model;
-    const autorotate = container.dataset.autorotate === 'true';
+      const canvas     = container.querySelector('canvas');
+      const url        = container.dataset.model;
+      const autorotate = container.dataset.autorotate === 'true';
 
-    const scene    = new THREE.Scene(); // transparent
-    const camera   = new THREE.PerspectiveCamera(45, 1, 0.01, 1000);
-    const renderer = new THREE.WebGLRenderer({ canvas, antialias:true, alpha:true });
-    renderer.setClearColor(0x000000, 0);
+      const scene    = new THREE.Scene(); // transparent
+      const camera   = new THREE.PerspectiveCamera(45, 1, 0.01, 1000);
+      const renderer = new THREE.WebGLRenderer({ canvas, antialias:true, alpha:true });
+      renderer.setClearColor(0x000000, 0);
 
-    const hemi = new THREE.HemisphereLight(0xffffff, 0x444444, 0.9);
-    const dir  = new THREE.DirectionalLight(0xffffff, 0.9); dir.position.set(3,4,6);
-    scene.add(hemi, dir);
+      const hemi = new THREE.HemisphereLight(0xffffff, 0x444444, 0.9);
+      const dir  = new THREE.DirectionalLight(0xffffff, 0.9); dir.position.set(3,4,6);
+      scene.add(hemi, dir);
 
-    const setSize = () => {
-      const w = container.clientWidth || 1;
-      const h = container.clientHeight || 1;
-      renderer.setSize(w, h, false);
-      renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.5));
-      camera.aspect = w / h;
-      camera.updateProjectionMatrix();
+      // OrbitControls (interactive)
+      const controls = new OrbitControls(camera, renderer.domElement);
+      controls.enableDamping = true;
+      controls.dampingFactor = 0.08;
+      controls.enablePan = false;      // keep orbit centered
+      controls.rotateSpeed = 0.7;
+      controls.zoomSpeed = 0.9;
+      controls.target.set(0,0,0);
+      controls.update();
+
+      const setSize = () => {
+        const w = container.clientWidth || 1;
+        const h = container.clientHeight || 1;
+        renderer.setSize(w, h, false);
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.5));
+        camera.aspect = w / h; camera.updateProjectionMatrix();
+      };
+      setSize();
+
+      // Resize when container box changes (e.g., becomes visible)
+      const ro = new ResizeObserver(() => setSize());
+      ro.observe(container);
+
+      const loader = new GLTFLoader();
+      let mixer = null, root = null, auto = autorotate;
+      let reEnableAutoTO = null;
+
+      loader.load(
+        url,
+        (gltf) => {
+          root = gltf.scene;
+          scene.add(root);
+
+          // Center & frame model
+          const box    = new THREE.Box3().setFromObject(root);
+          const size   = box.getSize(new THREE.Vector3()).length();
+          const center = box.getCenter(new THREE.Vector3());
+          root.position.sub(center);
+
+          const fov = camera.fov * (Math.PI/180);
+          let dist = (size/2) / Math.tan(fov/2);
+          dist *= 1.25;
+          camera.position.set(0, 0, dist);
+          camera.near = size/1000; camera.far = size*10; camera.updateProjectionMatrix();
+
+          // Controls limits based on model size
+          controls.minDistance = dist * 0.6;
+          controls.maxDistance = dist * 4.0;
+          controls.target.set(0,0,0);
+          controls.update();
+
+          if (gltf.animations && gltf.animations.length){
+            mixer = new THREE.AnimationMixer(root);
+            gltf.animations.forEach(clip => mixer.clipAction(clip).play());
+            auto = false; // animation drives motion
+          }
+        },
+        undefined,
+        (err) => console.warn('GLTF load error:', url, err)
+      );
+
+      // Pause autorotate while interacting, resume after idle
+      const startUser = () => {
+        container.classList.add('grabbing');
+        auto = false;
+        clearTimeout(reEnableAutoTO);
+      };
+      const endUser = () => {
+        container.classList.remove('grabbing');
+        reEnableAutoTO = setTimeout(() => {
+          // resume only if no animation clips
+          if (!mixer && container.dataset.autorotate === 'true' && !reduce) auto = true;
+        }, 1800);
+      };
+
+      renderer.domElement.addEventListener('pointerdown', startUser);
+      addEventListener('pointerup', endUser);
+      renderer.domElement.addEventListener('wheel', startUser, { passive: true });
+
+      const state = { visible:false };
+      const viewer = {
+        renderer, scene, camera, controls, state,
+        get mixer(){ return mixer; },
+        get root(){  return root;  },
+        get auto(){  return auto;  },
+        resize: setSize
+      };
+
+      viewerMap.set(container, viewer);
+      viewers.push(viewer);
+      return viewer;
+    }
+
+    // Allow other code (activate()) to force init/resize
+    window.__initViewerIfNeeded = (container, forceResize=false) => {
+      const v = initViewer(container);
+      if (forceResize) v.resize();
+      return v;
     };
-    setSize();
 
-    // Resize when container box changes (e.g., panel becomes visible)
-    const ro = new ResizeObserver(() => setSize());
-    ro.observe(container);
-
-    const loader = new GLTFLoader();
-    let mixer = null, root = null, auto = autorotate;
-
-    loader.load(
-      url,
-      (gltf) => {
-        root = gltf.scene;
-        scene.add(root);
-
-        // Frame nicely
-        const box    = new THREE.Box3().setFromObject(root);
-        const size   = box.getSize(new THREE.Vector3()).length();
-        const center = box.getCenter(new THREE.Vector3());
-        root.position.sub(center);
-
-        const fov = camera.fov * (Math.PI/180);
-        let dist = (size/2) / Math.tan(fov/2);
-        dist *= 1.25;
-        camera.position.set(0, 0, dist);
-        camera.near = size/1000; camera.far = size*10; camera.updateProjectionMatrix();
-
-        if (gltf.animations && gltf.animations.length){
-          mixer = new THREE.AnimationMixer(root);
-          gltf.animations.forEach(clip => mixer.clipAction(clip).play());
-          auto = false; // let animation drive motion
-        }
-      },
-      undefined,
-      (err) => {
-        console.warn('GLTF load error:', url, err);
-      }
-    );
-
-    const state = { visible:false };
-    const viewer = {
-      renderer, scene, camera, state,
-      get mixer(){ return mixer; },
-      get root(){  return root;  },
-      get auto(){  return auto;  },
-      resize: setSize,
-    };
-
-    viewerMap.set(container, viewer);
-    viewers.push(viewer);
-    return viewer;
-  }
-
-  // Make init accessible to activate()
-  window.__initViewerIfNeeded = (container, forceResize=false) => {
-    const v = initViewer(container);
-    if (forceResize) v.resize();
-    return v;
-  };
-
-  // Observe visibility: init on first intersect, toggle render flag thereafter
-  document.querySelectorAll('.panel-3d').forEach(container => {
-    const obs = new IntersectionObserver(entries => {
-      entries.forEach(e => {
-        if (e.isIntersecting) {
-          const v = initViewer(container);
-          v.state.visible = true;
-          v.resize(); // ensure proper size when it becomes visible
-        } else {
-          const v = viewerMap.get(container);
-          if (v) v.state.visible = false;
-        }
-      });
-    }, { threshold: 0.01 });
-    obs.observe(container);
-  });
-
-  // Render loop
-  const clock = new THREE.Clock();
-  (function loop(){
-    const dt = clock.getDelta();
-    viewers.forEach(v => {
-      if (!v.state.visible) return;
-      if (v.mixer) v.mixer.update(dt);
-      if (v.root && v.auto && !reduce) v.root.rotation.y += 0.6 * dt;
-      v.renderer.render(v.scene, v.camera);
+    // Observe visibility: init on first intersect, toggle render flag thereafter
+    document.querySelectorAll('.panel-3d').forEach(container => {
+      const obs = new IntersectionObserver(entries => {
+        entries.forEach(e => {
+          if (e.isIntersecting) {
+            const v = initViewer(container);
+            v.state.visible = true;
+            v.resize();
+          } else {
+            const v = viewerMap.get(container);
+            if (v) v.state.visible = false;
+          }
+        });
+      }, { threshold: 0.01 });
+      obs.observe(container);
     });
-    requestAnimationFrame(loop);
+
+    // Render loop
+    const clock = new THREE.Clock();
+    (function loop(){
+      const dt = clock.getDelta();
+      viewers.forEach(v => {
+        if (!v.state.visible) return;
+        if (v.mixer) v.mixer.update(dt);
+        if (v.root && v.auto && !reduce) v.root.rotation.y += 0.6 * dt;
+        v.controls.update();
+        v.renderer.render(v.scene, v.camera);
+      });
+      requestAnimationFrame(loop);
+    })();
   })();
-})();
 </script>
 
 </body>
