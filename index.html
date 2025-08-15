@@ -213,22 +213,26 @@
     </div>
   </header>
 
-  <!-- HERO: Orbiting rings + dissolving phrases -->
-  <section id="hero3d" class="relative min-h-[90vh] bg-white overflow-hidden grid place-items-center">
-    <canvas id="ringsCanvas" class="webgl absolute inset-0"></canvas>
+<!-- HERO: Orbiting rings + dissolving phrases -->
+<section id="hero3d" class="relative min-h-[90vh] bg-white overflow-hidden grid place-items-center">
+  <canvas id="ringsCanvas" class="webgl absolute inset-0"></canvas>
 
-    <!-- Centered via grid -->
-    <div class="hero-phrases relative z-20 w-full text-center">
-      <span class="phrase text-[clamp(2rem,6vw,4rem)] font-extrabold text-[var(--green)]"
-        style="font-family:'Playfair Display',serif">Brutalist&nbsp;Developer</span>
-      <span class="phrase text-[clamp(2rem,6vw,4rem)] font-extrabold text-[var(--green)]"
-        style="font-family:'Playfair Display',serif">UI&nbsp;/&nbsp;UX&nbsp;Designer</span>
-      <span class="phrase text-[clamp(2rem,6vw,4rem)] font-extrabold text-[var(--green)]"
-        style="font-family:'Playfair Display',serif">Performance-First</span>
-      <span class="phrase text-[clamp(2rem,6vw,4rem)] font-extrabold text-[var(--green)]"
-        style="font-family:'Playfair Display',serif">Web&nbsp;Engineer</span>
-    </div>
-  </section>
+  <div class="hero-phrases relative z-20 w-full text-center">
+    <span class="phrase leading-[.9] text-[clamp(2.6rem,10.5vw,8rem)] font-extrabold text-[var(--green)]" style="font-family:'Playfair Display',serif">
+      Brutalist&nbsp;Developer
+    </span>
+    <span class="phrase leading-[.9] text-[clamp(2.6rem,10.5vw,8rem)] font-extrabold text-[var(--green)]" style="font-family:'Playfair Display',serif">
+      Python&nbsp;Programmer
+    </span>
+    <span class="phrase leading-[.9] text-[clamp(2.6rem,10.5vw,8rem)] font-extrabold text-[var(--green)]" style="font-family:'Playfair Display',serif">
+      Performance-First
+    </span>
+    <span class="phrase leading-[.9] text-[clamp(2.6rem,10.5vw,8rem)] font-extrabold text-[var(--green)]" style="font-family:'Playfair Display',serif">
+      Web&nbsp;Engineer
+    </span>
+  </div>
+</section>
+
 
 
   <!-- SHOWCASE: full-viewport words (left) + sticky panels (right) with 3D -->
@@ -291,7 +295,11 @@
                   </div>
                   <!-- 3D -->
                   <div class="panel-3d relative h-56 md:h-64 lg:h-72 border-2 border-[var(--green)]/20"
-                    data-model="assets/3d_objects/room.glb" data-autorotate="true">
+                     data-model="/assets/3d_objects/person.glb"
+                    data-bg-color="rgb(237,235,221)" data-bg-alpha="1"
+                    data-env-hdr="https://github.com/pmndrs/drei-assets/tree/master/hdri/studio_small_08_1k.hdr"
+                    data-shadow="true" data-ground="true" data-ground-color="#ffffff" data-ground-opacity="0.25"
+                    data-autorotate="true">
                     <canvas class="webgl absolute inset-0"></canvas>
                   </div>
                 </div>
@@ -309,7 +317,11 @@
                     <div class="panel-text mt-8 h-0 border-t-2 border-[var(--green)]/30"></div>
                   </div>
                   <div class="panel-3d relative h-56 md:h-64 lg:h-72 border-2 border-[var(--green)]/20"
-                    data-model="assets/3d_objects/room.glb" data-autorotate="true">
+                    data-model="assets/3d_objects/room.glb"
+                     data-bg-color="#C6E376" data-bg-alpha="1"
+                    data-env-hdr="https://cdn.jsdelivr.net/gh/pmndrs/drei-assets@master/hdri/studio_small_08_1k.hdr"
+                    data-shadow="false" data-ground="true" data-ground-color="#ffffff" data-ground-opacity="0.25"
+                    data-autorotate="true">
                     <canvas class="webgl absolute inset-0"></canvas>
                   </div>
                 </div>
@@ -327,8 +339,11 @@
                     <div class="panel-text mt-8 h-0 border-t-2 border-[var(--green)]/30"></div>
                   </div>
                   <div class="panel-3d relative h-56 md:h-64 lg:h-72 border-2 border-[var(--green)]/20"
-                    data-model="https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/master/2.0/Avocado/glTF-Binary/Avocado.glb"
-                    data-autorotate="false">
+                    data-model="assets/3d_objects/moon.glb"
+                    data-stars="true" data-stars-count="900" data-stars-color="#C6E376"
+     data-stars-size="0.9" data-stars-radius="60"
+     data-shadow="true" data-ground="true" data-ground-opacity="0.22"
+     data-autorotate="true">
                     <canvas class="webgl absolute inset-0"></canvas>
                   </div>
                 </div>
@@ -346,7 +361,11 @@
                     <div class="panel-text mt-8 h-0 border-t-2 border-[var(--green)]/30"></div>
                   </div>
                   <div class="panel-3d relative h-56 md:h-64 lg:h-72 border-2 border-[var(--green)]/20"
-                    data-model="assets/3d_objects/cardbox.gltf" data-autorotate="true">
+                    data-model="assets/3d_objects/cardbox.gltf"      
+                    data-bg-color="rgb(237,235,221)" data-bg-alpha="1"
+                    data-env-hdr="https://cdn.jsdelivr.net/gh/pmndrs/drei-assets@master/hdri/studio_small_08_1k.hdr"
+                    data-shadow="true" data-ground="true" data-ground-color="#ffffff" data-ground-opacity="0.25"
+                    data-autorotate="true">
                     <canvas class="webgl absolute inset-0"></canvas>
                   </div>
                 </div>
@@ -379,8 +398,8 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.13.0/gsap.min.js"></script>
 
   <!-- Import map for Three.js ESM -->
-  <script type="importmap">
-    {
+<script type="importmap">
+{
   "imports": {
     "three": "https://cdn.jsdelivr.net/npm/three@0.159.0/build/three.module.js",
     "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.159.0/examples/jsm/"
@@ -389,12 +408,15 @@
 </script>
 
 
+
   <!-- App code (ES modules) -->
   <script type="module">
     import * as THREE from 'three';
-  import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
-  import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
-
+    import { GLTFLoader }        from 'three/addons/loaders/GLTFLoader.js';
+    import { DRACOLoader }       from 'three/addons/loaders/DRACOLoader.js';
+    import { KTX2Loader }        from 'three/addons/loaders/KTX2Loader.js';
+    import { OrbitControls }     from 'three/addons/controls/OrbitControls.js';
+    import { RGBELoader }        from 'three/addons/loaders/RGBELoader.js';
 /* ---------- HERO rings (centered + morphing paths + dot SHAPE swaps) ---------- */
 (() => {
   const canvas = document.getElementById('ringsCanvas');
@@ -640,171 +662,281 @@
   items.forEach(el=>io.observe(el));
 })();
 
- /* ---------- Panel 3D viewers (lazy init + OrbitControls) ---------- */
-  (() => {
-    const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
-    const viewers = [];
-    const viewerMap = new WeakMap(); // container -> viewer
+/* ---------- Panel 3D viewers (stars bg + RGB bg + shadows + lazy init) ---------- */
+(() => {
+  const reduce   = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const viewers  = [];
+  const viewerOf = new WeakMap(); // container -> viewer
 
-    function initViewer(container) {
-      if (viewerMap.has(container)) return viewerMap.get(container);
+  function makeStars({ count=900, radius=50, size=0.8, color='#FFFFFF' }) {
+    // sample on a spherical shell (outer space look, not clustered center)
+    const g = new THREE.BufferGeometry();
+    const pos = new Float32Array(count * 3);
+    for (let i=0; i<count; i++){
+      // random direction
+      const u = Math.random(), v = Math.random();
+      const theta = 2*Math.PI*u;
+      const phi   = Math.acos(2*v-1);
+      const r     = radius * (0.85 + Math.random()*0.15); // shell thickness
+      const x = r * Math.sin(phi) * Math.cos(theta);
+      const y = r * Math.sin(phi) * Math.sin(theta);
+      const z = r * Math.cos(phi);
+      pos[i*3+0] = x; pos[i*3+1] = y; pos[i*3+2] = z;
+    }
+    g.setAttribute('position', new THREE.BufferAttribute(pos, 3));
+    const m = new THREE.PointsMaterial({
+      color, size, sizeAttenuation: true,
+      transparent: true, opacity: 0.9,
+      depthWrite: false // avoids z-fighting sparkles
+    });
+    return new THREE.Points(g, m);
+  }
 
-      const canvas     = container.querySelector('canvas');
-      const url        = container.dataset.model;
-      const autorotate = container.dataset.autorotate === 'true';
+  function initViewer(container) {
+    if (viewerOf.has(container)) return viewerOf.get(container);
 
-      const scene    = new THREE.Scene(); // transparent
-      const camera   = new THREE.PerspectiveCamera(45, 1, 0.01, 1000);
-      const renderer = new THREE.WebGLRenderer({ canvas, antialias:true, alpha:true });
-      renderer.setClearColor(0x000000, 0);
+    // DATA ATTRS
+    const modelURL     = container.dataset.model;
+    const autoRotate   = container.dataset.autorotate === 'true';
 
-      const hemi = new THREE.HemisphereLight(0xffffff, 0x444444, 0.9);
-      const dir  = new THREE.DirectionalLight(0xffffff, 0.9); dir.position.set(3,4,6);
-      scene.add(hemi, dir);
+    const bgColorStr   = container.dataset.bgColor;        // e.g. "#000000" or "rgb(0,0,0)"
+    const bgAlphaStr   = container.dataset.bgAlpha;        // "0".."1"
+    const envHdrURL    = container.dataset.envHdr;         // ignored if stars enabled
+    const envAsBg      = container.dataset.envBackground === 'true';
 
-      // OrbitControls (interactive)
-      const controls = new OrbitControls(camera, renderer.domElement);
-      controls.enableDamping = true;
-      controls.dampingFactor = 0.08;
+    const withShadows  = container.dataset.shadow === 'true' || container.dataset.shadows === 'true';
+    const withGround   = container.dataset.ground === 'true';
+    const groundColor  = container.dataset.groundColor || '#ffffff';
+    const groundOpStr  = container.dataset.groundOpacity;  // default 0.25
+    const exposureStr  = container.dataset.exposure;       // default 1.0
 
-      controls.enablePan = true;          // ✅ allow repositioning
-      controls.screenSpacePanning = true; // pan straight up/down relative to screen
-      controls.panSpeed = 0.9;
+    // ⭐ NEW: stars controls
+    const withStars      = container.dataset.stars === 'true';
+    const starsCount     = parseInt(container.dataset.starsCount || '900', 10);
+    const starsColor     = container.dataset.starsColor || '#FFFFFF';
+    const starsSize      = parseFloat(container.dataset.starsSize || '0.8');
+    const starsRadius    = parseFloat(container.dataset.starsRadius || '50');
 
-      controls.rotateSpeed = 0.7;
-      controls.zoomSpeed   = 0.9;
-      // keep the orbit from flipping upside down (optional but nice)
-      controls.minPolarAngle = 0.05;
-      controls.maxPolarAngle = Math.PI - 0.05;
+    const canvas   = container.querySelector('canvas');
 
-      // smooth zoom-to-cursor (optional, remove if your OrbitControls version complains)
-      controls.zoomToCursor = true;
+    // THREE core
+    const scene    = new THREE.Scene();
+    const camera   = new THREE.PerspectiveCamera(45, 1, 0.01, 2000);
+    const renderer = new THREE.WebGLRenderer({ canvas, antialias:true, alpha:true });
 
-      controls.target.set(0,0,0);
-      controls.update();
+    renderer.outputColorSpace    = THREE.SRGBColorSpace;
+    renderer.toneMapping         = THREE.ACESFilmicToneMapping;
+    renderer.toneMappingExposure = parseFloat(exposureStr ?? '1');
 
-
-      const setSize = () => {
-        const w = container.clientWidth || 1;
-        const h = container.clientHeight || 1;
-        renderer.setSize(w, h, false);
-        renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.5));
-        camera.aspect = w / h; camera.updateProjectionMatrix();
-      };
-      setSize();
-
-      // Resize when container box changes (e.g., becomes visible)
-      const ro = new ResizeObserver(() => setSize());
-      ro.observe(container);
-
-      const loader = new GLTFLoader();
-      let mixer = null, root = null, auto = autorotate;
-      let reEnableAutoTO = null;
-
-      loader.load(
-        url,
-        (gltf) => {
-          root = gltf.scene;
-          scene.add(root);
-
-          // Center & frame model
-          const box    = new THREE.Box3().setFromObject(root);
-          const size   = box.getSize(new THREE.Vector3()).length();
-          const center = box.getCenter(new THREE.Vector3());
-          root.position.sub(center);
-
-          const fov = camera.fov * (Math.PI/180);
-          let dist = (size/2) / Math.tan(fov/2);
-          dist *= 1.25;
-          camera.position.set(0, 0, dist);
-          camera.near = size/1000; camera.far = size*10; camera.updateProjectionMatrix();
-
-          // Controls limits based on model size
-          controls.minDistance = dist * 0.6;
-          controls.maxDistance = dist * 4.0;
-          controls.target.set(0,0,0);
-          controls.update();
-
-          if (gltf.animations && gltf.animations.length){
-            mixer = new THREE.AnimationMixer(root);
-            gltf.animations.forEach(clip => mixer.clipAction(clip).play());
-            auto = false; // animation drives motion
-          }
-        },
-        undefined,
-        (err) => console.warn('GLTF load error:', url, err)
-      );
-
-      // Pause autorotate while interacting, resume after idle
-      const startUser = () => {
-        container.classList.add('grabbing');
-        auto = false;
-        clearTimeout(reEnableAutoTO);
-      };
-      const endUser = () => {
-        container.classList.remove('grabbing');
-        reEnableAutoTO = setTimeout(() => {
-          // resume only if no animation clips
-          if (!mixer && container.dataset.autorotate === 'true' && !reduce) auto = true;
-        }, 1800);
-      };
-
-      renderer.domElement.addEventListener('pointerdown', startUser);
-      addEventListener('pointerup', endUser);
-      renderer.domElement.addEventListener('wheel', startUser, { passive: true });
-
-      const state = { visible:false };
-      const viewer = {
-        renderer, scene, camera, controls, state,
-        get mixer(){ return mixer; },
-        get root(){  return root;  },
-        get auto(){  return auto;  },
-        resize: setSize
-      };
-
-      viewerMap.set(container, viewer);
-      viewers.push(viewer);
-      return viewer;
+    // Background
+    if (bgColorStr) {
+      renderer.setClearColor(new THREE.Color(bgColorStr), isFinite(bgAlphaStr) ? parseFloat(bgAlphaStr) : 1);
+    } else if (withStars) {
+      renderer.setClearColor(0x000000, 1); // solid black behind stars
+    } else {
+      renderer.setClearColor(0x000000, 0); // transparent (CSS can show through)
     }
 
-    // Allow other code (activate()) to force init/resize
-    window.__initViewerIfNeeded = (container, forceResize=false) => {
-      const v = initViewer(container);
-      if (forceResize) v.resize();
-      return v;
-    };
+    // Lights
+    const hemi = new THREE.HemisphereLight(0xffffff, 0x444444, 0.9);
+    const dir  = new THREE.DirectionalLight(0xffffff, 0.9);
+    dir.position.set(3,4,6);
+    scene.add(hemi, dir);
 
-    // Observe visibility: init on first intersect, toggle render flag thereafter
-    document.querySelectorAll('.panel-3d').forEach(container => {
-      const obs = new IntersectionObserver(entries => {
-        entries.forEach(e => {
-          if (e.isIntersecting) {
-            const v = initViewer(container);
-            v.state.visible = true;
-            v.resize();
-          } else {
-            const v = viewerMap.get(container);
-            if (v) v.state.visible = false;
+    // Shadows
+    if (withShadows) {
+      renderer.shadowMap.enabled = true;
+      renderer.shadowMap.type    = THREE.PCFSoftShadowMap;
+      dir.castShadow = true;
+      dir.shadow.mapSize.set(2048, 2048);
+      dir.shadow.camera.near = 0.1;
+      dir.shadow.camera.far  = 80;
+      dir.shadow.bias        = -0.00015;
+    }
+
+    // OrbitControls
+    const controls = new OrbitControls(camera, renderer.domElement);
+    controls.enableDamping      = true;
+    controls.dampingFactor      = 0.08;
+    controls.enablePan          = true;
+    controls.screenSpacePanning = true;
+    controls.panSpeed           = 0.9;
+    controls.rotateSpeed        = 0.7;
+    controls.zoomSpeed          = 0.9;
+    controls.minPolarAngle      = 0.05;
+    controls.maxPolarAngle      = Math.PI - 0.05;
+    if ('zoomToCursor' in controls) controls.zoomToCursor = true;
+
+    // Size / resize
+    const setSize = () => {
+      const w = container.clientWidth || 1;
+      const h = container.clientHeight || 1;
+      renderer.setSize(w, h, false);
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.5));
+      camera.aspect = w / h;
+      camera.updateProjectionMatrix();
+    };
+    setSize();
+    const ro = new ResizeObserver(setSize); ro.observe(container);
+
+    // ⭐ STARFIELD (ignores HDR if stars requested)
+    let starGroup = null;
+    if (withStars) {
+      starGroup = new THREE.Group();
+      const layer1 = makeStars({ count: starsCount, radius: starsRadius,   size: starsSize,     color: starsColor });
+      const layer2 = makeStars({ count: Math.floor(starsCount*0.4), radius: starsRadius*0.65, size: starsSize*0.7, color: starsColor });
+      starGroup.add(layer1, layer2);
+      scene.add(starGroup);
+    } else if (envHdrURL) {
+      // optional HDR environment if not using stars
+      new RGBELoader().setCrossOrigin('anonymous').load(envHdrURL, (hdr) => {
+        hdr.mapping = THREE.EquirectangularReflectionMapping;
+        scene.environment = hdr;
+        if (envAsBg) scene.background = hdr;
+      });
+    }
+
+    // Loaders
+    const loader = new GLTFLoader().setCrossOrigin('anonymous');
+    const draco  = new DRACOLoader();
+    draco.setDecoderPath('https://www.gstatic.com/draco/v1/decoders/');
+    loader.setDRACOLoader(draco);
+
+    const ktx2   = new KTX2Loader();
+    ktx2.setTranscoderPath('https://cdn.jsdelivr.net/npm/three@0.159.0/examples/jsm/libs/basis/');
+    ktx2.detectSupport(renderer);
+    loader.setKTX2Loader(ktx2);
+
+    // Model state
+    let mixer = null, root = null, auto = autoRotate;
+    let reEnableAutoTO = null;
+
+    loader.load(
+      modelURL,
+      (gltf) => {
+        root = gltf.scene;
+        scene.add(root);
+
+        // shadows
+        root.traverse(o => {
+          if (o.isMesh) {
+            o.castShadow = !!withShadows;
+            o.receiveShadow = false;
           }
         });
-      }, { threshold: 0.01 });
-      obs.observe(container);
-    });
 
-    // Render loop
-    const clock = new THREE.Clock();
-    (function loop(){
-      const dt = clock.getDelta();
-      viewers.forEach(v => {
-        if (!v.state.visible) return;
-        if (v.mixer) v.mixer.update(dt);
-        if (v.root && v.auto && !reduce) v.root.rotation.y += 0.6 * dt;
-        v.controls.update();
-        v.renderer.render(v.scene, v.camera);
+        // center & frame
+        const box = new THREE.Box3().setFromObject(root);
+        const size = box.getSize(new THREE.Vector3()).length();
+        const center = box.getCenter(new THREE.Vector3());
+        root.position.sub(center);
+
+        const fov  = camera.fov * (Math.PI/180);
+        let dist   = (size/2) / Math.tan(fov/2);
+        dist      *= 1.25;
+        camera.position.set(0, 0, dist);
+        camera.near = size/1000; camera.far = Math.max(2000, size*10);
+        camera.updateProjectionMatrix();
+
+        controls.minDistance = dist * 0.6;
+        controls.maxDistance = dist * 4.0;
+        controls.target.set(0,0,0);
+        controls.update();
+
+        // ground shadow catcher (optional)
+        if (withShadows && withGround) {
+          const centeredBox = new THREE.Box3().setFromObject(root);
+          const groundY = centeredBox.min.y - 0.02 * size;
+          const groundMat = new THREE.ShadowMaterial({ opacity: parseFloat(groundOpStr ?? '0.25') });
+          const ground = new THREE.Mesh(new THREE.PlaneGeometry(size*4, size*4), groundMat);
+          ground.rotation.x = -Math.PI/2;
+          ground.position.y = groundY;
+          ground.receiveShadow = true;
+          scene.add(ground);
+        }
+
+        // animations
+        if (gltf.animations && gltf.animations.length) {
+          mixer = new THREE.AnimationMixer(root);
+          gltf.animations.forEach(clip => mixer.clipAction(clip).play());
+          auto = false;
+        }
+      },
+      undefined,
+      (err) => console.warn('GLTF load error:', modelURL, err)
+    );
+
+    // interaction pauses auto-rotate
+    const startUser = () => { auto = false; clearTimeout(reEnableAutoTO); container.classList.add('grabbing'); };
+    const endUser   = () => {
+      container.classList.remove('grabbing');
+      reEnableAutoTO = setTimeout(() => {
+        if (!mixer && (container.dataset.autorotate === 'true') && !reduce) auto = true;
+      }, 1800);
+    };
+    renderer.domElement.addEventListener('pointerdown', startUser);
+    addEventListener('pointerup', endUser, { passive:true });
+    renderer.domElement.addEventListener('wheel', startUser, { passive:true });
+
+    const state = { visible:false };
+    const viewer = {
+      renderer, scene, camera, controls, state, starGroup,
+      get mixer(){ return mixer; },
+      get root(){  return root;  },
+      get auto(){  return auto;  },
+      resize: setSize
+    };
+
+    viewerOf.set(container, viewer);
+    viewers.push(viewer);
+    return viewer;
+  }
+
+  // allow external activate() to force init/resize
+  window.__initViewerIfNeeded = (container, forceResize=false) => {
+    const v = initViewer(container);
+    if (forceResize) v.resize();
+    return v;
+  };
+
+  // lazy init on visibility
+  document.querySelectorAll('.panel-3d').forEach(container => {
+    const obs = new IntersectionObserver(entries => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          const v = initViewer(container);
+          v.state.visible = true;
+          v.resize();
+        } else {
+          const v = viewerOf.get(container);
+          if (v) v.state.visible = false;
+        }
       });
-      requestAnimationFrame(loop);
-    })();
+    }, { threshold: 0.01 });
+    obs.observe(container);
+  });
+
+  // render loop
+  const clock = new THREE.Clock();
+  (function loop(){
+    const dt = clock.getDelta();
+    viewers.forEach(v => {
+      if (!v.state.visible) return;
+
+      // subtle star drift for life
+      if (v.starGroup && !reduce) {
+        v.starGroup.rotation.y += 0.0015;
+        v.starGroup.rotation.x += 0.0006;
+      }
+
+      if (v.mixer) v.mixer.update(dt);
+      if (v.root && v.auto && !reduce) v.root.rotation.y += 0.6 * dt;
+      v.controls.update();
+      v.renderer.render(v.scene, v.camera);
+    });
+    requestAnimationFrame(loop);
   })();
+})();
 </script>
 
 </body>
