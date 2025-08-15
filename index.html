@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -11,50 +12,162 @@
   <script src="https://cdn.tailwindcss.com"></script>
 
   <!-- Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Playfair+Display:wght@700;800&display=swap" rel="stylesheet">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Playfair+Display:wght@700;800&display=swap"
+    rel="stylesheet">
 
   <style>
-    :root{
-      --green:#1A2318;   /* deep brutalist green */
-      --lime:#C6E376;    /* accent lime */
-      --cream:#EDEBDD;   /* soft cream for sections */
-      --white:#FFFFFF;
+    :root {
+      --green: #1A2318;
+      /* deep brutalist green */
+      --lime: #C6E376;
+      /* accent lime */
+      --cream: #EDEBDD;
+      /* soft neutral */
+      --white: #FFFFFF;
     }
 
-    html, body { overflow-x:hidden; background:var(--white); }
-    body{ font-family:"Inter", system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial; color:var(--green); }
-
-    .nav-a{ position:relative; }
-    .nav-a::after{
-      content:""; position:absolute; left:0; bottom:-6px; height:2px; width:0;
-      background:var(--green); transition:width .25s ease;
-    }
-    .nav-a:hover::after{ width:100%; }
-
-    /* 3D canvases fill their parent */
-    canvas.webgl{ display:block; width:100%; height:100%; }
-
-    /* GLOBAL film grain overlay (covers whole page) */
-    .grain{
-      position:fixed; inset:0; width:100%; height:100%;
-      opacity:.08; mix-blend-mode:multiply; pointer-events:none; z-index:50;
-    }
-    @media (prefers-reduced-motion: reduce){
-      .grain{ opacity:.05; }
+    html,
+    body {
+      overflow-x: hidden;
+      background: var(--white);
     }
 
-    .section-rule{ border-color:var(--green); }
+    body {
+      font-family: "Inter", system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial;
+      color: var(--green);
+    }
+
+    /* Minimal brutalist nav underline */
+    .nav-a {
+      position: relative;
+    }
+
+    .nav-a::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      bottom: -6px;
+      height: 2px;
+      width: 0;
+      background: var(--green);
+      transition: width .25s ease;
+    }
+
+    .nav-a:hover::after {
+      width: 100%;
+    }
+
+    /* 3D canvases fill parent */
+    canvas.webgl {
+      display: block;
+      width: 100%;
+      height: 100%;
+    }
+
+    /* GLOBAL film grain overlay */
+    .grain {
+      position: fixed;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      opacity: .085;
+      mix-blend-mode: multiply;
+      pointer-events: none;
+      z-index: 50;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .grain {
+        opacity: .05;
+      }
+    }
+
+    /* Center hero phrases */
+    .hero-phrases {
+      pointer-events: none;
+      transform: translate(-50%, -50%);
+      left: 50%;
+      top: 50%;
+    }
+
+    .phrase {
+      position: absolute;
+      left: 0;
+      top: 0;
+      opacity: 0;
+      filter: blur(10px);
+      transform: translateY(10px);
+      white-space: nowrap;
+    }
+
+    /* Scroll list (left column) */
+    .scroll-list {
+      scroll-snap-type: y mandatory;
+      max-height: 80vh;
+      overflow-y: auto;
+    }
+
+    .scroll-item {
+      scroll-snap-align: start;
+      transition: color .2s ease, opacity .2s ease;
+      opacity: .7;
+    }
+
+    .scroll-item:hover,
+    .scroll-item.active {
+      opacity: 1;
+      color: var(--green);
+    }
+
+    /* Panels on the right */
+    .panel {
+      display: none;
+    }
+
+    .panel.active {
+      display: block;
+    }
+
+
+
+    /* hide vertical scrollbar but keep scrolling */
+    .no-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+
+    .no-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+
+    /* panel dissolve animation */
+    .panel {
+      opacity: 0;
+      filter: blur(10px);
+      transform: translateY(8px);
+      transition: opacity .45s ease, filter .45s ease, transform .45s ease;
+      pointer-events: none;
+    }
+
+    .panel.active {
+      opacity: 1;
+      filter: blur(0);
+      transform: translateY(0);
+      pointer-events: auto;
+    }
   </style>
 </head>
-<body>
 
-  <!-- Global Film Grain Overlay -->
+<body class="overflow-x-hidden">
+
+  <!-- Global Film Grain -->
   <svg class="grain" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
     <filter id="noiseFilter">
       <feTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="4" stitchTiles="stitch">
-        <animate attributeName="baseFrequency" values="0.65;0.9;0.65" dur="6s" repeatCount="indefinite"/>
+        <animate attributeName="baseFrequency" values="0.65;0.9;0.65" dur="6s" repeatCount="indefinite" />
       </feTurbulence>
-      <feColorMatrix type="saturate" values="0"/>
+      <feColorMatrix type="saturate" values="0" />
     </filter>
     <rect width="100%" height="100%" filter="url(#noiseFilter)"></rect>
   </svg>
@@ -71,149 +184,145 @@
       <div class="md:hidden w-3 h-3 rounded-full" style="background:var(--green)"></div>
     </div>
     <div class="max-w-6xl mx-auto px-6 md:px-10">
-      <div class="h-0 border-t-2 section-rule"></div>
+      <div class="h-0 border-t-2" style="border-color:var(--green)"></div>
     </div>
   </header>
 
-  <!-- HERO: Three orbiting dot rings (center) on clean white -->
+  <!-- HERO: Orbiting dot rings + dissolving centered text -->
   <section id="hero3d" class="relative min-h-[90vh] bg-white overflow-hidden">
+    <!-- WebGL -->
     <canvas id="ringsCanvas" class="webgl absolute inset-0"></canvas>
-  </section>
 
-  <!-- ABOUT: Brutalist copy + subtle 3D wireframe cube accent -->
-  <section id="about" class="bg-[var(--green)] text-[var(--white)] py-24 md:py-32 px-6 md:px-10 relative">
-    <div class="max-w-6xl mx-auto grid md:grid-cols-2 gap-12 items-start relative z-10">
-      <div class="space-y-8">
-        <h2 class="text-5xl md:text-6xl font-bold leading-none">
-          About<br><span class="pl-24">Me</span>
-        </h2>
-        <p class="text-lg leading-relaxed max-w-prose">
-          I’m Abdullahinur — a web developer/designer blending brutalist structure
-          with flat-style clarity. I build elegant, high-performance interfaces and
-          robust backend integrations.
-        </p>
-        <p class="text-lg leading-relaxed max-w-prose">
-          From design systems to payment flows, I care about intent, typography,
-          and performance—shipped with clean, maintainable code.
-        </p>
-
-        <a href="#contact"
-           class="inline-block border-2 border-[var(--lime)] text-[var(--lime)] uppercase tracking-wider font-medium px-10 py-3 transition-colors duration-300 hover:bg-[var(--lime)] hover:text-[var(--green)]">
-          Who I Am
-        </a>
-      </div>
-
-      <!-- Right column: image mask + 3D cube overlay -->
-      <div class="relative h-[420px] md:h-[520px]">
-        <!-- Placeholder image (swap with your own) -->
-        <img src="assets/images/brutalism1.png" alt="Brutalist Architecture"
-             class="absolute inset-0 w-full h-full object-cover contrast-110 grayscale" />
-        <!-- Hard edge mask -->
-        <div class="absolute inset-0 ring-2 ring-[var(--lime)] mix-blend-screen pointer-events-none"></div>
-        <!-- 3D cube canvas (subtle) -->
-        <canvas id="cubeCanvas" class="webgl absolute inset-0"></canvas>
-      </div>
-    </div>
-
-    <!-- bottom divider -->
-    <div class="max-w-6xl mx-auto mt-16">
-      <div class="h-0 border-t-2 border-[var(--white)]/20"></div>
+    <!-- Center phrases -->
+    <div class="hero-phrases absolute z-20">
+      <span class="phrase text-[clamp(2rem,6vw,4rem)] font-extrabold text-[var(--green)]"
+        style="font-family:'Playfair Display',serif">
+        Brutalist&nbsp;Developer
+      </span>
+      <span class="phrase text-[clamp(2rem,6vw,4rem)] font-extrabold text-[var(--green)]"
+        style="font-family:'Playfair Display',serif">
+        UI&nbsp;/&nbsp;UX&nbsp;Designer
+      </span>
+      <span class="phrase text-[clamp(2rem,6vw,4rem)] font-extrabold text-[var(--green)]"
+        style="font-family:'Playfair Display',serif">
+        Performance-First
+      </span>
+      <span class="phrase text-[clamp(2rem,6vw,4rem)] font-extrabold text-[var(--green)]"
+        style="font-family:'Playfair Display',serif">
+        Web&nbsp;Engineer
+      </span>
     </div>
   </section>
 
-  <!-- WORK: Bold cards with ghost numbers (brutalist) -->
-  <section id="work" class="bg-[var(--cream)] text-[var(--green)] py-28 px-6 md:px-10">
+<!-- SHOWCASE: each word = full viewport height -->
+<section id="showcase" class="bg-[var(--cream)] text-[var(--green)] p-0 m-0 overflow-x-hidden">
+  <div class="w-full grid md:grid-cols-12 gap-0">
+
+    <!-- LEFT: full-bleed list (words render under the panels) -->
+    <div class="md:col-span-5 relative z-0 overflow-visible">
+      <ul id="topicList"
+          class="no-scrollbar h-screen overflow-y-scroll snap-y snap-mandatory
+                 w-screen pl-0 ml-0">
+
+        <!-- Each item = 100vh; giant type; zero visible line-height -->
+        <li class="scroll-item snap-start h-screen m-0 p-0 select-none flex items-center"
+            data-panel="p1">
+          <span class="block font-extrabold uppercase tracking-tight whitespace-nowrap
+                       text-[100vh] leading-[0.62] -mt-[0.04em] -mb-[0.04em]">
+            Design
+          </span>
+        </li>
+
+        <li class="scroll-item snap-start h-screen m-0 p-0 select-none flex items-center"
+            data-panel="p2">
+          <span class="block font-extrabold uppercase tracking-tight whitespace-nowrap
+                       text-[100vh] leading-[0.62] -mt-[0.04em] -mb-[0.04em]">
+            Build
+          </span>
+        </li>
+
+        <li class="scroll-item snap-start h-screen m-0 p-0 select-none flex items-center"
+            data-panel="p3">
+          <span class="block font-extrabold uppercase tracking-tight whitespace-nowrap
+                       text-[100vh] leading-[0.62] -mt-[0.04em] -mb-[0.04em]">
+            Motion
+          </span>
+        </li>
+
+        <li class="scroll-item snap-start h-screen m-0 p-0 select-none flex items-center"
+            data-panel="p4">
+          <span class="block font-extrabold uppercase tracking-tight whitespace-nowrap
+                       text-[100vh] leading-[0.62] -mt-[0.04em] -mb-[0.04em]">
+            Ship
+          </span>
+        </li>
+      </ul>
+    </div>
+
+    <!-- RIGHT: panels on top (unchanged API; dissolve handled by .panel/.active) -->
+    <div class="md:col-span-7 relative z-10 px-6 md:px-10">
+      <div class="min-h-[420px]">
+        <article id="p1" class="panel active">
+          <div class="border-2 border-[var(--green)] p-8 md:p-10 bg-white">
+            <h3 class="text-3xl md:text-4xl font-extrabold uppercase">Design Systems</h3>
+            <p class="mt-4 max-w-prose text-black/80">
+              Type-led interfaces with brutalist skeletons, balanced by modern usability.
+              Figma to code with component libraries that scale.
+            </p>
+            <div class="mt-8 h-0 border-t-2 border-[var(--green)]/30"></div>
+          </div>
+        </article>
+
+        <article id="p2" class="panel">
+          <div class="border-2 border-[var(--green)] p-8 md:p-10 bg-white">
+            <h3 class="text-3xl md:text-4xl font-extrabold uppercase">Engineering</h3>
+            <p class="mt-4 max-w-prose text-black/80">
+              Full-stack builds with clean, accessible front-ends and robust APIs. Tailwind, Next.js, Node, and friends.
+            </p>
+            <div class="mt-8 h-0 border-t-2 border-[var(--green)]/30"></div>
+          </div>
+        </article>
+
+        <article id="p3" class="panel">
+          <div class="border-2 border-[var(--green)] p-8 md:p-10 bg-white">
+            <h3 class="text-3xl md:text-4xl font-extrabold uppercase">Motion & 3D</h3>
+            <p class="mt-4 max-w-prose text-black/80">
+              GSAP and Three.js for fluid, performance-first motion. Parallax, scroll sequences, and tasteful 3D accents.
+            </p>
+            <div class="mt-8 h-0 border-t-2 border-[var(--green)]/30"></div>
+          </div>
+        </article>
+
+        <article id="p4" class="panel">
+          <div class="border-2 border-[var(--green)] p-8 md:p-10 bg-white">
+            <h3 class="text-3xl md:text-4xl font-extrabold uppercase">Delivery</h3>
+            <p class="mt-4 max-w-prose text-black/80">
+              CI/CD, analytics, and performance budgets. Ship fast, iterate faster, keep the experience crisp.
+            </p>
+            <div class="mt-8 h-0 border-t-2 border-[var(--green)]/30"></div>
+          </div>
+        </article>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+  <!-- CTA / CONTACT -->
+  <section id="contact" class="bg-white text-[var(--green)] py-24 md:py-32 px-6 md:px-10">
     <div class="max-w-6xl mx-auto">
-      <h2 class="text-5xl font-bold leading-none -translate-x-2 mb-16">
-        Selected<br><span class="pl-24">Work</span>
-      </h2>
-
-      <div class="grid md:grid-cols-3 gap-10">
-        <!-- Card -->
-        <a href="#" class="relative group border-2 border-[var(--lime)] bg-[var(--green)] text-[var(--lime)]
-                           px-10 pt-14 pb-10 overflow-hidden transition-shadow hover:shadow-2xl">
-          <span class="absolute inset-y-0 left-0 w-2 bg-[var(--lime)]"></span>
-          <span class="absolute -top-4 -right-2 text-[10rem] font-extrabold text-[var(--lime)]/10 select-none pointer-events-none">
-            01
-          </span>
-          <h3 class="text-3xl font-extrabold uppercase tracking-tight">E-Commerce Platform</h3>
-          <p class="mt-8 text-sm tracking-widest opacity-80">React • Node.js</p>
-        </a>
-
-        <a href="#" class="relative group border-2 border-[var(--lime)] bg-[var(--green)] text-[var(--lime)]
-                           px-10 pt-14 pb-10 overflow-hidden transition-shadow hover:shadow-2xl">
-          <span class="absolute inset-y-0 left-0 w-2 bg-[var(--lime)]"></span>
-          <span class="absolute -top-4 -right-2 text-[10rem] font-extrabold text-[var(--lime)]/10 select-none pointer-events-none">
-            02
-          </span>
-          <h3 class="text-3xl font-extrabold uppercase tracking-tight">Portfolio Website</h3>
-          <p class="mt-8 text-sm tracking-widest opacity-80">HTML • Tailwind</p>
-        </a>
-
-        <a href="#" class="relative group border-2 border-[var(--lime)] bg-[var(--green)] text-[var(--lime)]
-                           px-10 pt-14 pb-10 overflow-hidden transition-shadow hover:shadow-2xl">
-          <span class="absolute inset-y-0 left-0 w-2 bg-[var(--lime)]"></span>
-          <span class="absolute -top-4 -right-2 text-[10rem] font-extrabold text-[var(--lime)]/10 select-none pointer-events-none">
-            03
-          </span>
-          <h3 class="text-3xl font-extrabold uppercase tracking-tight">Task Manager App</h3>
-          <p class="mt-8 text-sm tracking-widest opacity-80">Vue • Firebase</p>
-        </a>
-      </div>
-
-      <div class="mt-24 h-0 border-t-2 border-[var(--green)]/30"></div>
-    </div>
-  </section>
-
-  <!-- MANIFESTO: Typographic statement -->
-  <section id="manifesto" class="bg-[var(--green)] text-[var(--lime)] py-32 px-6 md:px-10 overflow-hidden">
-    <div class="max-w-6xl mx-auto relative">
-      <h2 class="uppercase font-bold leading-none tracking-tight">
-        <span class="block text-[11vw] md:text-[8rem] -translate-x-6">Design</span>
-        <span class="block text-[var(--cream)] text-[11vw] md:text-[8rem] translate-x-12">Meets</span>
-        <span class="block text-[11vw] md:text-[8rem] -translate-x-4 md:-translate-x-20">Purpose</span>
-      </h2>
-      <p class="max-w-xl mt-12 ml-auto text-[var(--cream)]/90 text-lg tracking-wide">
-        Clean code. Strong type. Brutalist skeleton. Human outcomes.
+      <h3 class="text-5xl md:text-6xl font-extrabold leading-none">
+        Let’s<br><span class="pl-24">Talk</span>
+      </h3>
+      <p class="mt-6 max-w-md text-black/80">
+        Ready to collaborate? I’m an email away—let’s build something bold and purposeful.
       </p>
-      <div class="absolute top-1/2 left-0 w-full border-t-2 border-[var(--lime)]/15"></div>
-    </div>
-  </section>
-
-  <!-- CONTACT: CTA + tiny dotted halo (3D) -->
-  <section id="contact" class="relative bg-white text-[var(--green)] py-24 md:py-32 px-6 md:px-10">
-    <div class="max-w-6xl mx-auto grid md:grid-cols-2 gap-12 items-center">
-      <div>
-        <h3 class="text-5xl md:text-6xl font-bold leading-none mb-6">
-          Let’s<br><span class="pl-24">Talk</span>
-        </h3>
-        <p class="text-lg max-w-md">
-          Ready to collaborate? I’m an email away—let’s build something bold and purposeful.
-        </p>
-
-        <a href="mailto:hello@abdullahinur.dev"
-           class="mt-8 inline-block border-2 border-[var(--green)] text-[var(--green)]
-                  px-8 py-3 uppercase tracking-wider font-medium
-                  transition-colors duration-300 hover:bg-[var(--green)] hover:text-white">
-          hello@abdullahinur.dev
-        </a>
-
-        <nav class="mt-6 flex gap-6 text-sm uppercase tracking-widest">
-          <a href="#" class="hover:text-[var(--green)]/70">GitHub</a>
-          <a href="#" class="hover:text-[var(--green)]/70">LinkedIn</a>
-          <a href="#" class="hover:text-[var(--green)]/70">X</a>
-        </nav>
-      </div>
-
-      <!-- 3D dotted halo accent -->
-      <div class="relative h-[360px]">
-        <canvas id="miniRingsCanvas" class="webgl absolute inset-0"></canvas>
-        <div class="absolute inset-0 ring-2 ring-[var(--green)]/10 pointer-events-none"></div>
-      </div>
-    </div>
-
-    <div class="max-w-6xl mx-auto mt-16">
-      <div class="h-0 border-t-2 section-rule"></div>
+      <a href="mailto:hello@abdullahinur.dev" class="mt-8 inline-block border-2 border-[var(--green)] text-[var(--green)]
+                px-8 py-3 uppercase tracking-wider font-medium
+                transition-colors duration-300 hover:bg-[var(--green)] hover:text-white">
+        hello@abdullahinur.dev
+      </a>
+      <div class="mt-12 h-0 border-t-2 border-[var(--green)]/20"></div>
     </div>
   </section>
 
@@ -221,166 +330,167 @@
   <footer class="bg-[var(--cream)] text-[var(--green)] pt-16 pb-10 px-6 md:px-10">
     <div class="max-w-6xl mx-auto flex flex-col md:flex-row items-center md:items-end justify-between gap-8">
       <div class="uppercase tracking-widest text-sm">© 2025 Abdullahinur</div>
-      <div class="h-0 border-t-2 w-full md:w-1/2 section-rule"></div>
+      <div class="h-0 border-t-2 w-full md:w-1/2" style="border-color:var(--green)"></div>
     </div>
   </footer>
 
-  <!-- Three.js -->
+  <!-- Three.js + GSAP -->
   <script src="https://cdn.jsdelivr.net/npm/three@0.159.0/build/three.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.13.0/gsap.min.js"></script>
 
   <script>
-  /* Utility: init renderer to parent size */
-  function makeRenderer(canvas){
-    const r = new THREE.WebGLRenderer({ canvas, antialias:true, alpha:false });
-    function setSize(){
-      const p = canvas.parentElement;
-      const w = p.clientWidth, h = p.clientHeight;
-      r.setSize(w, h, false);
-      r.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.5));
-    }
-    setSize();
-    window.addEventListener('resize', setSize);
-    return r;
-  }
+    /* ---------- Three.js HERO: three orbiting dot rings, centered ---------- */
+    (() => {
+      const canvas = document.getElementById('ringsCanvas');
+      const scene = new THREE.Scene();
+      scene.background = new THREE.Color('#ffffff');
 
-  /* HERO — three orbiting dot rings */
-  (() => {
-    const canvas = document.getElementById('ringsCanvas');
-    const scene  = new THREE.Scene();
-    scene.background = new THREE.Color('#ffffff');
+      const camera = new THREE.PerspectiveCamera(45, 1, 0.1, 100);
+      camera.position.set(0, 0, 7.2);
 
-    const camera = new THREE.PerspectiveCamera(45, 1, 0.1, 100);
-    camera.position.set(0, 0, 7.2);
+      const renderer = new THREE.WebGLRenderer({
+        canvas,
+        antialias: true,
+        alpha: false
+      });
 
-    const renderer = makeRenderer(canvas);
-    function updateAspect(){
-      const { clientWidth:w, clientHeight:h } = canvas.parentElement;
-      camera.aspect = w/h; camera.updateProjectionMatrix();
-    }
-    updateAspect(); window.addEventListener('resize', updateAspect);
-
-    scene.add(new THREE.AmbientLight(0xffffff, 0.95));
-
-    function makeDotRing({ radius=2.0, count=20, dotRadius=0.035, color='#1A2318', tiltX=Math.PI*0.3, tiltY=Math.PI*0.1 }={}){
-      const mat  = new THREE.MeshStandardMaterial({ color, roughness:0.35, metalness:0.25 });
-      const geom = new THREE.SphereGeometry(dotRadius, 16, 16);
-      const group = new THREE.Group();
-      group.rotation.x = tiltX; group.rotation.y = tiltY;
-      for (let i=0;i<count;i++){
-        const a = (i/count)*Math.PI*2;
-        const m = new THREE.Mesh(geom, mat);
-        m.position.set(Math.cos(a)*radius, Math.sin(a)*radius, 0);
-        group.add(m);
+      function setSize() {
+        const p = canvas.parentElement;
+        const w = p.clientWidth,
+          h = p.clientHeight;
+        renderer.setSize(w, h, false);
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.5));
+        camera.aspect = w / h;
+        camera.updateProjectionMatrix();
       }
-      scene.add(group); return group;
-    }
+      setSize();
+      window.addEventListener('resize', setSize);
+      scene.add(new THREE.AmbientLight(0xffffff, 0.95));
 
-    const ringInner = makeDotRing({
-      radius: 2.1, count: 20, dotRadius: 0.036, color: '#1A2318',
-      tiltX: Math.PI*0.22, tiltY: Math.PI*0.15
-    });
-    const ringMiddle = makeDotRing({
-      radius: 2.7, count: 20, dotRadius: 0.034, color: '#6E8256',
-      tiltX: Math.PI*0.62, tiltY: -Math.PI*0.18
-    });
-    const ringOuter = makeDotRing({
-      radius: 3.3, count: 20, dotRadius: 0.032, color: '#C6E376',
-      tiltX: Math.PI*0.40, tiltY: -Math.PI*1.00
-    });
-
-    const prefersReduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    const clock = new THREE.Clock();
-    (function tick(){
-      if (!prefersReduced){
-        const t = clock.getElapsedTime();
-        ringInner.rotation.z  =  t * 0.42;
-        ringMiddle.rotation.z = -t * 0.34;
-        ringOuter.rotation.z  =  t * 0.28;
+      function makeDotRing({
+        radius,
+        count,
+        dotRadius,
+        color,
+        tiltX,
+        tiltY
+      }) {
+        const mat = new THREE.MeshStandardMaterial({
+          color,
+          roughness: 0.35,
+          metalness: 0.25
+        });
+        const geom = new THREE.SphereGeometry(dotRadius, 16, 16);
+        const group = new THREE.Group();
+        group.rotation.x = tiltX;
+        group.rotation.y = tiltY;
+        for (let i = 0; i < count; i++) {
+          const a = (i / count) * Math.PI * 2,
+            x = Math.cos(a) * radius,
+            y = Math.sin(a) * radius;
+          const m = new THREE.Mesh(geom, mat);
+          m.position.set(x, y, 0);
+          group.add(m);
+        }
+        scene.add(group);
+        return group;
       }
-      renderer.render(scene, camera);
-      requestAnimationFrame(tick);
+
+      const ringInner = makeDotRing({
+        radius: 2.1,
+        count: 20,
+        dotRadius: 0.036,
+        color: '#1A2318',
+        tiltX: Math.PI * 0.22,
+        tiltY: Math.PI * 0.15
+      });
+      const ringMiddle = makeDotRing({
+        radius: 2.7,
+        count: 20,
+        dotRadius: 0.034,
+        color: '#6E8256',
+        tiltX: Math.PI * 0.62,
+        tiltY: -Math.PI * 0.18
+      });
+      const ringOuter = makeDotRing({
+        radius: 3.3,
+        count: 20,
+        dotRadius: 0.032,
+        color: '#C6E376',
+        tiltX: Math.PI * 0.40,
+        tiltY: -Math.PI * 1.00
+      });
+
+      const prefersReduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      const clock = new THREE.Clock();
+      (function tick() {
+        if (!prefersReduced) {
+          const t = clock.getElapsedTime();
+          ringInner.rotation.z = t * 0.42;
+          ringMiddle.rotation.z = -t * 0.34;
+          ringOuter.rotation.z = t * 0.28;
+        }
+        renderer.render(scene, camera);
+        requestAnimationFrame(tick);
+      })();
     })();
-  })();
 
-  /* ABOUT — subtle wireframe cube over the photo */
-  (() => {
-    const canvas = document.getElementById('cubeCanvas');
-    const scene  = new THREE.Scene(); scene.background = null; // overlay
+    /* ---------- GSAP: center phrases dissolve in/out looping ---------- */
+    (() => {
+      const phrases = gsap.utils.toArray(".phrase");
+      // stack all phrases in the center
+      gsap.set(".hero-phrases", {
+        position: "absolute"
+      });
+      gsap.set(phrases, {
+        opacity: 0,
+        filter: "blur(10px)",
+        y: 10,
+        zIndex: (i) => 100 - i
+      });
 
-    const camera = new THREE.PerspectiveCamera(45, 1, 0.1, 100);
-    camera.position.set(0, 0, 4.2);
-
-    const renderer = makeRenderer(canvas);
-    function updateAspect(){
-      const { clientWidth:w, clientHeight:h } = canvas.parentElement;
-      camera.aspect = w/h; camera.updateProjectionMatrix();
-    }
-    updateAspect(); window.addEventListener('resize', updateAspect);
-
-    // Wireframe cube
-    const geo  = new THREE.BoxGeometry(1.7, 1.7, 1.7, 8, 8, 8);
-    const mat  = new THREE.MeshBasicMaterial({ color:'#C6E376', wireframe:true, transparent:true, opacity:0.65 });
-    const cube = new THREE.Mesh(geo, mat);
-    cube.rotation.set(Math.PI*0.25, Math.PI*0.15, 0);
-    scene.add(cube);
-
-    const prefersReduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    (function tick(){
-      if (!prefersReduced){
-        cube.rotation.x += 0.003;
-        cube.rotation.y += 0.006;
-      }
-      renderer.render(scene, camera);
-      requestAnimationFrame(tick);
+      const tl = gsap.timeline({
+        repeat: -1,
+        repeatDelay: 0.2
+      });
+      phrases.forEach((el) => {
+        tl.to(el, {
+            opacity: 1,
+            filter: "blur(0px)",
+            y: 0,
+            duration: 0.9,
+            ease: "power3.out"
+          })
+          .to(el, {
+            opacity: 0,
+            filter: "blur(12px)",
+            y: -10,
+            duration: 0.8,
+            ease: "power3.in"
+          }, "+=0.9");
+      });
     })();
-  })();
 
-  /* CONTACT — tiny dotted halo */
-  (() => {
-    const canvas = document.getElementById('miniRingsCanvas');
-    const scene  = new THREE.Scene(); scene.background = new THREE.Color('#ffffff');
+  /* ---------- Showcase: activate panels via hover + scroll ---------- */
+  (()=>{
+    const list   = document.getElementById('topicList');
+    const items  = [...list.querySelectorAll('.scroll-item')];
+    const panels = [...document.querySelectorAll('#showcase .panel')];
 
-    const camera = new THREE.PerspectiveCamera(45, 1, 0.1, 100);
-    camera.position.set(0, 0, 5.5);
-
-    const renderer = makeRenderer(canvas);
-    function updateAspect(){
-      const { clientWidth:w, clientHeight:h } = canvas.parentElement;
-      camera.aspect = w/h; camera.updateProjectionMatrix();
+    function activate(id){
+      panels.forEach(p => p.classList.toggle('active', p.id === id));
     }
-    updateAspect(); window.addEventListener('resize', updateAspect);
+    items.forEach(li=>{
+      li.addEventListener('mouseenter', ()=>activate(li.dataset.panel));
+      li.addEventListener('focus',     ()=>activate(li.dataset.panel));
+    });
 
-    scene.add(new THREE.AmbientLight(0xffffff, 0.95));
-
-    function dotRing(radius, count, size, color, tiltX, tiltY){
-      const group = new THREE.Group();
-      const mat  = new THREE.MeshStandardMaterial({ color, roughness:0.4, metalness:0.2 });
-      const geom = new THREE.SphereGeometry(size, 12, 12);
-      for (let i=0;i<count;i++){
-        const a = (i/count)*Math.PI*2;
-        const d = new THREE.Mesh(geom, mat);
-        d.position.set(Math.cos(a)*radius, Math.sin(a)*radius, 0);
-        group.add(d);
-      }
-      group.rotation.x = tiltX; group.rotation.y = tiltY;
-      scene.add(group); return group;
-    }
-
-    const r1 = dotRing(1.4, 12, 0.03, '#1A2318', Math.PI*0.35, Math.PI*0.08);
-    const r2 = dotRing(2.0, 14, 0.026, '#C6E376', Math.PI*0.55, -Math.PI*0.12);
-
-    const prefersReduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    const clock = new THREE.Clock();
-    (function tick(){
-      if (!prefersReduced){
-        const t = clock.getElapsedTime();
-        r1.rotation.z =  t * 0.35;
-        r2.rotation.z = -t * 0.25;
-      }
-      renderer.render(scene, camera);
-      requestAnimationFrame(tick);
-    })();
+    const io = new IntersectionObserver(entries=>{
+      entries.forEach(e=>{ if (e.isIntersecting) activate(e.target.dataset.panel); });
+    }, { root:list, threshold: 0.8 });
+    items.forEach(el => io.observe(el));
   })();
   </script>
 </body>
+
 </html>
