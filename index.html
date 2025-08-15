@@ -291,7 +291,7 @@
                   </div>
                   <!-- 3D -->
                   <div class="panel-3d relative h-56 md:h-64 lg:h-72 border-2 border-[var(--green)]/20"
-                    data-model="assets/3d_objects/honor.glb" data-autorotate="true">
+                    data-model="assets/3d_objects/room.glb" data-autorotate="true">
                     <canvas class="webgl absolute inset-0"></canvas>
                   </div>
                 </div>
@@ -309,7 +309,7 @@
                     <div class="panel-text mt-8 h-0 border-t-2 border-[var(--green)]/30"></div>
                   </div>
                   <div class="panel-3d relative h-56 md:h-64 lg:h-72 border-2 border-[var(--green)]/20"
-                    data-model="assets/3d_objects/Avocado.glb" data-autorotate="true">
+                    data-model="assets/3d_objects/room.glb" data-autorotate="true">
                     <canvas class="webgl absolute inset-0"></canvas>
                   </div>
                 </div>
@@ -395,7 +395,7 @@
   import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
   import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 
-/* ---------- HERO rings (centered + MORE morphing shapes) ---------- */
+/* ---------- HERO rings (centered + morphing paths + dot SHAPE swaps) ---------- */
 (() => {
   const canvas = document.getElementById('ringsCanvas');
   const hero   = document.getElementById('hero3d');
@@ -423,172 +423,135 @@
   const orbitRoot = new THREE.Group();
   scene.add(orbitRoot);
 
-  // ---------- helpers ----------
-  const vec = (x,y)=>new THREE.Vector3(x,y,0);
-
-  // circle / ellipse
-  const makeCircle  = (n, r)=>Array.from({length:n},(_,i)=>{const a=i/n*2*Math.PI;return vec(Math.cos(a)*r,Math.sin(a)*r)});
-  const makeEllipse = (n, rx,ry)=>Array.from({length:n},(_,i)=>{const a=i/n*2*Math.PI;return vec(Math.cos(a)*rx,Math.sin(a)*ry)});
-
-  // Lissajous
-  const makeLissajous = (n, ax, ay, phase, s)=>Array.from({length:n},(_,i)=>{
-    const t=i/n*2*Math.PI; return vec(Math.sin(ax*t+phase)*s, Math.sin(ay*t)*s);
-  });
-
-  // Heart (parametric, scaled)
+  // ---------- SHAPE PATHS (same as before; trimmed for brevity) ----------
+  const V = (x,y)=>new THREE.Vector3(x,y,0);
+  const makeCircle  = (n, r)=>Array.from({length:n},(_,i)=>{const a=i/n*2*Math.PI;return V(Math.cos(a)*r,Math.sin(a)*r)});
+  const makeEllipse = (n, rx,ry)=>Array.from({length:n},(_,i)=>{const a=i/n*2*Math.PI;return V(Math.cos(a)*rx,Math.sin(a)*ry)});
   const makeHeart = (n, s)=>{
     const pts=[]; let maxR=0;
     for(let i=0;i<n;i++){
       const t=i/n*2*Math.PI;
       const x=16*Math.sin(t)**3;
       const y=13*Math.cos(t)-5*Math.cos(2*t)-2*Math.cos(3*t)-Math.cos(4*t);
-      const r=Math.hypot(x,y); if(r>maxR) maxR=r;
-      pts.push(vec(x,y));
+      maxR=Math.max(maxR,Math.hypot(x,y)); pts.push(V(x,y));
     }
     const k=s/(maxR||1); return pts.map(p=>p.multiplyScalar(k));
   };
-
-  // Star
-  const makeStar = (n, r1,r2,points=5)=>{
-    const m=Math.max(n,points*2);
-    const tmp=Array.from({length:m},(_,i)=>{
-      const a=i/m*2*Math.PI; const r=(i%2===0)?r1:r2; return vec(Math.cos(a)*r,Math.sin(a)*r);
-    });
-    // resample to n
-    return Array.from({length:n},(_,i)=>{
-      const t=i/(n-1)*(m-1); const i0=Math.floor(t), i1=Math.min(m-1,i0+1), f=t-i0;
-      return new THREE.Vector3().lerpVectors(tmp[i0], tmp[i1], f);
-    });
+  const makeStar = (n,r1,r2,points=5)=>{
+    const m=Math.max(n,points*2), tmp=[];
+    for(let i=0;i<m;i++){ const a=i/m*2*Math.PI, r=(i%2? r2:r1); tmp.push(V(Math.cos(a)*r,Math.sin(a)*r)); }
+    return Array.from({length:n},(_,i)=>{ const t=i/(n-1)*(m-1), i0=Math.floor(t), i1=Math.min(m-1,i0+1), f=t-i0; return new THREE.Vector3().lerpVectors(tmp[i0],tmp[i1],f); });
   };
+  const makeLissajous=(n,ax,ay,ph,s)=>Array.from({length:n},(_,i)=>{const t=i/n*2*Math.PI;return V(Math.sin(ax*t+ph)*s,Math.sin(ay*t)*s)});
+  const makeSuperellipse=(n,a,b,pow=4)=>Array.from({length:n},(_,i)=>{const t=i/n*2*Math.PI,ct=Math.cos(t),st=Math.sin(t);return V(Math.sign(ct)*a*Math.abs(ct)**(2/pow),Math.sign(st)*b*Math.abs(st)**(2/pow))});
+  const makeLemniscate=(n,s)=>Array.from({length:n},(_,i)=>{const t=i/n*2*Math.PI,d=1+Math.sin(t)**2;return V((s*Math.SQRT2*Math.cos(t))/d,(s*Math.SQRT2*Math.cos(t)*Math.sin(t))/d)});
+  const makeSpiro=(n,R,r,d,k=1)=>Array.from({length:n},(_,i)=>{const t=i/n*2*Math.PI;return V(((R-r)*Math.cos(t)+d*Math.cos((R-r)/r*t))*k,((R-r)*Math.sin(t)-d*Math.sin((R-r)/r*t))*k)});
 
-  // NEW: Superellipse / Squircle: |x/a|^n + |y/b|^n = 1
-  const makeSuperellipse = (n, a,b, pow=4)=>{
-    const pts=[];
-    for(let i=0;i<n;i++){
-      const t = i/n * 2*Math.PI;
-      const ct=Math.cos(t), st=Math.sin(t);
-      const x = Math.sign(ct)*a*Math.pow(Math.abs(ct), 2/pow);
-      const y = Math.sign(st)*b*Math.pow(Math.abs(st), 2/pow);
-      pts.push(vec(x,y));
-    }
-    return pts;
-  };
+  // ---------- DOT GEOMETRIES (actual mesh shapes) ----------
+  function makeDotGeometries(dotRadius){
+    return {
+      sphere:   new THREE.SphereGeometry(dotRadius, 16, 16),
+      box:      new THREE.BoxGeometry(dotRadius*2, dotRadius*2, dotRadius*2),
+      octa:     new THREE.OctahedronGeometry(dotRadius, 0),
+      icosa:    new THREE.IcosahedronGeometry(dotRadius, 0),
+      cone:     new THREE.ConeGeometry(dotRadius, dotRadius*2, 16),
+      capsule:  new THREE.CapsuleGeometry(dotRadius*0.75, dotRadius*1.2, 6, 12)
+    };
+  }
 
-  // NEW: Lemniscate of Bernoulli (infinity)
-  const makeLemniscate = (n, s)=>{
-    const a=s;
-    const pts=[];
-    for(let i=0;i<n;i++){
-      const t=i/n*2*Math.PI;
-      const denom = 1 + Math.sin(t)**2;
-      const x = (a*Math.SQRT2*Math.cos(t))/denom;
-      const y = (a*Math.SQRT2*Math.cos(t)*Math.sin(t))/denom;
-      pts.push(vec(x,y));
-    }
-    return pts;
-  };
+  // ---------- RING FACTORY ----------
+  function makeDotRing({ radius, count, dotRadius, color, tiltX, tiltY, initialShape='sphere' }) {
+    const mat  = new THREE.MeshStandardMaterial({ color, roughness:.35, metalness:.25, flatShading:true });
+    const geos = makeDotGeometries(dotRadius);
 
-  // NEW: Rose / Clover r = cos(kθ)
-  const makeRose = (n, k, s)=>{
-    const pts=[];
-    for(let i=0;i<n;i++){
-      const t=i/n*2*Math.PI;
-      const r = Math.cos(k*t)*s;
-      pts.push(vec(r*Math.cos(t), r*Math.sin(t)));
-    }
-    return pts;
-  };
-
-  // NEW: Spirograph (hypotrochoid)
-  // R: fixed circle radius, r: rolling radius, d: pen offset
-  const makeSpiro = (n, R,r,d, scale=1)=>{
-    const pts=[];
-    const k = R/r;
-    for(let i=0;i<n;i++){
-      const t=i/n*2*Math.PI;
-      const x=(R - r)*Math.cos(t) + d*Math.cos((R - r)/r * t);
-      const y=(R - r)*Math.sin(t) - d*Math.sin((R - r)/r * t);
-      pts.push(vec(x*scale, y*scale));
-    }
-    return pts;
-  };
-
-  // ---------- ring factory ----------
-  function makeDotRing({ radius, count, dotRadius, color, tiltX, tiltY }) {
-    const mat  = new THREE.MeshStandardMaterial({ color, roughness:.35, metalness:.25 });
-    const geom = new THREE.SphereGeometry(dotRadius, 16, 16);
     const ring = new THREE.Group();
     ring.rotation.x = tiltX;
     ring.rotation.y = tiltY;
 
-    // start on a circle
+    // place dots on a circle initially
     const base = makeCircle(count, radius);
-    for(let i=0;i<count;i++){
-      const m=new THREE.Mesh(geom,mat);
+    for (let i=0;i<count;i++){
+      const m = new THREE.Mesh(geos[initialShape], mat);
       m.position.copy(base[i]);
       ring.add(m);
     }
     orbitRoot.add(ring);
 
-    ring.morphTo = (targets, dur=2.4) => {
-      const kids = ring.children;
-      const N = Math.min(kids.length, targets.length);
+    // morph positions (unchanged)
+    ring.morphTo = (targets, dur=2.2) => {
+      const kids = ring.children; const N = Math.min(kids.length, targets.length);
       gsap.killTweensOf(kids.map(k=>k.position));
       gsap.to(kids.map(k=>k.position), {
         x:(i)=>targets[i].x, y:(i)=>targets[i].y, z:(i)=>targets[i].z,
-        duration: dur, ease:"power3.inOut",
+        duration:dur, ease:"power3.inOut",
         stagger:{ each:.012, from:"center" }
       });
     };
+
+    // NEW: swap dot geometry with a quick scale-in/out so it feels like a morph
+    ring.swapShape = (shape='sphere', dur=0.45) => {
+      const g = geos[shape] || geos.sphere;
+      ring.children.forEach((m, i) => {
+        gsap.to(m.scale, {
+          x:0.001, y:0.001, z:0.001,
+          duration: dur*0.5, ease:"power2.in",
+          delay: i*0.003,
+          onComplete: () => {
+            m.geometry = g;
+            gsap.to(m.scale, { x:1, y:1, z:1, duration: dur*0.5, ease:"power2.out" });
+          }
+        });
+      });
+    };
+
     return ring;
   }
 
-  // rings (palette/tilts)
+  // rings (your palette/tilts)
   const inner = makeDotRing({ radius:2.1, count:20, dotRadius:.036, color:'#1A2318', tiltX:Math.PI*.22, tiltY:Math.PI*.15 });
   const mid   = makeDotRing({ radius:2.7, count:20, dotRadius:.034, color:'#6E8256', tiltX:Math.PI*.62, tiltY:-Math.PI*.18 });
   const outer = makeDotRing({ radius:3.3, count:20, dotRadius:.032, color:'#C6E376', tiltX:Math.PI*.40, tiltY:-Math.PI*1.0 });
 
-  // programs (each returns [innerPts, midPts, outerPts])
-  const progs = [
-    (c)=>[ makeCircle(c,2.1),         makeCircle(c,2.7),            makeCircle(c,3.3) ],
-    (c)=>[ makeEllipse(c,2.4,1.6),    makeEllipse(c,3.0,2.0),       makeEllipse(c,3.7,2.2) ],
-    (c)=>[ makeLissajous(c,3,2,Math.PI/2,1.8), makeLissajous(c,5,4,Math.PI/3,2.4), makeLissajous(c,4,3,Math.PI/4,3.0) ],
-    (c)=>[ makeHeart(c,2.2),          makeHeart(c,2.8),             makeHeart(c,3.4) ],
-    (c)=>[ makeStar(c,2.3,1.2,5),     makeStar(c,3.0,1.5,5),        makeStar(c,3.8,1.8,5) ],
-
-    // NEW sets:
-    (c)=>[ makeSuperellipse(c,2.1,2.1,3.6),  makeSuperellipse(c,2.7,2.4,3.6),  makeSuperellipse(c,3.4,2.9,3.6) ],        // squircles
-    (c)=>[ makeSuperellipse(c,2.8,1.6,5.2),  makeSuperellipse(c,3.4,1.9,5.2),  makeSuperellipse(c,4.1,2.2,5.2) ],        // rounded rects
-    (c)=>[ makeRose(c,4,1.9),               makeRose(c,5,2.4),                 makeRose(c,6,3.0) ],                     // roses
-    (c)=>[ makeSpiro(c,5,3,4, .35),         makeSpiro(c,7,3,5, .36),           makeSpiro(c,9,4,5, .37) ],               // spirographs
-    (c)=>[ makeLemniscate(c,2.2),           makeLemniscate(c,2.7),             makeLemniscate(c,3.2) ],                 // infinity
+  // PATH programs + SHAPE programs
+  const pathPrograms = [
+    (c)=>[ makeCircle(c,2.1),                 makeCircle(c,2.7),                makeCircle(c,3.3) ],
+    (c)=>[ makeEllipse(c,2.4,1.6),            makeEllipse(c,3.0,2.0),           makeEllipse(c,3.7,2.2) ],
+    (c)=>[ makeLissajous(c,3,2,Math.PI/2,1.8),makeLissajous(c,5,4,Math.PI/3,2.4),makeLissajous(c,4,3,Math.PI/4,3.0) ],
+    (c)=>[ makeHeart(c,2.2),                  makeHeart(c,2.8),                 makeHeart(c,3.4) ],
+    (c)=>[ makeStar(c,2.3,1.2,5),             makeStar(c,3.0,1.5,5),            makeStar(c,3.8,1.8,5) ],
+    (c)=>[ makeSuperellipse(c,2.1,2.1,3.6),   makeSuperellipse(c,2.7,2.4,3.6),  makeSuperellipse(c,3.4,2.9,3.6) ],
+    (c)=>[ makeLemniscate(c,2.2),             makeLemniscate(c,2.7),            makeLemniscate(c,3.2) ],
+    (c)=>[ makeSpiro(c,5,3,4,.35),            makeSpiro(c,7,3,5,.36),           makeSpiro(c,9,4,5,.37) ],
   ];
 
+  const dotShapeCycle = ['sphere','box','octa','icosa','cone','capsule']; // cycles per morph
+
   const reduce   = matchMedia('(prefers-reduced-motion: reduce)').matches;
-  const MORPH_D  = 2.6;
-  const HOLD_D   = 1.1;
+  const MORPH_D  = 2.4, HOLD_D = 1.1;
 
   if (!reduce){
     let i=0;
     const cycle = ()=>{
-      const [a,b,c] = progs[i % progs.length](inner.children.length);
+      // morph paths
+      const [a,b,c] = pathPrograms[i % pathPrograms.length](inner.children.length);
       inner.morphTo(a, MORPH_D);
       mid.morphTo(b, MORPH_D);
       outer.morphTo(c, MORPH_D);
 
-      // subtle tilt change per program
+      // swap dot geometry (all rings share the same next shape for cohesion)
+      const nextDotShape = dotShapeCycle[i % dotShapeCycle.length];
+      inner.swapShape(nextDotShape, 0.42);
+      mid.swapShape(nextDotShape,   0.42);
+      outer.swapShape(nextDotShape, 0.42);
+
+      // subtle tilt change
       const tiltPresets = [
         { x:Math.PI*.22, y: Math.PI*.15 },
         { x:Math.PI*.35, y: Math.PI*.05 },
         { x:Math.PI*.55, y:-Math.PI*.10 },
         { x:Math.PI*.25, y:-Math.PI*.25 },
         { x:Math.PI*.42, y:-Math.PI*.90 },
-        { x:Math.PI*.30, y: Math.PI*.12 },
-        { x:Math.PI*.48, y:-Math.PI*.18 },
-        { x:Math.PI*.36, y: Math.PI*.08 },
-        { x:Math.PI*.52, y:-Math.PI*.22 },
-        { x:Math.PI*.40, y:-Math.PI*.70 },
-      ][i % 10];
+      ][i % 5];
 
       gsap.to([inner.rotation, mid.rotation, outer.rotation], {
         x:(idx)=> tiltPresets.x + (idx-1)*0.06,
@@ -613,6 +576,7 @@
     requestAnimationFrame(tick);
   })();
 })();
+
 
 
 
