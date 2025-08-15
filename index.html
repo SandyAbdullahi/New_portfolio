@@ -126,14 +126,60 @@
     .panel.active {
       display: block;
     }
-     .panel-3d canvas { cursor: grab; touch-action: none; }
-  .panel-3d.grabbing canvas { cursor: grabbing; }
+
+    .panel-3d canvas {
+      cursor: grab;
+      touch-action: none;
+    }
+
+    .panel-3d.grabbing canvas {
+      cursor: grabbing;
+    }
 
     /* dissolve only text inside panels */
     .panel-text {
       opacity: 0;
       filter: blur(10px);
       transform: translateY(8px);
+    }
+
+    /* showcase word hover/active */
+    .scroll-item {
+      position: relative;
+    }
+
+    .big-word {
+      position: relative;
+      z-index: 1;
+      transition: transform .28s cubic-bezier(.2, .8, .2, 1), color .2s ease;
+      will-change: transform;
+    }
+
+    /* lime highlight bar behind the word */
+    .scroll-item::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      top: 20%;
+      height: 60%;
+      background: rgba(198, 227, 118, 0.18);
+      /* --lime at low alpha */
+      transform: scaleX(0);
+      transform-origin: left center;
+      transition: transform .35s ease;
+      z-index: 0;
+    }
+
+    /* hover & active states */
+    .scroll-item:hover::before,
+    .scroll-item.is-active::before {
+      transform: scaleX(1);
+    }
+
+    .scroll-item:hover .big-word,
+    .scroll-item.is-active .big-word {
+      color: var(--lime);
+      transform: translateX(.2vw) skewX(-1.2deg);
     }
   </style>
 </head>
@@ -195,28 +241,28 @@
                    w-screen pl-0 ml-0">
 
           <li class="scroll-item snap-start h-screen m-0 p-0 select-none flex items-center" data-panel="p1">
-            <span class="block font-extrabold uppercase tracking-tight whitespace-nowrap
+            <span class="big-word block font-extrabold uppercase tracking-tight whitespace-nowrap
                          text-[100vh] leading-[0.62] -mt-[0.04em] -mb-[0.04em]">
               Design
             </span>
           </li>
 
           <li class="scroll-item snap-start h-screen m-0 p-0 select-none flex items-center" data-panel="p2">
-            <span class="block font-extrabold uppercase tracking-tight whitespace-nowrap
+            <span class="big-word block font-extrabold uppercase tracking-tight whitespace-nowrap
                          text-[100vh] leading-[0.62] -mt-[0.04em] -mb-[0.04em]">
               Build
             </span>
           </li>
 
           <li class="scroll-item snap-start h-screen m-0 p-0 select-none flex items-center" data-panel="p3">
-            <span class="block font-extrabold uppercase tracking-tight whitespace-nowrap
+            <span class="big-word block font-extrabold uppercase tracking-tight whitespace-nowrap
                          text-[100vh] leading-[0.62] -mt-[0.04em] -mb-[0.04em]">
               Motion
             </span>
           </li>
 
           <li class="scroll-item snap-start h-screen m-0 p-0 select-none flex items-center" data-panel="p4">
-            <span class="block font-extrabold uppercase tracking-tight whitespace-nowrap
+            <span class="big-word block font-extrabold uppercase tracking-tight whitespace-nowrap
                          text-[100vh] leading-[0.62] -mt-[0.04em] -mb-[0.04em]">
               Ship
             </span>
@@ -245,7 +291,7 @@
                   </div>
                   <!-- 3D -->
                   <div class="panel-3d relative h-56 md:h-64 lg:h-72 border-2 border-[var(--green)]/20"
-                    data-model="assets/3d_objects/ReciprocatingSaw.glb" data-autorotate="true">
+                    data-model="assets/3d_objects/honor.glb" data-autorotate="true">
                     <canvas class="webgl absolute inset-0"></canvas>
                   </div>
                 </div>
@@ -300,8 +346,7 @@
                     <div class="panel-text mt-8 h-0 border-t-2 border-[var(--green)]/30"></div>
                   </div>
                   <div class="panel-3d relative h-56 md:h-64 lg:h-72 border-2 border-[var(--green)]/20"
-                    data-model="https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/master/2.0/Avocado/glTF-Binary/Avocado.glb"
-                    data-autorotate="true">
+                    data-model="assets/3d_objects/cardbox.gltf" data-autorotate="true">
                     <canvas class="webgl absolute inset-0"></canvas>
                   </div>
                 </div>
@@ -334,8 +379,8 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.13.0/gsap.min.js"></script>
 
   <!-- Import map for Three.js ESM -->
-<script type="importmap">
-{
+  <script type="importmap">
+    {
   "imports": {
     "three": "https://cdn.jsdelivr.net/npm/three@0.159.0/build/three.module.js",
     "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.159.0/examples/jsm/"
@@ -350,72 +395,226 @@
   import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
   import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 
-  /* ---------- HERO rings (unchanged) ---------- */
-   (() => {
-    const canvas = document.getElementById('ringsCanvas');
-    const hero   = document.getElementById('hero3d');
+/* ---------- HERO rings (centered + MORE morphing shapes) ---------- */
+(() => {
+  const canvas = document.getElementById('ringsCanvas');
+  const hero   = document.getElementById('hero3d');
 
-    const scene = new THREE.Scene();
-    scene.background = new THREE.Color('#ffffff');
+  const scene = new THREE.Scene();
+  scene.background = new THREE.Color('#ffffff');
 
-    const camera = new THREE.PerspectiveCamera(45, 1, 0.1, 100);
-    camera.position.set(0, 0, 7.2);
-    camera.lookAt(0, 0, 0);             // ⟵ make sure we’re aimed at the center
+  const camera = new THREE.PerspectiveCamera(45, 1, 0.1, 100);
+  camera.position.set(0, 0, 7.2);
+  camera.lookAt(0, 0, 0);
 
-    const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: false });
+  const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: false });
 
-    function setSize() {
-      const { width, height } = hero.getBoundingClientRect();
-      renderer.setSize(width, height, false);
-      renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.5));
-      camera.aspect = width / height;
-      camera.updateProjectionMatrix();
+  function setSize() {
+    const { width, height } = hero.getBoundingClientRect();
+    renderer.setSize(width, height, false);
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.5));
+    camera.aspect = width / height;
+    camera.updateProjectionMatrix();
+  }
+  setSize(); addEventListener('resize', setSize);
+
+  scene.add(new THREE.AmbientLight(0xffffff, 0.95));
+
+  const orbitRoot = new THREE.Group();
+  scene.add(orbitRoot);
+
+  // ---------- helpers ----------
+  const vec = (x,y)=>new THREE.Vector3(x,y,0);
+
+  // circle / ellipse
+  const makeCircle  = (n, r)=>Array.from({length:n},(_,i)=>{const a=i/n*2*Math.PI;return vec(Math.cos(a)*r,Math.sin(a)*r)});
+  const makeEllipse = (n, rx,ry)=>Array.from({length:n},(_,i)=>{const a=i/n*2*Math.PI;return vec(Math.cos(a)*rx,Math.sin(a)*ry)});
+
+  // Lissajous
+  const makeLissajous = (n, ax, ay, phase, s)=>Array.from({length:n},(_,i)=>{
+    const t=i/n*2*Math.PI; return vec(Math.sin(ax*t+phase)*s, Math.sin(ay*t)*s);
+  });
+
+  // Heart (parametric, scaled)
+  const makeHeart = (n, s)=>{
+    const pts=[]; let maxR=0;
+    for(let i=0;i<n;i++){
+      const t=i/n*2*Math.PI;
+      const x=16*Math.sin(t)**3;
+      const y=13*Math.cos(t)-5*Math.cos(2*t)-2*Math.cos(3*t)-Math.cos(4*t);
+      const r=Math.hypot(x,y); if(r>maxR) maxR=r;
+      pts.push(vec(x,y));
     }
-    setSize();
-    addEventListener('resize', setSize);
+    const k=s/(maxR||1); return pts.map(p=>p.multiplyScalar(k));
+  };
 
-    scene.add(new THREE.AmbientLight(0xffffff, 0.95));
+  // Star
+  const makeStar = (n, r1,r2,points=5)=>{
+    const m=Math.max(n,points*2);
+    const tmp=Array.from({length:m},(_,i)=>{
+      const a=i/m*2*Math.PI; const r=(i%2===0)?r1:r2; return vec(Math.cos(a)*r,Math.sin(a)*r);
+    });
+    // resample to n
+    return Array.from({length:n},(_,i)=>{
+      const t=i/(n-1)*(m-1); const i0=Math.floor(t), i1=Math.min(m-1,i0+1), f=t-i0;
+      return new THREE.Vector3().lerpVectors(tmp[i0], tmp[i1], f);
+    });
+  };
 
-    // single centered pivot for all rings (easy to nudge if needed)
-    const orbitRoot = new THREE.Group();
-    orbitRoot.position.set(0, 0, 0);    // ⟵ adjust here if you ever want a tiny visual nudge
-    scene.add(orbitRoot);
+  // NEW: Superellipse / Squircle: |x/a|^n + |y/b|^n = 1
+  const makeSuperellipse = (n, a,b, pow=4)=>{
+    const pts=[];
+    for(let i=0;i<n;i++){
+      const t = i/n * 2*Math.PI;
+      const ct=Math.cos(t), st=Math.sin(t);
+      const x = Math.sign(ct)*a*Math.pow(Math.abs(ct), 2/pow);
+      const y = Math.sign(st)*b*Math.pow(Math.abs(st), 2/pow);
+      pts.push(vec(x,y));
+    }
+    return pts;
+  };
 
-    const makeDotRing = ({ radius, count, dotRadius, color, tiltX, tiltY }) => {
-      const mat  = new THREE.MeshStandardMaterial({ color, roughness: .35, metalness: .25 });
-      const geom = new THREE.SphereGeometry(dotRadius, 16, 16);
-      const ring = new THREE.Group();
-      ring.rotation.x = tiltX;
-      ring.rotation.y = tiltY;
+  // NEW: Lemniscate of Bernoulli (infinity)
+  const makeLemniscate = (n, s)=>{
+    const a=s;
+    const pts=[];
+    for(let i=0;i<n;i++){
+      const t=i/n*2*Math.PI;
+      const denom = 1 + Math.sin(t)**2;
+      const x = (a*Math.SQRT2*Math.cos(t))/denom;
+      const y = (a*Math.SQRT2*Math.cos(t)*Math.sin(t))/denom;
+      pts.push(vec(x,y));
+    }
+    return pts;
+  };
 
-      for (let i = 0; i < count; i++) {
-        const a = (i / count) * Math.PI * 2;
-        const m = new THREE.Mesh(geom, mat);
-        m.position.set(Math.cos(a) * radius, Math.sin(a) * radius, 0);
-        ring.add(m);
-      }
-      orbitRoot.add(ring);
-      return ring;
+  // NEW: Rose / Clover r = cos(kθ)
+  const makeRose = (n, k, s)=>{
+    const pts=[];
+    for(let i=0;i<n;i++){
+      const t=i/n*2*Math.PI;
+      const r = Math.cos(k*t)*s;
+      pts.push(vec(r*Math.cos(t), r*Math.sin(t)));
+    }
+    return pts;
+  };
+
+  // NEW: Spirograph (hypotrochoid)
+  // R: fixed circle radius, r: rolling radius, d: pen offset
+  const makeSpiro = (n, R,r,d, scale=1)=>{
+    const pts=[];
+    const k = R/r;
+    for(let i=0;i<n;i++){
+      const t=i/n*2*Math.PI;
+      const x=(R - r)*Math.cos(t) + d*Math.cos((R - r)/r * t);
+      const y=(R - r)*Math.sin(t) - d*Math.sin((R - r)/r * t);
+      pts.push(vec(x*scale, y*scale));
+    }
+    return pts;
+  };
+
+  // ---------- ring factory ----------
+  function makeDotRing({ radius, count, dotRadius, color, tiltX, tiltY }) {
+    const mat  = new THREE.MeshStandardMaterial({ color, roughness:.35, metalness:.25 });
+    const geom = new THREE.SphereGeometry(dotRadius, 16, 16);
+    const ring = new THREE.Group();
+    ring.rotation.x = tiltX;
+    ring.rotation.y = tiltY;
+
+    // start on a circle
+    const base = makeCircle(count, radius);
+    for(let i=0;i<count;i++){
+      const m=new THREE.Mesh(geom,mat);
+      m.position.copy(base[i]);
+      ring.add(m);
+    }
+    orbitRoot.add(ring);
+
+    ring.morphTo = (targets, dur=2.4) => {
+      const kids = ring.children;
+      const N = Math.min(kids.length, targets.length);
+      gsap.killTweensOf(kids.map(k=>k.position));
+      gsap.to(kids.map(k=>k.position), {
+        x:(i)=>targets[i].x, y:(i)=>targets[i].y, z:(i)=>targets[i].z,
+        duration: dur, ease:"power3.inOut",
+        stagger:{ each:.012, from:"center" }
+      });
     };
+    return ring;
+  }
 
-    const ringInner  = makeDotRing({ radius: 2.1, count: 20, dotRadius: .036, color: '#1A2318', tiltX: Math.PI * .22, tiltY: Math.PI * .15 });
-    const ringMiddle = makeDotRing({ radius: 2.7, count: 20, dotRadius: .034, color: '#6E8256', tiltX: Math.PI * .62, tiltY: -Math.PI * .18 });
-    const ringOuter  = makeDotRing({ radius: 4, count: 20, dotRadius: .032, color: '#C6E376', tiltX: Math.PI * .40, tiltY: -Math.PI * 1.00 });
+  // rings (palette/tilts)
+  const inner = makeDotRing({ radius:2.1, count:20, dotRadius:.036, color:'#1A2318', tiltX:Math.PI*.22, tiltY:Math.PI*.15 });
+  const mid   = makeDotRing({ radius:2.7, count:20, dotRadius:.034, color:'#6E8256', tiltX:Math.PI*.62, tiltY:-Math.PI*.18 });
+  const outer = makeDotRing({ radius:3.3, count:20, dotRadius:.032, color:'#C6E376', tiltX:Math.PI*.40, tiltY:-Math.PI*1.0 });
 
-    const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
-    const clock  = new THREE.Clock();
+  // programs (each returns [innerPts, midPts, outerPts])
+  const progs = [
+    (c)=>[ makeCircle(c,2.1),         makeCircle(c,2.7),            makeCircle(c,3.3) ],
+    (c)=>[ makeEllipse(c,2.4,1.6),    makeEllipse(c,3.0,2.0),       makeEllipse(c,3.7,2.2) ],
+    (c)=>[ makeLissajous(c,3,2,Math.PI/2,1.8), makeLissajous(c,5,4,Math.PI/3,2.4), makeLissajous(c,4,3,Math.PI/4,3.0) ],
+    (c)=>[ makeHeart(c,2.2),          makeHeart(c,2.8),             makeHeart(c,3.4) ],
+    (c)=>[ makeStar(c,2.3,1.2,5),     makeStar(c,3.0,1.5,5),        makeStar(c,3.8,1.8,5) ],
 
-    (function tick() {
-      if (!reduce) {
-        const t = clock.getElapsedTime();
-        ringInner.rotation.z  =  t * .42;
-        ringMiddle.rotation.z = -t * .34;
-        ringOuter.rotation.z  =  t * .28;
-      }
-      renderer.render(scene, camera);
-      requestAnimationFrame(tick);
-    })();
+    // NEW sets:
+    (c)=>[ makeSuperellipse(c,2.1,2.1,3.6),  makeSuperellipse(c,2.7,2.4,3.6),  makeSuperellipse(c,3.4,2.9,3.6) ],        // squircles
+    (c)=>[ makeSuperellipse(c,2.8,1.6,5.2),  makeSuperellipse(c,3.4,1.9,5.2),  makeSuperellipse(c,4.1,2.2,5.2) ],        // rounded rects
+    (c)=>[ makeRose(c,4,1.9),               makeRose(c,5,2.4),                 makeRose(c,6,3.0) ],                     // roses
+    (c)=>[ makeSpiro(c,5,3,4, .35),         makeSpiro(c,7,3,5, .36),           makeSpiro(c,9,4,5, .37) ],               // spirographs
+    (c)=>[ makeLemniscate(c,2.2),           makeLemniscate(c,2.7),             makeLemniscate(c,3.2) ],                 // infinity
+  ];
+
+  const reduce   = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const MORPH_D  = 2.6;
+  const HOLD_D   = 1.1;
+
+  if (!reduce){
+    let i=0;
+    const cycle = ()=>{
+      const [a,b,c] = progs[i % progs.length](inner.children.length);
+      inner.morphTo(a, MORPH_D);
+      mid.morphTo(b, MORPH_D);
+      outer.morphTo(c, MORPH_D);
+
+      // subtle tilt change per program
+      const tiltPresets = [
+        { x:Math.PI*.22, y: Math.PI*.15 },
+        { x:Math.PI*.35, y: Math.PI*.05 },
+        { x:Math.PI*.55, y:-Math.PI*.10 },
+        { x:Math.PI*.25, y:-Math.PI*.25 },
+        { x:Math.PI*.42, y:-Math.PI*.90 },
+        { x:Math.PI*.30, y: Math.PI*.12 },
+        { x:Math.PI*.48, y:-Math.PI*.18 },
+        { x:Math.PI*.36, y: Math.PI*.08 },
+        { x:Math.PI*.52, y:-Math.PI*.22 },
+        { x:Math.PI*.40, y:-Math.PI*.70 },
+      ][i % 10];
+
+      gsap.to([inner.rotation, mid.rotation, outer.rotation], {
+        x:(idx)=> tiltPresets.x + (idx-1)*0.06,
+        y:(idx)=> tiltPresets.y - (idx-1)*0.08,
+        duration:MORPH_D, ease:"power2.inOut"
+      });
+
+      i++; gsap.delayedCall(MORPH_D + HOLD_D, cycle);
+    };
+    cycle();
+  }
+
+  // gentle overall spin
+  const clock = new THREE.Clock();
+  (function tick(){
+    if (!reduce){
+      inner.rotation.z +=  0.0055;
+      mid.rotation.z   += -0.0045;
+      outer.rotation.z +=  0.0038;
+    }
+    renderer.render(scene, camera);
+    requestAnimationFrame(tick);
   })();
+})();
+
+
 
   /* ---------- Hero phrases dissolve (loop) ---------- */
 (() => {
@@ -432,30 +631,28 @@
   });
 })();
 
-/* ---------- Showcase: activate + text-only dissolve (with viewer resize) ---------- */
+/* ---------- Showcase: activate + text-only dissolve (with active word) ---------- */
 (() => {
   const list   = document.getElementById('topicList');
   const items  = [...list.querySelectorAll('.scroll-item')];
   const panels = [...document.querySelectorAll('#showcase .panel')];
 
-  // expose a hook we can call after activation
+  // map panel id -> li element
+  const itemByPanel = items.reduce((m, li) => (m.set(li.dataset.panel, li), m), new Map());
+
   const ensurePanel3DReady = (panelEl) => {
     panelEl.querySelectorAll('.panel-3d').forEach(c => {
-      // will init if needed, then resize
       window.__initViewerIfNeeded && window.__initViewerIfNeeded(c, /*forceResize*/true);
     });
   };
 
   function activate(id){
+    // panels
     panels.forEach(p => {
       const active = (p.id === id);
       p.classList.toggle('active', active);
-
       if (active) {
-        // initialize/resize any viewers in this panel
         ensurePanel3DReady(p);
-
-        // dissolve only the text inside the active panel
         const texts = p.querySelectorAll('.panel-text');
         gsap.fromTo(texts,
           { opacity:0, filter:"blur(10px)", y:8 },
@@ -463,6 +660,9 @@
         );
       }
     });
+
+    // words (left list)
+    items.forEach(li => li.classList.toggle('is-active', li.dataset.panel === id));
   }
 
   items.forEach(li=>{
@@ -502,11 +702,23 @@
       const controls = new OrbitControls(camera, renderer.domElement);
       controls.enableDamping = true;
       controls.dampingFactor = 0.08;
-      controls.enablePan = false;      // keep orbit centered
+
+      controls.enablePan = true;          // ✅ allow repositioning
+      controls.screenSpacePanning = true; // pan straight up/down relative to screen
+      controls.panSpeed = 0.9;
+
       controls.rotateSpeed = 0.7;
-      controls.zoomSpeed = 0.9;
+      controls.zoomSpeed   = 0.9;
+      // keep the orbit from flipping upside down (optional but nice)
+      controls.minPolarAngle = 0.05;
+      controls.maxPolarAngle = Math.PI - 0.05;
+
+      // smooth zoom-to-cursor (optional, remove if your OrbitControls version complains)
+      controls.zoomToCursor = true;
+
       controls.target.set(0,0,0);
       controls.update();
+
 
       const setSize = () => {
         const w = container.clientWidth || 1;
