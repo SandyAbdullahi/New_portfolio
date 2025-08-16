@@ -8,6 +8,97 @@ import { KTX2Loader }    from 'three/addons/loaders/KTX2Loader.js';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { RGBELoader }    from 'three/addons/loaders/RGBELoader.js';
 
+
+/* ------------------ Animated “TV static” grain (in-place) ------------------ */
+(() => {
+  const canvas = document.getElementById('grain');
+  if (!canvas) return;
+
+  const ctx = canvas.getContext('2d', { alpha: true });
+
+  // Tunables
+  const TILE_SIZE = 256;     // 128–512: lower = chunkier noise, higher = finer
+  const FRAMES    = 10;      // how many unique noise tiles we cycle through
+  const FPS       = 18;      // 12–24 feels like classic CRT flicker
+  const OPACITY   = 1.0;     // leave at 1.0; use CSS .grain { opacity: ... } to set strength
+  const CONTRAST  = 1.0;     // >1 = punchier speckle, <1 = softer (e.g., 0.8–1.3)
+
+  const prefersReduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const targetFPS = prefersReduce ? 2 : FPS;
+
+  let wCSS = 0, hCSS = 0;
+
+  function makeNoiseTile(size = TILE_SIZE) {
+    const off = document.createElement('canvas');
+    off.width = size; off.height = size;
+    const octx = off.getContext('2d');
+    const img = octx.createImageData(size, size);
+    const data = img.data;
+
+    for (let i = 0; i < size * size; i++) {
+      let v = Math.random();
+      v = Math.pow(v, 1 / CONTRAST);           // simple contrast curve
+      const g = Math.floor(v * 255);
+      const j = i * 4;
+      data[j + 0] = g;
+      data[j + 1] = g;
+      data[j + 2] = g;
+      data[j + 3] = Math.floor(255 * OPACITY);
+    }
+    octx.putImageData(img, 0, 0);
+    return off;
+  }
+
+  // Prebuild a few frames and cycle through them (cheap + looks authentic)
+  let tiles = [];
+  let patterns = [];
+  function buildFrames() {
+    tiles = Array.from({ length: FRAMES }, () => makeNoiseTile());
+    patterns = tiles.map(t => ctx.createPattern(t, 'repeat'));
+  }
+
+  function sizeCanvas() {
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    wCSS = window.innerWidth;
+    hCSS = window.innerHeight;
+
+    canvas.width  = Math.max(1, Math.floor(wCSS * dpr));
+    canvas.height = Math.max(1, Math.floor(hCSS * dpr));
+    canvas.style.width  = wCSS + 'px';
+    canvas.style.height = hCSS + 'px';
+
+    // Map CSS pixels to device pixels (keeps the pattern anchored = no drifting)
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  }
+
+  function drawFrame(i) {
+    ctx.fillStyle = patterns[i];
+    ctx.fillRect(0, 0, wCSS, hCSS);   // fill entire viewport
+  }
+
+  // Init
+  buildFrames();
+  sizeCanvas();
+  let frame = 0, last = 0, step = 1000 / targetFPS;
+
+  function loop(ts) {
+    if (ts - last >= step) {
+      frame = (frame + 1) % patterns.length;
+      drawFrame(frame);
+      last = ts;
+    }
+    requestAnimationFrame(loop);
+  }
+
+  window.addEventListener('resize', () => {
+    sizeCanvas();
+    drawFrame(frame);
+  }, { passive: true });
+
+  requestAnimationFrame(loop);
+})();
+
+
 /* ------------------------------------------------------------------ */
 /* HERO RINGS (centered, morphing paths, dot-shape swaps)              */
 /* ------------------------------------------------------------------ */

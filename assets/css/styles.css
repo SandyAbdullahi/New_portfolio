@@ -71,3 +71,22 @@
       -webkit-overflow-scrolling:touch;
       position:relative; z-index:1; background:var(--cream);
     }
+
+    /* Static TV-style grain overlay */
+.grain {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 50;
+  pointer-events: none;
+  mix-blend-mode: multiply;     /* keeps it subtle over light backgrounds */
+  opacity: 0.12;                /* tune strength here */
+  image-rendering: pixelated;   /* makes the speckle feel crisp */
+}
+
+/* Optional: if you use a dark page section and prefer lighter speckle there
+@media (prefers-color-scheme: dark) {
+  .grain { mix-blend-mode: screen; opacity: 0.08; }
+}
+*/
