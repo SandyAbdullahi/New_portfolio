@@ -1,91 +1,205 @@
- :root{
-      --green:#1A2318;
-      --lime:#C6E376;
-      --cream:#EDEBDD;
-      --white:#FFFFFF;
-    }
+ :root {
+     --green: #1A2318;
+     --lime: #C6E376;
+     --cream: #EDEBDD;
+     --white: #FFFFFF;
+ }
 
-    html, body{ overflow-x:hidden; background:var(--white); }
-    body{ font-family:"Inter", system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial; color:var(--green); }
+ html,
+ body {
+     overflow-x: hidden;
+     background: var(--white);
+ }
 
-    /* nav underline */
-    .nav-a{ position:relative; }
-    .nav-a::after{
-      content:""; position:absolute; left:0; bottom:-6px; height:2px; width:0; background:var(--green); transition:width .25s ease;
-    }
-    .nav-a:hover::after{ width:100%; }
+ body {
+     font-family: "Inter", system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial;
+     color: var(--green);
+ }
 
-    /* film grain */
-    .grain{
-      position:fixed; inset:0; width:100%; height:100%;
-      opacity:.7; mix-blend-mode:multiply; pointer-events:none; z-index:50;
-    }
-    @media (prefers-reduced-motion: reduce){ .grain{ opacity:.7; } }
+ /* nav underline */
+ .nav-a {
+     position: relative;
+ }
 
-    /* iOS/Safari paint fix: disable blending on phones */
-    @media (max-width: 767px){
-      .grain{ mix-blend-mode:normal; opacity:.4; }
-    }
+ .nav-a::after {
+     content: "";
+     position: absolute;
+     left: 0;
+     bottom: -6px;
+     height: 2px;
+     width: 0;
+     background: var(--green);
+     transition: width .25s ease;
+ }
 
-    /* hero canvas fill */
-    #hero3d{ position:relative; display:grid; place-items:center; }
-    canvas.webgl{ position:absolute; inset:0; width:100%; height:100%; display:block; }
+ .nav-a:hover::after {
+     width: 100%;
+ }
 
-    /* hero phrases centered */
-    .hero-phrases{ display:grid; place-items:center; text-align:center; }
-    .phrase{
-      position:absolute; left:50%; top:50%; transform:translate(-50%,-50%);
-      opacity:0; filter:blur(10px); transform-origin:center;
-    }
+ /* film grain */
+ .grain {
+     position: fixed;
+     inset: 0;
+     width: 100%;
+     height: 100%;
+     opacity: .7;
+     mix-blend-mode: multiply;
+     pointer-events: none;
+     z-index: 50;
+ }
 
-    /* left list scroller look */
-    .no-scrollbar::-webkit-scrollbar{ display:none; }
-    .no-scrollbar{ -ms-overflow-style:none; scrollbar-width:none; }
+ @media (prefers-reduced-motion: reduce) {
+     .grain {
+         opacity: .7;
+     }
+ }
 
-    /* panels: show/hide shell via .active; dissolve only inner text */
-    .panel{ display:none; }
-    .panel.active{ display:block; }
+ /* iOS/Safari paint fix: disable blending on phones */
+ @media (max-width: 767px) {
+     .grain {
+         mix-blend-mode: normal;
+         opacity: .4;
+     }
+ }
 
-    .panel-3d canvas{ cursor:grab; touch-action:none; }
-    .panel-3d.grabbing canvas{ cursor:grabbing; }
+ /* hero canvas fill */
+ #hero3d {
+     position: relative;
+     display: grid;
+     place-items: center;
+ }
 
-    .panel-text{ opacity:0; filter:blur(10px); transform:translateY(8px); }
+ canvas.webgl {
+     position: absolute;
+     inset: 0;
+     width: 100%;
+     height: 100%;
+     display: block;
+ }
 
-    /* showcase word hover/active */
-    .scroll-item{ position:relative; }
-    .big-word{
-      position:relative; z-index:1;
-      transition:transform .28s cubic-bezier(.2,.8,.2,1), color .2s ease;
-      will-change:transform;
-    }
-    .scroll-item::before{
-      content:""; position:absolute; inset:0; top:20%; height:60%;
-      background:rgba(198,227,118,0.18);
-      transform:scaleX(0); transform-origin:left center; transition:transform .35s ease; z-index:0;
-    }
-    .scroll-item:hover::before, .scroll-item.is-active::before{ transform:scaleX(1); }
-    .scroll-item:hover .big-word, .scroll-item.is-active .big-word{ color:var(--lime); transform:translateX(.2vw) skewX(-1.2deg); }
+ /* Mobile-only hero text tweaks (move up + larger font) */
+ @media (max-width: 767.98px) {
+     #hero3d .phrase {
+         top: 44%;
+         /* was 50% */
+         font-size: clamp(3rem, 12vw, 4.6rem) !important;
+         /* a touch larger */
+         line-height: 0.9;
+     }
+ }
 
-    /* ensure mobile scroller paints correctly on iOS */
-    #showcase .md\:hidden ul{
-      -webkit-overflow-scrolling:touch;
-      position:relative; z-index:1; background:var(--cream);
-    }
+ /* hero phrases centered */
+ .hero-phrases {
+     display: grid;
+     place-items: center;
+     text-align: center;
+ }
 
-    /* Static TV-style grain overlay */
-.grain {
-  position: fixed;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  z-index: 50;
-  pointer-events: none;
-  mix-blend-mode: multiply;     /* keeps it subtle over light backgrounds */
-  opacity: 0.12;                /* tune strength here */
-  image-rendering: pixelated;   /* makes the speckle feel crisp */
-}
+ .phrase {
+     position: absolute;
+     left: 50%;
+     top: 50%;
+     transform: translate(-50%, -50%);
+     opacity: 0;
+     filter: blur(10px);
+     transform-origin: center;
+ }
 
-/* Optional: if you use a dark page section and prefer lighter speckle there
+ /* left list scroller look */
+ .no-scrollbar::-webkit-scrollbar {
+     display: none;
+ }
+
+ .no-scrollbar {
+     -ms-overflow-style: none;
+     scrollbar-width: none;
+ }
+
+ /* panels: show/hide shell via .active; dissolve only inner text */
+ .panel {
+     display: none;
+ }
+
+ .panel.active {
+     display: block;
+ }
+
+ .panel-3d canvas {
+     cursor: grab;
+     touch-action: none;
+ }
+
+ .panel-3d.grabbing canvas {
+     cursor: grabbing;
+ }
+
+ .panel-text {
+     opacity: 0;
+     filter: blur(10px);
+     transform: translateY(8px);
+ }
+
+ /* showcase word hover/active */
+ .scroll-item {
+     position: relative;
+ }
+
+ .big-word {
+     position: relative;
+     z-index: 1;
+     transition: transform .28s cubic-bezier(.2, .8, .2, 1), color .2s ease;
+     will-change: transform;
+ }
+
+ .scroll-item::before {
+     content: "";
+     position: absolute;
+     inset: 0;
+     top: 20%;
+     height: 60%;
+     background: rgba(198, 227, 118, 0.18);
+     transform: scaleX(0);
+     transform-origin: left center;
+     transition: transform .35s ease;
+     z-index: 0;
+ }
+
+ .scroll-item:hover::before,
+ .scroll-item.is-active::before {
+     transform: scaleX(1);
+ }
+
+ .scroll-item:hover .big-word,
+ .scroll-item.is-active .big-word {
+     color: var(--lime);
+     transform: translateX(.2vw) skewX(-1.2deg);
+ }
+
+ /* ensure mobile scroller paints correctly on iOS */
+ #showcase .md\:hidden ul {
+     -webkit-overflow-scrolling: touch;
+     position: relative;
+     z-index: 1;
+     background: var(--cream);
+ }
+
+ /* Static TV-style grain overlay */
+ .grain {
+     position: fixed;
+     inset: 0;
+     width: 100%;
+     height: 100%;
+     z-index: 50;
+     pointer-events: none;
+     mix-blend-mode: multiply;
+     /* keeps it subtle over light backgrounds */
+     opacity: 0.12;
+     /* tune strength here */
+     image-rendering: pixelated;
+     /* makes the speckle feel crisp */
+ }
+
+ /* Optional: if you use a dark page section and prefer lighter speckle there
 @media (prefers-color-scheme: dark) {
   .grain { mix-blend-mode: screen; opacity: 0.08; }
 }
