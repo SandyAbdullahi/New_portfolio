@@ -310,21 +310,61 @@ import { RGBELoader }    from 'three/addons/loaders/RGBELoader.js';
     };
   }
 
-  function initMobile(){
-    const mobileContainer = document.querySelector('#showcase .md\\:hidden ul');
-    if (!mobileContainer){ cleanup = () => {}; return; }
+function initMobile() {
+  const mobileContainer = document.querySelector('#showcase .mobile-slides');
+  if (!mobileContainer) { cleanup = () => {}; return; }
 
-    const cards = mobileContainer.querySelectorAll('.border-2.bg-white');
-    const io = new IntersectionObserver((entries)=>{
-      entries.forEach(e=>{
-        if (e.isIntersecting && window.gsap){
-          gsap.fromTo(e.target, { y:16, opacity:0, filter:'blur(8px)' }, { y:0, opacity:1, filter:'blur(0px)', duration:0.45, ease:'power2.out' });
-        }
-      });
-    }, { root: mobileContainer, threshold: 0.2 });
-    cards.forEach(c => io.observe(c));
-    cleanup = () => io.disconnect();
-  }
+  const slides = Array.from(mobileContainer.querySelectorAll('.mobile-slide'));
+  const cards  = mobileContainer.querySelectorAll('.mobile-card .border-2.bg-white');
+
+  // Fade-in nicety (optional)
+  const fadeIO = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting && window.gsap) {
+        gsap.fromTo(e.target, { y: 16, opacity: 0, filter: 'blur(8px)' },
+                              { y: 0,  opacity: 1, filter: 'blur(0px)', duration: 0.45, ease: 'power2.out' });
+      }
+    });
+  }, { root: mobileContainer, threshold: 0.2 });
+  cards.forEach(c => fadeIO.observe(c));
+
+  // Size the container to the active slide's card height
+  const setToCardHeight = (li) => {
+    const card = li.querySelector('.mobile-card');
+    if (!card) return;
+    const cs = getComputedStyle(li);
+    const padY = parseFloat(cs.paddingTop) + parseFloat(cs.paddingBottom);
+    mobileContainer.style.height = (card.offsetHeight + padY) + 'px';
+  };
+
+  // Observe which slide is active (center-ish) and resize container
+  const activeIO = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) setToCardHeight(e.target);
+    });
+  }, { root: mobileContainer, threshold: 0.6 });
+  slides.forEach(s => activeIO.observe(s));
+
+  // Initial size + on resize
+  setToCardHeight(slides[0] || mobileContainer);
+  const onWinResize = () => {
+    const current = slides.find(s => {
+      const r  = s.getBoundingClientRect();
+      const rc = mobileContainer.getBoundingClientRect();
+      return r.top >= rc.top && r.bottom <= rc.bottom;
+    }) || slides[0];
+    if (current) setToCardHeight(current);
+  };
+  window.addEventListener('resize', onWinResize);
+
+  // Teardown
+  cleanup = () => {
+    fadeIO.disconnect();
+    activeIO.disconnect();
+    window.removeEventListener('resize', onWinResize);
+  };
+}
+
 
   function boot(){ cleanup(); if (mq.matches) initDesktop(); else initMobile(); }
   if (mq.addEventListener) mq.addEventListener('change', boot); else mq.addListener(boot);

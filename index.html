@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -11,17 +12,20 @@
   <script src="https://cdn.tailwindcss.com"></script>
 
   <!-- Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Playfair+Display:wght@700;800&display=swap" rel="stylesheet">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Playfair+Display:wght@700;800&display=swap"
+    rel="stylesheet">
 
   <link rel="stylesheet" href="assets/css/styles.css">
 </head>
+
 <body class="overflow-x-hidden">
 
   <!-- Global Film Grain -->
-<canvas id="grain" class="grain"></canvas>
+  <canvas id="grain" class="grain"></canvas>
 
 
-  
+
 
   <!-- Navbar -->
   <header class="relative z-40 bg-white/90 backdrop-blur">
@@ -44,10 +48,14 @@
     <canvas id="ringsCanvas" class="webgl absolute inset-0"></canvas>
 
     <div class="hero-phrases relative z-20 w-full text-center">
-      <span class="phrase leading-[.9] text-[clamp(2.6rem,10.5vw,8rem)] font-extrabold text-[var(--green)]" style="font-family:'Playfair Display',serif">Brutalist&nbsp;<br />Developer</span>
-      <span class="phrase leading-[.9] text-[clamp(2.6rem,10.5vw,8rem)] font-extrabold text-[var(--green)]" style="font-family:'Playfair Display',serif">Python&nbsp;<br />Programmer</span>
-      <span class="phrase leading-[.9] text-[clamp(2.6rem,10.5vw,8rem)] font-extrabold text-[var(--green)]" style="font-family:'Playfair Display',serif">Performance-First</span>
-      <span class="phrase leading-[.9] text-[clamp(2.6rem,10.5vw,8rem)] font-extrabold text-[var(--green)]" style="font-family:'Playfair Display',serif">Web&nbsp;Engineer</span>
+      <span class="phrase leading-[.9] text-[clamp(2.6rem,10.5vw,8rem)] font-extrabold text-[var(--green)]"
+        style="font-family:'Playfair Display',serif">Brutalist&nbsp;<br />Developer</span>
+      <span class="phrase leading-[.9] text-[clamp(2.6rem,10.5vw,8rem)] font-extrabold text-[var(--green)]"
+        style="font-family:'Playfair Display',serif">Python&nbsp;<br />Programmer</span>
+      <span class="phrase leading-[.9] text-[clamp(2.6rem,10.5vw,8rem)] font-extrabold text-[var(--green)]"
+        style="font-family:'Playfair Display',serif">Performance-First</span>
+      <span class="phrase leading-[.9] text-[clamp(2.6rem,10.5vw,8rem)] font-extrabold text-[var(--green)]"
+        style="font-family:'Playfair Display',serif">Web&nbsp;Engineer</span>
     </div>
   </section>
 
@@ -60,16 +68,20 @@
       <div class="md:col-span-5 relative z-0 overflow-visible">
         <ul id="topicList" class="no-scrollbar h-screen overflow-y-scroll snap-y snap-mandatory w-screen pl-0 ml-0">
           <li class="scroll-item snap-start h-screen m-0 p-0 select-none flex items-center" data-panel="p1">
-            <span class="big-word block font-extrabold uppercase tracking-tight whitespace-nowrap text-[100vh] leading-[0.62] -mt-[0.04em] -mb-[0.04em]">Design</span>
+            <span
+              class="big-word block font-extrabold uppercase tracking-tight whitespace-nowrap text-[100vh] leading-[0.62] -mt-[0.04em] -mb-[0.04em]">Design</span>
           </li>
           <li class="scroll-item snap-start h-screen m-0 p-0 select-none flex items-center" data-panel="p2">
-            <span class="big-word block font-extrabold uppercase tracking-tight whitespace-nowrap text-[100vh] leading-[0.62] -mt-[0.04em] -mb-[0.04em]">Build</span>
+            <span
+              class="big-word block font-extrabold uppercase tracking-tight whitespace-nowrap text-[100vh] leading-[0.62] -mt-[0.04em] -mb-[0.04em]">Build</span>
           </li>
           <li class="scroll-item snap-start h-screen m-0 p-0 select-none flex items-center" data-panel="p3">
-            <span class="big-word block font-extrabold uppercase tracking-tight whitespace-nowrap text-[100vh] leading-[0.62] -mt-[0.04em] -mb-[0.04em]">Motion</span>
+            <span
+              class="big-word block font-extrabold uppercase tracking-tight whitespace-nowrap text-[100vh] leading-[0.62] -mt-[0.04em] -mb-[0.04em]">Motion</span>
           </li>
           <li class="scroll-item snap-start h-screen m-0 p-0 select-none flex items-center" data-panel="p4">
-            <span class="big-word block font-extrabold uppercase tracking-tight whitespace-nowrap text-[100vh] leading-[0.62] -mt-[0.04em] -mb-[0.04em]">Ship</span>
+            <span
+              class="big-word block font-extrabold uppercase tracking-tight whitespace-nowrap text-[100vh] leading-[0.62] -mt-[0.04em] -mb-[0.04em]">Ship</span>
           </li>
         </ul>
       </div>
@@ -85,14 +97,13 @@
                 <div class="grid md:grid-cols-2 gap-6 items-stretch">
                   <div class="panel-copy">
                     <h3 class="panel-text text-3xl md:text-4xl font-extrabold uppercase mb-4">Design</h3>
-                    <p class="panel-text max-w-prose text-black/80">Type-led systems, grids, and intent. Replace the demo with a painter/architect-table model (.gltf/.glb) anytime.</p>
+                    <p class="panel-text max-w-prose text-black/80">Type-led systems, grids, and intent. Replace the
+                      demo with a painter/architect-table model (.gltf/.glb) anytime.</p>
                     <div class="panel-text mt-8 h-0 border-t-2 border-[var(--green)]/30"></div>
                   </div>
                   <div class="panel-3d relative h-56 md:h-64 lg:h-72 border-2 border-[var(--green)]/20"
-                       data-model="assets/3d_objects/person.glb"
-                       data-bg-color="rgb(237,235,221)" data-bg-alpha="1"
-                       data-shadow="true" data-ground="true" data-ground-opacity="0.25"
-                       data-autorotate="true">
+                    data-model="assets/3d_objects/person.glb" data-bg-color="rgb(237,235,221)" data-bg-alpha="1"
+                    data-shadow="true" data-ground="true" data-ground-opacity="0.25" data-autorotate="true">
                     <canvas class="webgl absolute inset-0"></canvas>
                   </div>
                 </div>
@@ -105,14 +116,13 @@
                 <div class="grid md:grid-cols-2 gap-6 items-stretch">
                   <div class="panel-copy">
                     <h3 class="panel-text text-3xl md:text-4xl font-extrabold uppercase mb-4">Engineering</h3>
-                    <p class="panel-text max-w-prose text-black/80">Robust front-ends, solid APIs, clean integrations.</p>
+                    <p class="panel-text max-w-prose text-black/80">Robust front-ends, solid APIs, clean integrations.
+                    </p>
                     <div class="panel-text mt-8 h-0 border-t-2 border-[var(--green)]/30"></div>
                   </div>
                   <div class="panel-3d relative h-56 md:h-64 lg:h-72 border-2 border-[var(--green)]/20"
-                       data-model="assets/3d_objects/room.glb"
-                       data-bg-color="#C6E376" data-bg-alpha="1"
-                       data-shadow="false" data-ground="true" data-ground-opacity="0.25"
-                       data-autorotate="true">
+                    data-model="assets/3d_objects/room.glb" data-bg-color="#C6E376" data-bg-alpha="1"
+                    data-shadow="false" data-ground="true" data-ground-opacity="0.25" data-autorotate="true">
                     <canvas class="webgl absolute inset-0"></canvas>
                   </div>
                 </div>
@@ -125,15 +135,14 @@
                 <div class="grid md:grid-cols-2 gap-6 items-stretch">
                   <div class="panel-copy">
                     <h3 class="panel-text text-3xl md:text-4xl font-extrabold uppercase mb-4">Motion & 3D</h3>
-                    <p class="panel-text max-w-prose text-black/80">GSAP & Three.js sequences, scroll-driven reveals, tasteful depth.</p>
+                    <p class="panel-text max-w-prose text-black/80">GSAP & Three.js sequences, scroll-driven reveals,
+                      tasteful depth.</p>
                     <div class="panel-text mt-8 h-0 border-t-2 border-[var(--green)]/30"></div>
                   </div>
                   <div class="panel-3d relative h-56 md:h-64 lg:h-72 border-2 border-[var(--green)]/20"
-                       data-model="assets/3d_objects/moon.glb"
-                       data-stars="true" data-stars-count="900" data-stars-color="#C6E376"
-                       data-stars-size="0.9" data-stars-radius="60"
-                       data-shadow="true" data-ground="true" data-ground-opacity="0.22"
-                       data-autorotate="true">
+                    data-model="assets/3d_objects/moon.glb" data-stars="true" data-stars-count="900"
+                    data-stars-color="#C6E376" data-stars-size="0.9" data-stars-radius="60" data-shadow="true"
+                    data-ground="true" data-ground-opacity="0.22" data-autorotate="true">
                     <canvas class="webgl absolute inset-0"></canvas>
                   </div>
                 </div>
@@ -146,14 +155,13 @@
                 <div class="grid md:grid-cols-2 gap-6 items-stretch">
                   <div class="panel-copy">
                     <h3 class="panel-text text-3xl md:text-4xl font-extrabold uppercase mb-4">Delivery</h3>
-                    <p class="panel-text max-w-prose text-black/80">CI/CD, analytics, performance budgets—ship with intent.</p>
+                    <p class="panel-text max-w-prose text-black/80">CI/CD, analytics, performance budgets—ship with
+                      intent.</p>
                     <div class="panel-text mt-8 h-0 border-t-2 border-[var(--green)]/30"></div>
                   </div>
                   <div class="panel-3d relative h-56 md:h-64 lg:h-72 border-2 border-[var(--green)]/20"
-                       data-model="assets/3d_objects/cardbox.gltf"
-                       data-bg-color="rgb(237,235,221)" data-bg-alpha="1"
-                       data-shadow="true" data-ground="true" data-ground-opacity="0.25"
-                       data-autorotate="true">
+                    data-model="assets/3d_objects/cardbox.gltf" data-bg-color="rgb(237,235,221)" data-bg-alpha="1"
+                    data-shadow="true" data-ground="true" data-ground-opacity="0.25" data-autorotate="true">
                     <canvas class="webgl absolute inset-0"></canvas>
                   </div>
                 </div>
@@ -166,23 +174,19 @@
     </div><!-- end DESKTOP -->
 
     <!-- MOBILE (stacked slides) -->
-    <div class="block md:hidden">
-      <ul class="snap-y snap-mandatory h-screen h-[100svh] min-h-[100svh] overflow-y-auto no-scrollbar">
+    <div class="md:hidden">
+      <ul class="mobile-slides no-scrollbar">
         <!-- Slide 1 -->
-        <li class="snap-start min-h-screen relative">
-          <div class="absolute inset-0 flex items-center justify-start pointer-events-none">
-            <span class="font-extrabold uppercase tracking-tight text-[clamp(6rem,22vh,26vh)] leading-[0.8] pl-2 opacity-[0.08]">Design</span>
-          </div>
-          <div id="p1m" class="relative z-10 px-4 pt-6">
+        <li class="mobile-slide">
+          <span class="vertical-word">Design</span>
+          <div id="p1m" class="mobile-card">
             <div class="border-2 border-[var(--green)] p-6 bg-white">
               <h3 class="text-2xl font-extrabold uppercase mb-3">Design</h3>
               <p class="text-black/80">Type-led systems, grids, and intent.</p>
               <div class="mt-6 h-0 border-t-2 border-[var(--green)]/30"></div>
               <div class="panel-3d mt-4 relative h-56 border-2 border-[var(--green)]/20"
-                   data-model="assets/3d_objects/person.glb"
-                   data-bg-color="rgb(237,235,221)" data-bg-alpha="1"
-                   data-shadow="true" data-ground="true" data-ground-opacity="0.25"
-                   data-autorotate="true">
+                data-model="/assets/3d_objects/person.glb" data-bg-color="rgb(237,235,221)" data-bg-alpha="1"
+                data-shadow="true" data-ground="true" data-ground-opacity="0.25" data-autorotate="true">
                 <canvas class="webgl absolute inset-0"></canvas>
               </div>
             </div>
@@ -190,20 +194,16 @@
         </li>
 
         <!-- Slide 2 -->
-        <li class="snap-start min-h-screen relative">
-          <div class="absolute inset-0 flex items-center justify-start pointer-events-none">
-            <span class="font-extrabold uppercase tracking-tight text-[clamp(6rem,22vh,26vh)] leading-[0.8] pl-2 opacity-[0.08]">Build</span>
-          </div>
-          <div id="p2m" class="relative z-10 px-4 pt-6">
+        <li class="mobile-slide">
+          <span class="vertical-word">Build</span>
+          <div id="p2m" class="mobile-card">
             <div class="border-2 border-[var(--green)] p-6 bg-white">
               <h3 class="text-2xl font-extrabold uppercase mb-3">Engineering</h3>
               <p class="text-black/80">Robust front-ends, solid APIs, clean integrations.</p>
               <div class="mt-6 h-0 border-t-2 border-[var(--green)]/30"></div>
               <div class="panel-3d mt-4 relative h-56 border-2 border-[var(--green)]/20"
-                   data-model="assets/3d_objects/room.glb"
-                   data-bg-color="#C6E376" data-bg-alpha="1"
-                   data-shadow="false" data-ground="true" data-ground-opacity="0.25"
-                   data-autorotate="true">
+                data-model="/assets/3d_objects/room.glb" data-bg-color="#C6E376" data-bg-alpha="1" data-shadow="false"
+                data-ground="true" data-ground-opacity="0.25" data-autorotate="true">
                 <canvas class="webgl absolute inset-0"></canvas>
               </div>
             </div>
@@ -211,21 +211,17 @@
         </li>
 
         <!-- Slide 3 -->
-        <li class="snap-start min-h-screen relative">
-          <div class="absolute inset-0 flex items-center justify-start pointer-events-none">
-            <span class="font-extrabold uppercase tracking-tight text-[clamp(6rem,22vh,26vh)] leading-[0.8] pl-2 opacity-[0.08]">Motion</span>
-          </div>
-          <div id="p3m" class="relative z-10 px-4 pt-6">
+        <li class="mobile-slide">
+          <span class="vertical-word">Motion</span>
+          <div id="p3m" class="mobile-card">
             <div class="border-2 border-[var(--green)] p-6 bg-white">
               <h3 class="text-2xl font-extrabold uppercase mb-3">Motion & 3D</h3>
               <p class="text-black/80">GSAP & Three.js sequences, scroll-driven reveals, tasteful depth.</p>
               <div class="mt-6 h-0 border-t-2 border-[var(--green)]/30"></div>
               <div class="panel-3d mt-4 relative h-56 border-2 border-[var(--green)]/20"
-                   data-model="assets/3d_objects/moon.glb"
-                   data-stars="true" data-stars-count="900" data-stars-color="#C6E376"
-                   data-stars-size="0.9" data-stars-radius="60"
-                   data-shadow="true" data-ground="true" data-ground-opacity="0.22"
-                   data-autorotate="true">
+                data-model="/assets/3d_objects/moon.glb" data-stars="true" data-stars-count="900"
+                data-stars-color="#C6E376" data-stars-size="0.9" data-stars-radius="60" data-shadow="true"
+                data-ground="true" data-ground-opacity="0.22" data-autorotate="true">
                 <canvas class="webgl absolute inset-0"></canvas>
               </div>
             </div>
@@ -233,20 +229,16 @@
         </li>
 
         <!-- Slide 4 -->
-        <li class="snap-start min-h-screen relative">
-          <div class="absolute inset-0 flex items-center justify-start pointer-events-none">
-            <span class="font-extrabold uppercase tracking-tight text-[clamp(6rem,22vh,26vh)] leading-[0.8] pl-2 opacity-[0.08]">Ship</span>
-          </div>
-          <div id="p4m" class="relative z-10 px-4 pt-6">
+        <li class="mobile-slide">
+          <span class="vertical-word">Ship</span>
+          <div id="p4m" class="mobile-card">
             <div class="border-2 border-[var(--green)] p-6 bg-white">
               <h3 class="text-2xl font-extrabold uppercase mb-3">Delivery</h3>
               <p class="text-black/80">CI/CD, analytics, performance budgets—ship with intent.</p>
               <div class="mt-6 h-0 border-t-2 border-[var(--green)]/30"></div>
               <div class="panel-3d mt-4 relative h-56 border-2 border-[var(--green)]/20"
-                   data-model="assets/3d_objects/cardbox.gltf"
-                   data-bg-color="rgb(237,235,221)" data-bg-alpha="1"
-                   data-shadow="true" data-ground="true" data-ground-opacity="0.25"
-                   data-autorotate="true">
+                data-model="/assets/3d_objects/cardbox.gltf" data-bg-color="rgb(237,235,221)" data-bg-alpha="1"
+                data-shadow="true" data-ground="true" data-ground-opacity="0.25" data-autorotate="true">
                 <canvas class="webgl absolute inset-0"></canvas>
               </div>
             </div>
@@ -254,26 +246,29 @@
         </li>
       </ul>
     </div>
+
   </section>
 
   <!-- CTA / CONTACT -->
   <section id="contact" class="bg-white text-[var(--green)] py-24 md:py-32 px-6 md:px-10">
     <div class="max-w-6xl mx-auto">
       <h3 class="text-5xl md:text-6xl font-extrabold leading-none">Let’s<br><span class="pl-24">Talk</span></h3>
-      <p class="mt-6 max-w-md text-black/80">Ready to collaborate? I’m an email away—let’s build something bold and purposeful.</p>
-      <a href="mailto:hello@abdullahinur.dev" class="mt-8 inline-block border-2 border-[var(--green)] text-[var(--green)] px-8 py-3 uppercase tracking-wider font-medium transition-colors duration-300 hover:bg-[var(--green)] hover:text-white">
+      <p class="mt-6 max-w-md text-black/80">Ready to collaborate? I’m an email away—let’s build something bold and
+        purposeful.</p>
+      <a href="mailto:hello@abdullahinur.dev"
+        class="mt-8 inline-block border-2 border-[var(--green)] text-[var(--green)] px-8 py-3 uppercase tracking-wider font-medium transition-colors duration-300 hover:bg-[var(--green)] hover:text-white">
         hello@abdullahinur.dev
       </a>
       <div class="mt-12 h-0 border-t-2 border-[var(--green)]/20"></div>
     </div>
   </section>
 
-<!-- GSAP -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.13.0/gsap.min.js"></script>
+  <!-- GSAP -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.13.0/gsap.min.js"></script>
 
-<!-- Import map for Three.js (must remain in HTML) -->
-<script type="importmap">
-{
+  <!-- Import map for Three.js (must remain in HTML) -->
+  <script type="importmap">
+    {
   "imports": {
     "three": "https://cdn.jsdelivr.net/npm/three@0.159.0/build/three.module.js",
     "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.159.0/examples/jsm/"
@@ -281,10 +276,11 @@
 }
 </script>
 
-<script type="module" src="assets/js/scripts.js"></script>
+  <script type="module" src="assets/js/scripts.js"></script>
 
 
 
 
 </body>
+
 </html>

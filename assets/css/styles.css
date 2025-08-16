@@ -183,6 +183,60 @@
      background: var(--cream);
  }
 
+ /* MOBILE-ONLY showcase tweaks */
+@media (max-width: 767.98px) {
+  /* Let the container shrink/expand to the active card */
+  #showcase .mobile-slides {
+    height: auto;           /* JS will set an explicit height */
+    min-height: 0;
+    max-height: none;
+    overflow-y: auto;       /* keep vertical snapping */
+    scroll-snap-type: y mandatory;
+  }
+
+  /* Each mobile slide wraps the vertical word and the card */
+  #showcase .mobile-slide {
+    position: relative;
+    padding: 0.75rem 1rem 1.25rem 1rem; /* breathing room */
+    scroll-snap-align: start;
+  }
+
+  /* Vertical word down the left edge */
+  #showcase .vertical-word {
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+
+    writing-mode: vertical-rl; /* vertical */
+    text-orientation: mixed;
+    transform: rotate(180deg); /* top-to-bottom reading */
+
+    font-weight: 800;
+    font-size: clamp(2.75rem, 10vh, 6.5rem);
+    line-height: 1;
+    letter-spacing: 0.04em;
+    opacity: 0.1;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 0.25rem;
+    z-index: 0;
+    pointer-events: none;
+    user-select: none;
+  }
+
+  /* Card sits above the word and nudges right a bit */
+  #showcase .mobile-card {
+    position: relative;
+    z-index: 1;
+    margin-left: 2.75rem; /* room so the word peeks on the left */
+  }
+}
+
+
  /* Static TV-style grain overlay */
  .grain {
      position: fixed;
