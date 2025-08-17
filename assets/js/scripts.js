@@ -371,55 +371,64 @@ function initMobile() {
   boot();
 })();
 
-/* ------------------------------------------------------------------ */
-/* PANEL 3D VIEWERS (stars, RGB bg, shadows, lazy init)               */
-/* ------------------------------------------------------------------ */
+/* ========================================================================== */
+/* PANEL 3D viewers (stars/RGB/HDR bg, shadows, ground, OrbitControls)        */
+/* - lazy-init per container                                                  */
+/* - per-viewer tickers + modelLoaded event                                   */
+/* ========================================================================== */
 (() => {
   const reduce   = matchMedia('(prefers-reduced-motion: reduce)').matches;
   const viewers  = [];
-  const viewerOf = new WeakMap();
+  const viewerOf = new WeakMap(); // container -> viewer
 
-  function makeStars({ count=900, radius=50, size=0.8, color='#FFFFFF' }){
+  function makeStars({ count=900, radius=50, size=0.8, color='#FFFFFF' }) {
     const g = new THREE.BufferGeometry();
-    const pos = new Float32Array(count*3);
-    for (let i=0;i<count;i++){
-      const u=Math.random(), v=Math.random();
-      const theta=2*Math.PI*u, phi=Math.acos(2*v-1);
-      const r=radius*(0.85+Math.random()*0.15);
-      pos[i*3+0]=r*Math.sin(phi)*Math.cos(theta);
-      pos[i*3+1]=r*Math.sin(phi)*Math.sin(theta);
-      pos[i*3+2]=r*Math.cos(phi);
+    const pos = new Float32Array(count * 3);
+    for (let i=0; i<count; i++){
+      const u = Math.random(), v = Math.random();
+      const theta = 2*Math.PI*u;
+      const phi   = Math.acos(2*v-1);
+      const r     = radius * (0.85 + Math.random()*0.15);
+      pos[i*3+0] = r * Math.sin(phi) * Math.cos(theta);
+      pos[i*3+1] = r * Math.sin(phi) * Math.sin(theta);
+      pos[i*3+2] = r * Math.cos(phi);
     }
-    g.setAttribute('position', new THREE.BufferAttribute(pos,3));
-    const m = new THREE.PointsMaterial({ color, size, sizeAttenuation:true, transparent:true, opacity:0.9, depthWrite:false });
+    g.setAttribute('position', new THREE.BufferAttribute(pos, 3));
+    const m = new THREE.PointsMaterial({
+      color, size, sizeAttenuation: true,
+      transparent: true, opacity: 0.9,
+      depthWrite: false
+    });
     return new THREE.Points(g, m);
   }
 
-  function initViewer(container){
+  function initViewer(container) {
     if (viewerOf.has(container)) return viewerOf.get(container);
 
-    // data attrs
-    const modelURL   = container.dataset.model;
-    const autoRotate = container.dataset.autorotate === 'true';
+    // DATA ATTRS
+    const modelURL     = container.dataset.model;
+    const autoRotate   = container.dataset.autorotate === 'true';
 
-    const bgColorStr = container.dataset.bgColor;
-    const bgAlphaStr = container.dataset.bgAlpha;
-    const envHdrURL  = container.dataset.envHdr;
-    const envAsBg    = container.dataset.envBackground === 'true';
+    const bgColorStr   = container.dataset.bgColor;
+    const bgAlphaStr   = container.dataset.bgAlpha;
+    const envHdrURL    = container.dataset.envHdr;
+    const envAsBg      = container.dataset.envBackground === 'true';
 
-    const withShadows = container.dataset.shadow === 'true' || container.dataset.shadows === 'true';
-    const withGround  = container.dataset.ground === 'true';
-    const groundColor = container.dataset.groundColor || '#ffffff';
-    const groundOpStr = container.dataset.groundOpacity;
-    const exposureStr = container.dataset.exposure;
+    const withShadows  = container.dataset.shadow === 'true' || container.dataset.shadows === 'true';
+    const withGround   = container.dataset.ground === 'true';
+    const groundColor  = container.dataset.groundColor || '#ffffff';
+    const groundOpStr  = container.dataset.groundOpacity;
+    const exposureStr  = container.dataset.exposure;
 
-    const withStars   = container.dataset.stars === 'true';
-    const starsCount  = parseInt(container.dataset.starsCount || '900', 10);
-    const starsColor  = container.dataset.starsColor || '#FFFFFF';
-    const starsSize   = parseFloat(container.dataset.starsSize || '0.8');
-    const starsRadius = parseFloat(container.dataset.starsRadius || '50');
+    const withStars    = container.dataset.stars === 'true';
+    const starsCount   = parseInt(container.dataset.starsCount || '900', 10);
+    const starsColor   = container.dataset.starsColor || '#FFFFFF';
+    const starsSize    = parseFloat(container.dataset.starsSize || '0.8');
+    const starsRadius  = parseFloat(container.dataset.starsRadius || '50');
 
     const canvas   = container.querySelector('canvas');
+
+    // THREE core
     const scene    = new THREE.Scene();
     const camera   = new THREE.PerspectiveCamera(45, 1, 0.01, 2000);
     const renderer = new THREE.WebGLRenderer({ canvas, antialias:true, alpha:true });
@@ -428,112 +437,163 @@ function initMobile() {
     renderer.toneMapping         = THREE.ACESFilmicToneMapping;
     renderer.toneMappingExposure = parseFloat(exposureStr ?? '1');
 
-    if (bgColorStr){
-      renderer.setClearColor(new THREE.Color(bgColorStr), isFinite(bgAlphaStr) ? parseFloat(bgAlphaStr) : 1);
-    } else if (withStars){
+    // Background
+    if (bgColorStr) {
+      const alpha = (bgAlphaStr !== undefined) ? parseFloat(bgAlphaStr) : 1;
+      renderer.setClearColor(new THREE.Color(bgColorStr), Number.isFinite(alpha) ? alpha : 1);
+    } else if (withStars) {
       renderer.setClearColor(0x000000, 1);
     } else {
       renderer.setClearColor(0x000000, 0);
     }
 
-    // lights
+    // Lights
     const hemi = new THREE.HemisphereLight(0xffffff, 0x444444, 0.9);
-    const dir  = new THREE.DirectionalLight(0xffffff, 0.9); dir.position.set(3,4,6);
+    const dir  = new THREE.DirectionalLight(0xffffff, 0.9);
+    dir.position.set(3,4,6);
     scene.add(hemi, dir);
 
-    // shadows
-    if (withShadows){
+    // Shadows
+    if (withShadows) {
       renderer.shadowMap.enabled = true;
       renderer.shadowMap.type    = THREE.PCFSoftShadowMap;
       dir.castShadow = true;
-      dir.shadow.mapSize.set(2048,2048);
+      dir.shadow.mapSize.set(2048, 2048);
       dir.shadow.camera.near = 0.1;
       dir.shadow.camera.far  = 80;
       dir.shadow.bias        = -0.00015;
     }
 
-    // controls
+    // Controls
     const controls = new OrbitControls(camera, renderer.domElement);
-    controls.enableDamping      = true; controls.dampingFactor = 0.08;
-    controls.enablePan          = true; controls.screenSpacePanning = true;
-    controls.panSpeed           = 0.9;  controls.rotateSpeed = 0.7; controls.zoomSpeed = 0.9;
-    controls.minPolarAngle      = 0.05; controls.maxPolarAngle = Math.PI - 0.05;
+    controls.enableDamping      = true;
+    controls.dampingFactor      = 0.08;
+    controls.enablePan          = true;
+    controls.screenSpacePanning = true;
+    controls.panSpeed           = 0.9;
+    controls.rotateSpeed        = 0.7;
+    controls.zoomSpeed          = 0.9;
+    controls.minPolarAngle      = 0.05;
+    controls.maxPolarAngle      = Math.PI - 0.05;
     if ('zoomToCursor' in controls) controls.zoomToCursor = true;
 
+    // Resize
     const setSize = () => {
-      const w = container.clientWidth || 1, h = container.clientHeight || 1;
+      const w = container.clientWidth || 1;
+      const h = container.clientHeight || 1;
       renderer.setSize(w, h, false);
       renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.5));
-      camera.aspect = w/h; camera.updateProjectionMatrix();
+      camera.aspect = w / h;
+      camera.updateProjectionMatrix();
     };
-    setSize(); (new ResizeObserver(setSize)).observe(container);
+    setSize();
+    const ro = ('ResizeObserver' in window) ? new ResizeObserver(setSize) : null;
+    if (ro) ro.observe(container);
+    else addEventListener('resize', setSize);
 
-    // stars / env
+    // Stars or HDR
     let starGroup = null;
-    if (withStars){
+    if (withStars) {
       starGroup = new THREE.Group();
-      starGroup.add(
-        makeStars({ count:starsCount, radius:starsRadius,    size:starsSize,     color:starsColor }),
-        makeStars({ count:Math.floor(starsCount*0.4), radius:starsRadius*0.65, size:starsSize*0.7, color:starsColor })
-      );
+      const layer1 = makeStars({ count: starsCount, radius: starsRadius,   size: starsSize,     color: starsColor });
+      const layer2 = makeStars({ count: Math.floor(starsCount*0.4), radius: starsRadius*0.65, size: starsSize*0.7, color: starsColor });
+      starGroup.add(layer1, layer2);
       scene.add(starGroup);
-    } else if (envHdrURL){
-      new RGBELoader().setCrossOrigin('anonymous').load(envHdrURL, (hdr)=>{
+    } else if (envHdrURL) {
+      new RGBELoader().setCrossOrigin('anonymous').load(envHdrURL, (hdr) => {
         hdr.mapping = THREE.EquirectangularReflectionMapping;
-        scene.environment = hdr; if (envAsBg) scene.background = hdr;
+        scene.environment = hdr;
+        if (envAsBg) scene.background = hdr;
       });
     }
 
-    // loaders
+    // Loaders
     const loader = new GLTFLoader().setCrossOrigin('anonymous');
-    const draco  = new DRACOLoader(); draco.setDecoderPath('https://www.gstatic.com/draco/v1/decoders/'); loader.setDRACOLoader(draco);
-    const ktx2   = new KTX2Loader();  ktx2.setTranscoderPath('https://cdn.jsdelivr.net/npm/three@0.159.0/examples/jsm/libs/basis/'); ktx2.detectSupport(renderer); loader.setKTX2Loader(ktx2);
+    const draco  = new DRACOLoader();
+    draco.setDecoderPath('https://www.gstatic.com/draco/v1/decoders/');
+    loader.setDRACOLoader(draco);
 
-    let mixer=null, root=null, auto=autoRotate;
-    let reEnableAutoTO=null;
+    const ktx2   = new KTX2Loader();
+    ktx2.setTranscoderPath('https://cdn.jsdelivr.net/npm/three@0.159.0/examples/jsm/libs/basis/');
+    ktx2.detectSupport(renderer);
+    loader.setKTX2Loader(ktx2);
+
+    // Model state
+    let mixer = null, root = null, auto = autoRotate;
+    let reEnableAutoTO = null;
 
     loader.load(
       modelURL,
-      (gltf)=>{
-        root = gltf.scene; scene.add(root);
-        root.traverse(o=>{ if (o.isMesh){ o.castShadow = !!withShadows; o.receiveShadow = false; } });
+      (gltf) => {
+        root = gltf.scene;
+        scene.add(root);
 
-        // frame
-        const box    = new THREE.Box3().setFromObject(root);
-        const size   = box.getSize(new THREE.Vector3()).length();
+        // shadows flags
+        root.traverse(o => {
+          if (o.isMesh) {
+            o.castShadow = !!withShadows;
+            o.receiveShadow = false;
+          }
+        });
+
+        // center & close-up frame
+        const box = new THREE.Box3().setFromObject(root);
+        const size = box.getSize(new THREE.Vector3()).length();
         const center = box.getCenter(new THREE.Vector3());
         root.position.sub(center);
 
-        const fov=camera.fov*(Math.PI/180);
-        let dist=(size/2)/Math.tan(fov/2); dist*=1.25;
-        camera.position.set(0,0,dist);
-        camera.near = size/1000; camera.far = Math.max(2000, size*10); camera.updateProjectionMatrix();
+        const fov  = camera.fov * (Math.PI/180);
+        let dist   = (size/2) / Math.tan(fov/2);
+        dist      *= 0.95; // closer than default (close-up)
+        camera.position.set(0, 0, dist);
+        camera.near = size/1000; camera.far = Math.max(2000, size*10);
+        camera.updateProjectionMatrix();
 
-        controls.minDistance = dist*0.6; controls.maxDistance = dist*4.0;
-        controls.target.set(0,0,0); controls.update();
+        controls.minDistance = dist * 0.4;
+        controls.maxDistance = dist * 4.0;
+        controls.target.set(0,0,0);
+        controls.update();
 
-        if (withShadows && withGround){
+        // Ground shadow catcher
+        if (withShadows && withGround) {
           const centeredBox = new THREE.Box3().setFromObject(root);
-          const groundY = centeredBox.min.y - 0.02 * size;
-          const groundMat = new THREE.ShadowMaterial({ opacity: parseFloat(groundOpStr ?? '0.25') });
-          const ground = new THREE.Mesh(new THREE.PlaneGeometry(size*4, size*4), groundMat);
-          ground.rotation.x = -Math.PI/2; ground.position.y = groundY; ground.receiveShadow = true; scene.add(ground);
+          const modelSize   = centeredBox.getSize(new THREE.Vector3()).length();
+          const groundY     = centeredBox.min.y - 0.02 * modelSize;
+          const groundMat   = new THREE.ShadowMaterial({ opacity: parseFloat(groundOpStr ?? '0.25') });
+          const ground      = new THREE.Mesh(new THREE.PlaneGeometry(modelSize*4, modelSize*4), groundMat);
+          ground.rotation.x = -Math.PI/2;
+          ground.position.y = groundY;
+          ground.receiveShadow = true;
+          scene.add(ground);
+          // (Optional visual ground) — uncomment for visible ground plane:
+          // const gVis = new THREE.Mesh(new THREE.PlaneGeometry(modelSize*4, modelSize*4),
+          //   new THREE.MeshStandardMaterial({ color: groundColor }));
+          // gVis.rotation.x = -Math.PI/2; gVis.position.y = groundY - 0.001; scene.add(gVis);
         }
 
-        if (gltf.animations && gltf.animations.length){
+        // Built-in animations
+        if (gltf.animations && gltf.animations.length) {
           mixer = new THREE.AnimationMixer(root);
           gltf.animations.forEach(clip => mixer.clipAction(clip).play());
           auto = false;
         }
+
+        // Notify external animation hooks
+        dispatchEvent(new CustomEvent('panel3d:modelLoaded', {
+          detail: { container, viewer, gltf, modelURL }
+        }));
       },
       undefined,
-      (err)=> console.warn('GLTF load error:', modelURL, err)
+      (err) => console.warn('GLTF load error:', modelURL, err)
     );
 
+    // Pause auto-rotate while user interacts
     const startUser = () => { auto = false; clearTimeout(reEnableAutoTO); container.classList.add('grabbing'); };
     const endUser   = () => {
       container.classList.remove('grabbing');
-      reEnableAutoTO = setTimeout(()=>{ if (!mixer && (container.dataset.autorotate==='true') && !reduce) auto = true; }, 1800);
+      reEnableAutoTO = setTimeout(() => {
+        if (!mixer && (container.dataset.autorotate === 'true') && !reduce) auto = true;
+      }, 1800);
     };
     renderer.domElement.addEventListener('pointerdown', startUser);
     addEventListener('pointerup', endUser, { passive:true });
@@ -542,17 +602,26 @@ function initMobile() {
     const state = { visible:false };
     const viewer = {
       renderer, scene, camera, controls, state, starGroup,
+      tickers: [], // ⬅ per-viewer frame callbacks (for model-animations.js)
       get mixer(){ return mixer; },
       get root(){  return root;  },
       get auto(){  return auto;  },
       resize: setSize
     };
+
     viewerOf.set(container, viewer);
     viewers.push(viewer);
     return viewer;
   }
 
-  // lazy init on visibility
+  // Expose an init helper if you need to force-init a container elsewhere
+  window.__initViewerIfNeeded = (container, forceResize=false) => {
+    const v = initViewer(container);
+    if (forceResize) v.resize();
+    return v;
+  };
+
+  // Lazy init via IntersectionObserver
   document.querySelectorAll('.panel-3d').forEach(container => {
     const obs = new IntersectionObserver(entries => {
       entries.forEach(e => {
@@ -569,15 +638,26 @@ function initMobile() {
     obs.observe(container);
   });
 
-  // render loop
+  // Global render loop
   const clock = new THREE.Clock();
   (function loop(){
     const dt = clock.getDelta();
     viewers.forEach(v => {
       if (!v.state.visible) return;
-      if (v.starGroup && !reduce){ v.starGroup.rotation.y += 0.0015; v.starGroup.rotation.x += 0.0006; }
+
+      if (v.starGroup && !reduce) {
+        v.starGroup.rotation.y += 0.0015;
+        v.starGroup.rotation.x += 0.0006;
+      }
+
       if (v.mixer) v.mixer.update(dt);
-      if (v.root && v.auto && !reduce) v.root.rotation.y += 0.6*dt;
+      if (v.root && v.auto && !reduce) v.root.rotation.y += 0.6 * dt;
+
+      // per-viewer custom tickers (e.g., procedural gear animation)
+      if (v.tickers && v.tickers.length) {
+        for (const fn of v.tickers) { try { fn(dt, v); } catch(_){} }
+      }
+
       v.controls.update();
       v.renderer.render(v.scene, v.camera);
     });

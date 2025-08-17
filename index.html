@@ -185,8 +185,9 @@
               <p class="text-black/80">Type-led systems, grids, and intent.</p>
               <div class="mt-6 h-0 border-t-2 border-[var(--green)]/30"></div>
               <div class="panel-3d mt-4 relative h-56 border-2 border-[var(--green)]/20"
-                data-model="assets/3d_objects/person.glb" data-bg-color="rgb(237,235,221)" data-bg-alpha="1"
-                data-shadow="true" data-ground="true" data-ground-opacity="0.25" data-autorotate="true">
+                data-model="assets/3d_objects/SheenChair.glb" data-animate="spin" data-zoom="2.7" data-spin-speed="0.5"
+                data-bob-amp="0.02" data-bob-speed="0.9" data-shadow="true" data-ground="true"
+                data-ground-opacity="0.25" data-bg-color="rgb(237,235,221)" data-bg-alpha="1">
                 <canvas class="webgl absolute inset-0"></canvas>
               </div>
             </div>
@@ -202,8 +203,15 @@
               <p class="text-black/80">Robust front-ends, solid APIs, clean integrations.</p>
               <div class="mt-6 h-0 border-t-2 border-[var(--green)]/30"></div>
               <div class="panel-3d mt-4 relative h-56 border-2 border-[var(--green)]/20"
-                data-model="assets/3d_objects/room.glb" data-bg-color="#C6E376" data-bg-alpha="1" data-shadow="false"
-                data-ground="true" data-ground-opacity="0.25" data-autorotate="true">
+                data-model="assets/3d_objects/GearboxAssy.glb"
+                data-autorotate="false"
+                data-shadow="true" data-ground="true" data-ground-opacity="0.25"
+                data-log-tree="true"          
+                data-gear-auto="true"         
+                data-gear-axis="z"            
+                data-gear-speed="2.2"   
+                data-zoom="2.7"      
+                data-gear-alternate-dir="true">
                 <canvas class="webgl absolute inset-0"></canvas>
               </div>
             </div>
@@ -277,6 +285,7 @@
 </script>
 
   <script type="module" src="assets/js/scripts.js"></script>
+  <script type="module" src="/assets/js/model-animations.js"></script>
 
 
 
