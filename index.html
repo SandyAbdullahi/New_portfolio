@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -12,20 +11,16 @@
   <script src="https://cdn.tailwindcss.com"></script>
 
   <!-- Fonts -->
-  <link
-    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Playfair+Display:wght@700;800&display=swap"
-    rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Playfair+Display:wght@700;800&display=swap" rel="stylesheet" />
 
-  <link rel="stylesheet" href="assets/css/styles.css">
+  <!-- Your site styles -->
+  <link rel="stylesheet" href="assets/css/styles.css" />
 </head>
 
 <body class="overflow-x-hidden">
 
   <!-- Global Film Grain -->
   <canvas id="grain" class="grain"></canvas>
-
-
-
 
   <!-- Navbar -->
   <header class="relative z-40 bg-white/90 backdrop-blur">
@@ -48,223 +43,227 @@
     <canvas id="ringsCanvas" class="webgl absolute inset-0"></canvas>
 
     <div class="hero-phrases relative z-20 w-full text-center">
-      <span class="phrase leading-[.9] text-[clamp(2.6rem,10.5vw,8rem)] font-extrabold text-[var(--green)]"
-        style="font-family:'Playfair Display',serif">Brutalist&nbsp;<br />Developer</span>
-      <span class="phrase leading-[.9] text-[clamp(2.6rem,10.5vw,8rem)] font-extrabold text-[var(--green)]"
-        style="font-family:'Playfair Display',serif">Python&nbsp;<br />Programmer</span>
-      <span class="phrase leading-[.9] text-[clamp(2.6rem,10.5vw,8rem)] font-extrabold text-[var(--green)]"
-        style="font-family:'Playfair Display',serif">Performance-First</span>
-      <span class="phrase leading-[.9] text-[clamp(2.6rem,10.5vw,8rem)] font-extrabold text-[var(--green)]"
-        style="font-family:'Playfair Display',serif">Web&nbsp;Engineer</span>
+      <span class="phrase leading-[.9] text-[clamp(2.6rem,10.5vw,8rem)] font-extrabold text-[var(--green)]" style="font-family:'Playfair Display',serif">
+        Brutalist&nbsp;<br />Developer
+      </span>
+      <span class="phrase leading-[.9] text-[clamp(2.6rem,10.5vw,8rem)] font-extrabold text-[var(--green)]" style="font-family:'Playfair Display',serif">
+        Python&nbsp;<br />Programmer
+      </span>
+      <span class="phrase leading-[.9] text-[clamp(2.6rem,10.5vw,8rem)] font-extrabold text-[var(--green)]" style="font-family:'Playfair Display',serif">
+        Performance-First
+      </span>
+      <span class="phrase leading-[.9] text-[clamp(2.6rem,10.5vw,8rem)] font-extrabold text-[var(--green)]" style="font-family:'Playfair Display',serif">
+        Web&nbsp;Engineer
+      </span>
     </div>
   </section>
 
-  <!-- SHOWCASE -->
-  <section id="showcase" class="bg-[var(--cream)] text-[var(--green)] p-0 m-0 overflow-x-hidden">
+<section id="showcase" aria-labelledby="showcase-title" class="bg-[var(--cream)] text-[var(--green)]">
+  <div class="max-w-6xl mx-auto px-6 md:px-10 py-16 md:py-24">
+    <!-- Header -->
+    <header class="mb-8 md:mb-12">
+      <h2 id="showcase-title" class="text-4xl md:text-5xl font-extrabold leading-tight">
+        How I turn ideas into shipped product
+      </h2>
+      <p class="mt-3 max-w-2xl text-black/80">
+        A four-step, heuristic-driven workflow that balances speed, clarity, and craft.
+      </p>
+    </header>
 
-    <!-- DESKTOP -->
-    <div class="hidden md:grid w-full md:grid-cols-12 gap-0">
-      <!-- LEFT -->
-      <div class="md:col-span-5 relative z-0 overflow-visible">
-        <ul id="topicList" class="no-scrollbar h-screen overflow-y-scroll snap-y snap-mandatory w-screen pl-0 ml-0">
-          <li class="scroll-item snap-start h-screen m-0 p-0 select-none flex items-center" data-panel="p1">
-            <span
-              class="big-word block font-extrabold uppercase tracking-tight whitespace-nowrap text-[100vh] leading-[0.62] -mt-[0.04em] -mb-[0.04em]">Design</span>
-          </li>
-          <li class="scroll-item snap-start h-screen m-0 p-0 select-none flex items-center" data-panel="p2">
-            <span
-              class="big-word block font-extrabold uppercase tracking-tight whitespace-nowrap text-[100vh] leading-[0.62] -mt-[0.04em] -mb-[0.04em]">Build</span>
-          </li>
-          <li class="scroll-item snap-start h-screen m-0 p-0 select-none flex items-center" data-panel="p3">
-            <span
-              class="big-word block font-extrabold uppercase tracking-tight whitespace-nowrap text-[100vh] leading-[0.62] -mt-[0.04em] -mb-[0.04em]">Motion</span>
-          </li>
-          <li class="scroll-item snap-start h-screen m-0 p-0 select-none flex items-center" data-panel="p4">
-            <span
-              class="big-word block font-extrabold uppercase tracking-tight whitespace-nowrap text-[100vh] leading-[0.62] -mt-[0.04em] -mb-[0.04em]">Ship</span>
-          </li>
-        </ul>
+    <!-- Progress / system status -->
+    <div class="mb-6" aria-hidden="true">
+      <div class="flex items-center justify-between text-xs uppercase tracking-widest">
+        <span id="showcase-status">Step 1 of 4</span>
+        <span>End</span>
       </div>
+      <div class="mt-2 h-2 bg-white/60">
+        <div id="showcase-bar" class="h-2 bg-[var(--green)] w-1/4"></div>
+      </div>
+    </div>
 
-      <!-- RIGHT (sticky panels) -->
-      <div class="md:col-span-7 relative z-10">
-        <div class="sticky top-0 bg-[var(--cream)] p-0">
-          <div class="min-h-[0px] space-y-0">
+    <!-- Tabs (keyboard accessible) -->
+    <div
+      role="tablist"
+      aria-label="Showcase steps"
+      class="flex gap-2 overflow-x-auto snap-x snap-mandatory no-scrollbar pb-2 border-b-2 border-[var(--green)]/20"
+      data-tablist
+    >
+      <button role="tab" aria-selected="true" aria-controls="step-discover" id="tab-discover"
+        class="snap-start shrink-0 px-4 py-2 rounded-md border-2 border-[var(--green)] bg-white font-semibold focus:outline-none focus:ring-2 focus:ring-[var(--green)]">
+        <span aria-hidden="true">🔎</span> <span class="ml-2">Discover</span>
+      </button>
+      <button role="tab" aria-selected="false" aria-controls="step-design" id="tab-design"
+        class="snap-start shrink-0 px-4 py-2 rounded-md border-2 border-transparent hover:border-[var(--green)]/40 font-semibold focus:outline-none focus:ring-2 focus:ring-[var(--green)]">
+        <span aria-hidden="true">📐</span> <span class="ml-2">Design</span>
+      </button>
+      <button role="tab" aria-selected="false" aria-controls="step-build" id="tab-build"
+        class="snap-start shrink-0 px-4 py-2 rounded-md border-2 border-transparent hover:border-[var(--green)]/40 font-semibold focus:outline-none focus:ring-2 focus:ring-[var(--green)]">
+        <span aria-hidden="true">⚙️</span> <span class="ml-2">Build</span>
+      </button>
+      <button role="tab" aria-selected="false" aria-controls="step-validate" id="tab-validate"
+        class="snap-start shrink-0 px-4 py-2 rounded-md border-2 border-transparent hover:border-[var(--green)]/40 font-semibold focus:outline-none focus:ring-2 focus:ring-[var(--green)]">
+        <span aria-hidden="true">✅</span> <span class="ml-2">Validate & Ship</span>
+      </button>
+    </div>
 
-            <!-- DESIGN -->
-            <article id="p1" class="panel active">
-              <div class="border-2 border-[var(--green)] p-8 md:p-10 bg-white">
-                <div class="grid md:grid-cols-2 gap-6 items-stretch">
-                  <div class="panel-copy">
-                    <h3 class="panel-text text-3xl md:text-4xl font-extrabold uppercase mb-4">Design</h3>
-                    <p class="panel-text max-w-prose text-black/80">Type-led systems, grids, and intent. Replace the
-                      demo with a painter/architect-table model (.gltf/.glb) anytime.</p>
-                    <div class="panel-text mt-8 h-0 border-t-2 border-[var(--green)]/30"></div>
-                  </div>
-                  <div class="panel-3d relative h-56 md:h-64 lg:h-72 border-2 border-[var(--green)]/20"
-                    data-model="assets/3d_objects/person.glb" data-bg-color="rgb(237,235,221)" data-bg-alpha="1"
-                    data-shadow="true" data-ground="true" data-ground-opacity="0.25" data-autorotate="true">
-                    <canvas class="webgl absolute inset-0"></canvas>
-                  </div>
-                </div>
-              </div>
-            </article>
+    <!-- Panels -->
+    <div class="mt-8 space-y-8">
 
-            <!-- ENGINEERING -->
-            <article id="p2" class="panel">
-              <div class="border-2 border-[var(--green)] p-8 md:p-10 bg-white">
-                <div class="grid md:grid-cols-2 gap-6 items-stretch">
-                  <div class="panel-copy">
-                    <h3 class="panel-text text-3xl md:text-4xl font-extrabold uppercase mb-4">Engineering</h3>
-                    <p class="panel-text max-w-prose text-black/80">Robust front-ends, solid APIs, clean integrations.
-                    </p>
-                    <div class="panel-text mt-8 h-0 border-t-2 border-[var(--green)]/30"></div>
-                  </div>
-                  <div class="panel-3d relative h-56 md:h-64 lg:h-72 border-2 border-[var(--green)]/20"
-                    data-model="assets/3d_objects/room.glb" data-bg-color="#C6E376" data-bg-alpha="1"
-                    data-shadow="false" data-ground="true" data-ground-opacity="0.25" data-autorotate="true">
-                    <canvas class="webgl absolute inset-0"></canvas>
-                  </div>
-                </div>
-              </div>
-            </article>
+      <!-- Discover -->
+      <section id="step-discover" role="tabpanel" aria-labelledby="tab-discover">
+        <div class="grid md:grid-cols-12 gap-6 items-stretch">
+          <div class="md:col-span-6 border-2 border-[var(--green)] bg-white p-6">
+            <h3 class="text-2xl font-extrabold uppercase mb-3">Discover</h3>
+            <p class="text-black/80">
+              Align on goals, audiences, and constraints. Speak the user's language and surface the real jobs-to-be-done.
+            </p>
+            <ul class="mt-4 text-sm grid grid-cols-1 sm:grid-cols-2 gap-2">
+              <li>🧭 Match real world: task language, mental models</li>
+              <li>🪟 Visibility: clear next steps & expectations</li>
+              <li>🧩 Consistency: align terms across touchpoints</li>
+              <li>🧠 Recognition over recall: visible choices</li>
+            </ul>
+            <details class="mt-4">
+              <summary class="cursor-pointer font-semibold">Methods</summary>
+              <ul class="mt-2 list-disc list-inside text-sm text-black/80">
+                <li>Stakeholder interviews & competitive scans</li>
+                <li>Outcome mapping & success metrics</li>
+                <li>IA sketching, flows, and content inventory</li>
+              </ul>
+            </details>
+          </div>
 
-            <!-- MOTION & 3D -->
-            <article id="p3" class="panel">
-              <div class="border-2 border-[var(--green)] p-8 md:p-10 bg-white">
-                <div class="grid md:grid-cols-2 gap-6 items-stretch">
-                  <div class="panel-copy">
-                    <h3 class="panel-text text-3xl md:text-4xl font-extrabold uppercase mb-4">Motion & 3D</h3>
-                    <p class="panel-text max-w-prose text-black/80">GSAP & Three.js sequences, scroll-driven reveals,
-                      tasteful depth.</p>
-                    <div class="panel-text mt-8 h-0 border-t-2 border-[var(--green)]/30"></div>
-                  </div>
-                  <div class="panel-3d relative h-56 md:h-64 lg:h-72 border-2 border-[var(--green)]/20"
-                    data-model="assets/3d_objects/moon.glb" data-stars="true" data-stars-count="900"
-                    data-stars-color="#C6E376" data-stars-size="0.9" data-stars-radius="60" data-shadow="true"
-                    data-ground="true" data-ground-opacity="0.22" data-autorotate="true">
-                    <canvas class="webgl absolute inset-0"></canvas>
-                  </div>
-                </div>
-              </div>
-            </article>
-
-            <!-- DELIVERY -->
-            <article id="p4" class="panel">
-              <div class="border-2 border-[var(--green)] p-8 md:p-10 bg-white">
-                <div class="grid md:grid-cols-2 gap-6 items-stretch">
-                  <div class="panel-copy">
-                    <h3 class="panel-text text-3xl md:text-4xl font-extrabold uppercase mb-4">Delivery</h3>
-                    <p class="panel-text max-w-prose text-black/80">CI/CD, analytics, performance budgets—ship with
-                      intent.</p>
-                    <div class="panel-text mt-8 h-0 border-t-2 border-[var(--green)]/30"></div>
-                  </div>
-                  <div class="panel-3d relative h-56 md:h-64 lg:h-72 border-2 border-[var(--green)]/20"
-                    data-model="assets/3d_objects/cardbox.gltf" data-bg-color="rgb(237,235,221)" data-bg-alpha="1"
-                    data-shadow="true" data-ground="true" data-ground-opacity="0.25" data-autorotate="true">
-                    <canvas class="webgl absolute inset-0"></canvas>
-                  </div>
-                </div>
-              </div>
-            </article>
-
+          <div class="md:col-span-6 border-2 border-[var(--green)]/20 bg-white p-0">
+            <div class="panel-3d relative h-64 md:h-80" data-model="assets/3d_objects/user_interface.glb"
+                 data-bg-color="rgb(237,235,221)" data-bg-alpha="1"
+                 data-shadow="true" data-ground="true" data-ground-opacity="0.22"
+                 data-autorotate="true" data-zoom="2.2">
+              <canvas class="webgl absolute inset-0"></canvas>
+            </div>
           </div>
         </div>
-      </div>
-    </div><!-- end DESKTOP -->
+      </section>
 
-    <!-- MOBILE (stacked slides) -->
-    <div class="md:hidden">
-      <ul class="mobile-slides no-scrollbar">
-        <!-- Slide 1 -->
-        <li class="mobile-slide">
-          <span class="vertical-word">Design</span>
-          <div id="p1m" class="mobile-card">
-            <div class="border-2 border-[var(--green)] p-6 bg-white">
-              <h3 class="text-2xl font-extrabold uppercase mb-3">Design</h3>
-              <p class="text-black/80">Type-led systems, grids, and intent.</p>
-              <div class="mt-6 h-0 border-t-2 border-[var(--green)]/30"></div>
-              <div class="panel-3d mt-4 relative h-56 border-2 border-[var(--green)]/20"
-                data-model="assets/3d_objects/SheenChair.glb" data-animate="spin" data-zoom="2.7" data-spin-speed="0.5"
-                data-bob-amp="0.02" data-bob-speed="0.9" data-shadow="true" data-ground="true"
-                data-ground-opacity="0.25" data-bg-color="rgb(237,235,221)" data-bg-alpha="1">
-                <canvas class="webgl absolute inset-0"></canvas>
-              </div>
+      <!-- Design -->
+      <section id="step-design" role="tabpanel" aria-labelledby="tab-design" hidden>
+        <div class="grid md:grid-cols-12 gap-6 items-stretch">
+          <div class="md:col-span-6 border-2 border-[var(--green)] bg-white p-6">
+            <h3 class="text-2xl font-extrabold uppercase mb-3">Design</h3>
+            <p class="text-black/80">
+              Type-led systems, grid discipline, and components that scale. Minimalist, but expressive where it matters.
+            </p>
+            <ul class="mt-4 text-sm grid grid-cols-1 sm:grid-cols-2 gap-2">
+              <li>✂️ Minimalist: remove noise, keep signal</li>
+              <li>🚪 User control: undo, cancel, safe exits</li>
+              <li>🛡️ Error prevention: defaults, constraints</li>
+              <li>🧩 Consistency: tokens & patterns</li>
+            </ul>
+            <details class="mt-4">
+              <summary class="cursor-pointer font-semibold">Artifacts</summary>
+              <ul class="mt-2 list-disc list-inside text-sm text-black/80">
+                <li>Responsive type scale & spacing</li>
+                <li>Accessible color system (AA+)</li>
+                <li>Component spec with variants & states</li>
+              </ul>
+            </details>
+          </div>
+
+          <div class="md:col-span-6 border-2 border-[var(--green)]/20 bg-white p-0">
+            <div class="panel-3d relative h-64 md:h-80"
+                 data-model="assets/3d_objects/ui_dashboard.glb"
+                 data-bg-color="#EDEBDD" data-bg-alpha="1"
+                 data-shadow="true" data-ground="true" data-ground-opacity="0.22"
+                 data-autorotate="false" data-zoom="2.6">
+              <canvas class="webgl absolute inset-0"></canvas>
             </div>
           </div>
-        </li>
+        </div>
+      </section>
 
-        <!-- Slide 2 -->
-        <li class="mobile-slide">
-          <span class="vertical-word">Build</span>
-          <div id="p2m" class="mobile-card">
-            <div class="border-2 border-[var(--green)] p-6 bg-white">
-              <h3 class="text-2xl font-extrabold uppercase mb-3">Engineering</h3>
-              <p class="text-black/80">Robust front-ends, solid APIs, clean integrations.</p>
-              <div class="mt-6 h-0 border-t-2 border-[var(--green)]/30"></div>
-              <div class="panel-3d mt-4 relative h-56 border-2 border-[var(--green)]/20"
-                data-model="assets/3d_objects/GearboxAssy.glb"
-                data-autorotate="false"
-                data-shadow="true" data-ground="true" data-ground-opacity="0.25"
-                data-log-tree="true"          
-                data-gear-auto="true"         
-                data-gear-axis="z"            
-                data-gear-speed="2.2"   
-                data-zoom="2.7"      
-                data-gear-alternate-dir="true">
-                <canvas class="webgl absolute inset-0"></canvas>
-              </div>
+      <!-- Build -->
+      <section id="step-build" role="tabpanel" aria-labelledby="tab-build" hidden>
+        <div class="grid md:grid-cols-12 gap-6 items-stretch">
+          <div class="md:col-span-6 border-2 border-[var(--green)] bg-white p-6">
+            <h3 class="text-2xl font-extrabold uppercase mb-3">Build</h3>
+            <p class="text-black/80">
+              Robust front-ends, typed APIs, and smooth integrations. Performance first, then polish.
+            </p>
+            <ul class="mt-4 text-sm grid grid-cols-1 sm:grid-cols-2 gap-2">
+              <li>⚡ Efficiency: shortcuts & power-user paths</li>
+              <li>♻️ Consistency/standards: semantics & ARIA</li>
+              <li>🧯 Error prevention: form guards & safe ops</li>
+              <li>📣 Status: loading, success, and failure states</li>
+            </ul>
+            <details class="mt-4">
+              <summary class="cursor-pointer font-semibold">Tech</summary>
+              <ul class="mt-2 list-disc list-inside text-sm text-black/80">
+                <li>Three.js + GSAP micro-interactions</li>
+                <li>CI/CD, analytics, and perf budgets</li>
+                <li>Accessibility checks baked into pipeline</li>
+              </ul>
+            </details>
+          </div>
+
+          <div class="md:col-span-6 border-2 border-[var(--green)]/20 bg-white p-0">
+            <div class="panel-3d relative h-64 md:h-80"
+                 data-model="assets/3d_objects/GearboxAssy.glb"
+                 data-shadow="true" data-ground="true" data-ground-opacity="0.25"
+                 data-gear-auto="true" data-gear-axis="z" data-gear-speed="2.0" data-gear-alternate-dir="true"
+                 data-autorotate="false" data-zoom="2.7">
+              <canvas class="webgl absolute inset-0"></canvas>
             </div>
           </div>
-        </li>
+        </div>
+      </section>
 
-        <!-- Slide 3 -->
-        <li class="mobile-slide">
-          <span class="vertical-word">Motion</span>
-          <div id="p3m" class="mobile-card">
-            <div class="border-2 border-[var(--green)] p-6 bg-white">
-              <h3 class="text-2xl font-extrabold uppercase mb-3">Motion & 3D</h3>
-              <p class="text-black/80">GSAP & Three.js sequences, scroll-driven reveals, tasteful depth.</p>
-              <div class="mt-6 h-0 border-t-2 border-[var(--green)]/30"></div>
-              <div class="panel-3d mt-4 relative h-56 border-2 border-[var(--green)]/20"
-                data-model="assets/3d_objects/moon.glb" data-stars="true" data-stars-count="900"
-                data-stars-color="#C6E376" data-stars-size="0.9" data-stars-radius="60" data-shadow="true"
-                data-ground="true" data-ground-opacity="0.22" data-autorotate="true">
-                <canvas class="webgl absolute inset-0"></canvas>
-              </div>
+      <!-- Validate & Ship -->
+      <section id="step-validate" role="tabpanel" aria-labelledby="tab-validate" hidden>
+        <div class="grid md:grid-cols-12 gap-6 items-stretch">
+          <div class="md:col-span-6 border-2 border-[var(--green)] bg-white p-6">
+            <h3 class="text-2xl font-extrabold uppercase mb-3">Validate & Ship</h3>
+            <p class="text-black/80">
+              Test with users, instrument the experience, and ship safely with rollbacks and alerts.
+            </p>
+            <ul class="mt-4 text-sm grid grid-cols-1 sm:grid-cols-2 gap-2">
+              <li>🧪 Help & documentation: inline hints</li>
+              <li>↩️ User freedom: easy exits & redo</li>
+              <li>📈 Status: progress, errors, recovery</li>
+              <li>🔁 Iteration: telemetry-driven improvements</li>
+            </ul>
+            <details class="mt-4">
+              <summary class="cursor-pointer font-semibold">Validation</summary>
+              <ul class="mt-2 list-disc list-inside text-sm text-black/80">
+                <li>Usability tests & success task rates</li>
+                <li>Real-world performance (Core Web Vitals)</li>
+                <li>Staged rollouts & monitoring</li>
+              </ul>
+            </details>
+          </div>
+
+          <div class="md:col-span-6 border-2 border-[var(--green)]/20 bg-white p-0">
+            <div class="panel-3d relative h-64 md:h-80"
+                 data-model="assets/3d_objects/cardbox.glb"
+                 data-bg-color="#EDEBDD" data-bg-alpha="1"
+                 data-shadow="true" data-ground="true" data-ground-opacity="0.25"
+                 data-autorotate="true" data-zoom="2.3">
+              <canvas class="webgl absolute inset-0"></canvas>
             </div>
           </div>
-        </li>
+        </div>
+      </section>
 
-        <!-- Slide 4 -->
-        <li class="mobile-slide">
-          <span class="vertical-word">Ship</span>
-          <div id="p4m" class="mobile-card">
-            <div class="border-2 border-[var(--green)] p-6 bg-white">
-              <h3 class="text-2xl font-extrabold uppercase mb-3">Delivery</h3>
-              <p class="text-black/80">CI/CD, analytics, performance budgets—ship with intent.</p>
-              <div class="mt-6 h-0 border-t-2 border-[var(--green)]/30"></div>
-              <div class="panel-3d mt-4 relative h-56 border-2 border-[var(--green)]/20"
-                data-model="assets/3d_objects/honor.glb" data-bg-color="rgb(237,235,221)" data-bg-alpha="1"
-                data-shadow="true" data-ground="true" data-ground-opacity="0.25" data-autorotate="true">
-                <canvas class="webgl absolute inset-0"></canvas>
-              </div>
-            </div>
-          </div>
-        </li>
-      </ul>
     </div>
+  </div>
+</section>
 
-  </section>
 
   <!-- CTA / CONTACT -->
   <section id="contact" class="bg-white text-[var(--green)] py-24 md:py-32 px-6 md:px-10">
     <div class="max-w-6xl mx-auto">
       <h3 class="text-5xl md:text-6xl font-extrabold leading-none">Let’s<br><span class="pl-24">Talk</span></h3>
-      <p class="mt-6 max-w-md text-black/80">Ready to collaborate? I’m an email away—let’s build something bold and
-        purposeful.</p>
+      <p class="mt-6 max-w-md text-black/80">Ready to collaborate? I’m an email away—let’s build something bold and purposeful.</p>
       <a href="mailto:hello@abdullahinur.dev"
-        class="mt-8 inline-block border-2 border-[var(--green)] text-[var(--green)] px-8 py-3 uppercase tracking-wider font-medium transition-colors duration-300 hover:bg-[var(--green)] hover:text-white">
+         class="mt-8 inline-block border-2 border-[var(--green)] text-[var(--green)] px-8 py-3 uppercase tracking-wider font-medium transition-colors duration-300 hover:bg-[var(--green)] hover:text-white">
         hello@abdullahinur.dev
       </a>
       <div class="mt-12 h-0 border-t-2 border-[var(--green)]/20"></div>
@@ -277,19 +276,17 @@
   <!-- Import map for Three.js (must remain in HTML) -->
   <script type="importmap">
     {
-  "imports": {
-    "three": "https://cdn.jsdelivr.net/npm/three@0.159.0/build/three.module.js",
-    "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.159.0/examples/jsm/"
-  }
-}
-</script>
+      "imports": {
+        "three": "https://cdn.jsdelivr.net/npm/three@0.159.0/build/three.module.js",
+        "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.159.0/examples/jsm/"
+      }
+    }
+  </script>
 
+  <!-- Your app & model animation modules -->
   <script type="module" src="assets/js/scripts.js"></script>
-  <script type="module" src="/assets/js/model-animations.js"></script>
-
-
-
+  <script type="module" src="assets/js/model-animations.js"></script>
+  <script type="module" src="assets/js/showcase-tabs.js"></script>
 
 </body>
-
 </html>
