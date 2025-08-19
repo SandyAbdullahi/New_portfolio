@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -8,10 +9,13 @@
   <meta name="description" content="Abdullahinur — Brutalist UI/UX & Web Engineer" />
 
   <!-- Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@400;600;800&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@400;600;800&family=IBM+Plex+Mono:wght@400;600&display=swap"
+    rel="stylesheet">
 
   <link rel="stylesheet" href="assets/css/styles.css" />
 </head>
+
 <body>
 
   <!-- Brutal outer frame -->
@@ -21,14 +25,25 @@
   <header class="header">
     <div class="wrap header-row">
       <a class="brand" href="#top">ABDULLAHINUR</a>
-      <nav aria-label="Primary" class="nav">
+
+      <nav aria-label="Primary" class="nav" id="primary-nav">
+        <!-- Close button visible when overlay is open -->
+        <button class="nav__close" type="button" aria-label="Close menu">CLOSE ✕</button>
+
         <a class="pill" href="#work">WORK</a>
         <a class="pill" href="#process">PROCESS</a>
         <a class="pill" href="#about">ABOUT</a>
         <a class="pill pill--accent" href="#contact">CONTACT</a>
       </nav>
+
+      <!-- Hamburger -->
+      <button class="menu" aria-label="Open menu" aria-controls="primary-nav" aria-expanded="false">
+        <span class="menu__label">MENU</span>
+        <span class="menu__icon" aria-hidden="true"></span>
+      </button>
     </div>
   </header>
+
 
   <!-- HERO -->
   <main id="top">
@@ -67,46 +82,19 @@
           </ul>
         </div>
 
-        <!-- Right column: collage images -->
-        <div class="col col-images" aria-label="Selected project thumbnails">
-          <!-- Large tile -->
-          <figure class="tile tile--lg">
-            <img
-              src="https://picsum.photos/id/1011/1200/1600"
-              alt="Monochrome architectural lines symbolizing systems and structure"
-              width="600" height="800" loading="eager" />
+        <!-- Right column: single hero image -->
+        <div class="col col-media" aria-label="Selected project thumbnail">
+          <figure class="hero-media hero-media--frame">
+            <img src="https://picsum.photos/id/1011/1200/1600"
+              alt="Monochrome architectural lines symbolizing systems and structure" width="600" height="800"
+              loading="eager" />
             <figcaption>
               <span class="tag">SYSTEMS</span>
               Dense dashboards & design tokens
             </figcaption>
           </figure>
-
-          <!-- Stack: two small tiles -->
-          <figure class="tile tile--sm t-a">
-            <img
-              src="https://picsum.photos/id/1039/800/800"
-              alt="Brutalist concrete texture"
-              width="400" height="400" loading="lazy" />
-            <figcaption>
-              <span class="tag">UI</span>
-              Grids, states, edge cases
-            </figcaption>
-          </figure>
-
-          <figure class="tile tile--sm t-b">
-            <img
-              src="https://picsum.photos/id/1016/800/800"
-              alt="Industrial gears representing engineering rigor"
-              width="400" height="400" loading="lazy" />
-            <figcaption>
-              <span class="tag">ENGINEERING</span>
-              Robust, testable, fast
-            </figcaption>
-          </figure>
-
-          <!-- Stamp -->
-          <div class="stamp" aria-hidden="true">V1 / BRUTAL</div>
         </div>
+
       </div>
 
       <!-- Marquee -->
@@ -136,9 +124,13 @@
             </figure>
             <div class="card__body">
               <h3 class="card__title">SignalDeck</h3>
-              <p class="card__copy">Complex data, simple decisions. Systemized typography, 16-column grid, and runtime theming.</p>
+              <p class="card__copy">Complex data, simple decisions. Systemized typography, 16-column grid, and runtime
+                theming.</p>
               <ul class="chips">
-                <li>Figma</li><li>React</li><li>Typescript</li><li>Vitest</li>
+                <li>Figma</li>
+                <li>React</li>
+                <li>Typescript</li>
+                <li>Vitest</li>
               </ul>
             </div>
             <a class="card__cta" href="#" aria-label="Open SignalDeck case study">VIEW ↗</a>
@@ -154,7 +146,10 @@
               <h3 class="card__title">Mercado</h3>
               <p class="card__copy">Instant nav, measurable UX. Core Web Vitals in the green, even on 3G.</p>
               <ul class="chips">
-                <li>Next.js</li><li>Edge</li><li>ISR</li><li>Playwright</li>
+                <li>Next.js</li>
+                <li>Edge</li>
+                <li>ISR</li>
+                <li>Playwright</li>
               </ul>
             </div>
             <a class="card__cta" href="#" aria-label="Open Mercado case study">VIEW ↗</a>
@@ -170,7 +165,10 @@
               <h3 class="card__title">GridOps</h3>
               <p class="card__copy">Dense UI, zero ambiguity. Keyboard-first controls and resilient realtime sync.</p>
               <ul class="chips">
-                <li>WebSockets</li><li>Zustand</li><li>Rust API</li><li>GSAP</li>
+                <li>WebSockets</li>
+                <li>Zustand</li>
+                <li>Rust API</li>
+                <li>GSAP</li>
               </ul>
             </div>
             <a class="card__cta" href="#" aria-label="Open GridOps case study">VIEW ↗</a>
@@ -266,9 +264,15 @@
 
         <div class="about__copy">
           <h2 class="section-title">About</h2>
-          <p class="lead">I’m Abdullahinur — a UI/UX designer and web engineer obsessed with grids, typography, and speed. I work with founders and teams who value clarity over ornament.</p>
+          <p class="lead">I’m Abdullahinur — a UI/UX designer and web engineer obsessed with grids, typography, and
+            speed. I work with founders and teams who value clarity over ornament.</p>
           <ul class="chips">
-            <li>Figma</li><li>React</li><li>TypeScript</li><li>Node</li><li>GSAP</li><li>Three.js</li>
+            <li>Figma</li>
+            <li>React</li>
+            <li>TypeScript</li>
+            <li>Node</li>
+            <li>GSAP</li>
+            <li>Three.js</li>
           </ul>
 
           <div class="cta-row">
@@ -301,4 +305,5 @@
 
   <script type="module" src="assets/js/app.js"></script>
 </body>
+
 </html>
