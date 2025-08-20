@@ -1,309 +1,318 @@
 <!DOCTYPE html>
-<html lang="en">
-
+<html lang="en" data-theme="bw" data-smooth-scroll>
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Abdullahinur — Portfolio</title>
-  <meta name="theme-color" content="#0B0B0B" />
-  <meta name="description" content="Abdullahinur — Brutalist UI/UX & Web Engineer" />
+  <title>Your Name — Portfolio</title>
+  <meta name="description" content="Typographic, spacious portfolio by Your Name — web developer & designer." />
 
   <!-- Fonts -->
-  <link
-    href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@400;600;800&family=IBM+Plex+Mono:wght@400;600&display=swap"
-    rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700&family=Inter:wght@300;400;600;800&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet" />
 
-  <link rel="stylesheet" href="assets/css/styles.css" />
+  <!-- Styles -->
+  <link rel="stylesheet" href="./assets/css/main.css?v=3.4.2" />
+  <meta name="color-scheme" content="light dark" />
 </head>
-
 <body>
+  <a href="#main" class="skip-link">Skip to content</a>
 
-  <!-- Brutal outer frame -->
-  <div class="frame" aria-hidden="true"></div>
+  <!-- Background grain + optional grid overlay -->
+  <div class="grain" aria-hidden="true"></div>
+  <div class="grid-overlay" aria-hidden="true" data-grid-overlay></div>
 
-  <!-- Header -->
-  <header class="header">
-    <div class="wrap header-row">
-      <a class="brand" href="#top">ABDULLAHINUR</a>
+  <!-- ===== HEADER ===== -->
+  <header class="site-header" data-reveal>
+    <div class="container header__inner">
+      <a class="brand" href="#home" aria-label="Home">
+        <span class="brand__wordmark">YOUR&nbsp;NAME</span>
+        <span class="brand__tag">WEB / DESIGN</span>
+      </a>
 
-      <nav aria-label="Primary" class="nav" id="primary-nav">
-        <!-- Close button visible when overlay is open -->
-        <button class="nav__close" type="button" aria-label="Close menu">CLOSE ✕</button>
-
-        <a class="pill" href="#work">WORK</a>
-        <a class="pill" href="#process">PROCESS</a>
-        <a class="pill" href="#about">ABOUT</a>
-        <a class="pill pill--accent" href="#contact">CONTACT</a>
+      <!-- Desktop nav -->
+      <nav class="nav nav--desktop" aria-label="Primary">
+        <ul class="nav__list">
+          <li><a href="#work" class="nav__link" data-navlink>Work</a></li>
+          <li><a href="#about" class="nav__link" data-navlink>About</a></li>
+          <li><a href="#contact" class="nav__link" data-navlink>Contact</a></li>
+          <li class="nav__divider" aria-hidden="true">/</li>
+          <li><a href="#index" class="nav__link nav__link--muted" data-navlink>Index</a></li>
+          <li class="nav__divider" aria-hidden="true">/</li>
+          <li>
+            <button class="nav__button" data-theme-toggle aria-pressed="false" aria-label="Toggle color theme">
+              Theme: <span data-theme-state>BW</span>
+            </button>
+          </li>
+          <li>
+            <button class="nav__button" data-grid-toggle aria-pressed="false" aria-label="Toggle grid overlay">
+              Grid: <span data-grid-state>off</span>
+            </button>
+          </li>
+        </ul>
       </nav>
 
-      <!-- Hamburger -->
-      <button class="menu" aria-label="Open menu" aria-controls="primary-nav" aria-expanded="false">
-        <span class="menu__label">MENU</span>
-        <span class="menu__icon" aria-hidden="true"></span>
+      <!-- Mobile hamburger -->
+      <button
+        class="hamburger"
+        data-menu-toggle
+        aria-controls="mobile-menu"
+        aria-expanded="false"
+        aria-label="Open menu">
+        <span class="hamburger__box" aria-hidden="true">
+          <span class="hamburger__bar"></span>
+          <span class="hamburger__bar"></span>
+          <span class="hamburger__bar"></span>
+        </span>
       </button>
+    </div>
+
+    <!-- Backdrop + Drawer (start hidden) -->
+    <div class="menu-backdrop" data-menu-backdrop hidden></div>
+
+    <div class="mobile-menu" id="mobile-menu" aria-hidden="true" hidden>
+      <div class="mobile-menu__header">
+        <span class="mobile-menu__brand">YOUR&nbsp;NAME</span>
+        <button class="mobile-menu__close" data-menu-toggle aria-label="Close menu">✕</button>
+      </div>
+
+      <nav class="mobile-menu__nav" aria-label="Mobile">
+        <a href="#work" data-navlink class="mobile-menu__link">Work</a>
+        <a href="#about" data-navlink class="mobile-menu__link">About</a>
+        <a href="#contact" data-navlink class="mobile-menu__link">Contact</a>
+        <a href="#index" data-navlink class="mobile-menu__link">Index</a>
+      </nav>
+
+      <div class="mobile-menu__row">
+        <button class="chip chip--full" data-theme-toggle aria-pressed="false">
+          Theme: <span data-theme-state>BW</span>
+        </button>
+        <button class="chip chip--full" data-grid-toggle aria-pressed="false">
+          Grid: <span data-grid-state>off</span>
+        </button>
+      </div>
+
+      <div class="mobile-menu__footer">
+        <a href="mailto:you@example.com" class="mobile-menu__meta">Email</a>
+        <a href="https://github.com/" class="mobile-menu__meta" rel="noopener">GitHub</a>
+        <a href="https://www.instagram.com/" class="mobile-menu__meta" rel="noopener">Instagram</a>
+      </div>
     </div>
   </header>
 
+  <!-- Sticky mini header (appears on scroll) -->
+  <aside class="mini-header" data-mini-header aria-hidden="true">
+    <div class="mini-header__progress" aria-hidden="true">
+      <div class="mini-header__bar" data-scroll-progress></div>
+    </div>
+    <div class="mini-header__inner container">
+      <a href="#home" class="mini-header__brand">YOUR&nbsp;NAME</a>
+      <nav class="mini-header__nav" aria-label="Secondary">
+        <a href="#work" data-navlink>Work</a>
+        <a href="#about" data-navlink>About</a>
+        <a href="#contact" data-navlink>Contact</a>
+      </nav>
+    </div>
+  </aside>
 
-  <!-- HERO -->
-  <main id="top">
-    <section class="hero">
-      <div class="wrap hero-grid">
-        <!-- Left column: copy -->
-        <div class="col col-copy">
-          <p class="kicker"><span class="dot"></span> BRUTALIST • GRID-LED • FAST</p>
-
-          <h1 class="hero-title">
-            I DESIGN & BUILD<br>
-            <span class="strike">BEAUTIFUL</span>
-            <span class="rotator">
-              <b class="rot is-active">USEFUL</b>
-              <b class="rot">CLEAR</b>
-              <b class="rot">INTENTIONAL</b>
-            </span>
-            INTERFACES
+  <!-- ===== MAIN ===== -->
+  <main id="main">
+    <!-- HERO -->
+    <section id="home" class="hero" aria-label="Intro">
+      <div class="container hero__inner">
+        <div class="hero__copy" data-reveal data-stagger>
+          <h1 class="hero__title">
+            <span class="hero__line">I build stark,</span>
+            <span class="hero__line">interactive web things.</span>
           </h1>
-
-          <p class="lead">
-            No fluff. Just hard edges, strict systems, and ruthless performance.
-            From Figma tokens to shipping production code.
+          <p class="hero__dek">
+            Typographic, spacious, and quietly animated — clarity first, personality next.
           </p>
-
-          <div class="cta-row">
-            <a class="btn btn--solid" href="#work">SEE WORK</a>
-            <a class="btn btn--ghost" href="mailto:hello@abdullahinur.dev">EMAIL ME</a>
+          <div class="hero__cta">
+            <a href="#work" class="btn" data-cta>See work</a>
+            <a href="#contact" class="btn btn--ghost" data-cta>Say hi</a>
           </div>
-
-          <ul class="meta">
-            <li>ACCESSIBLE</li>
-            <li>TYPE-LED</li>
-            <li>PERFORMANCE</li>
-            <li>THREE.JS</li>
-          </ul>
         </div>
 
-        <!-- Right column: single hero image -->
-        <div class="col col-media" aria-label="Selected project thumbnail">
-          <figure class="hero-media hero-media--frame">
-            <img src="https://picsum.photos/id/1011/1200/1600"
-              alt="Monochrome architectural lines symbolizing systems and structure" width="600" height="800"
-              loading="eager" />
-            <figcaption>
-              <span class="tag">SYSTEMS</span>
-              Dense dashboards & design tokens
-            </figcaption>
-          </figure>
-        </div>
-
+        <figure class="hero__media" data-parallax>
+          <img
+            src="https://images.pexels.com/photos/32191170/pexels-photo-32191170.jpeg?auto=compress&cs=tinysrgb&dpr=2&w=1600"
+            alt="Brutalist architecture — stark concrete geometry."
+            loading="eager"
+            fetchpriority="high"
+            class="hero__img"
+            data-bw
+          />
+        </figure>
       </div>
 
-      <!-- Marquee -->
-      <div class="marquee" role="region" aria-label="Availability">
-        <div class="marquee__track">
-          <span>NOW BOOKING Q4 — PERFORMANCE FIRST — ACCESSIBLE BY DEFAULT — </span>
-          <span>NOW BOOKING Q4 — PERFORMANCE FIRST — ACCESSIBLE BY DEFAULT — </span>
-          <span>NOW BOOKING Q4 — PERFORMANCE FIRST — ACCESSIBLE BY DEFAULT — </span>
+      <div class="ticker" aria-hidden="true" data-marquee data-speed="slow">
+        <div class="ticker__track">
+          <span>CARE ABOUT CRAFT —</span>
+          <span>BIG TYPE · SOFT MOTION —</span>
+          <span>INDEX / SHOWCASE MINDSET —</span>
         </div>
       </div>
     </section>
 
-    <!-- WORK / CASE STUDIES -->
-    <section id="work" class="section section--work">
-      <div class="wrap">
-        <div class="section-head">
+    <!-- WORK -->
+    <section id="work" class="work" aria-label="Selected projects" data-view="showcase">
+      <header class="section-head work__head" data-reveal>
+        <div class="work__head-left">
           <h2 class="section-title">Selected Work</h2>
-          <p class="eyebrow">Real projects, heavy constraints, shipped clean.</p>
+          <p class="section-kicker">Editorial spacing. Oversized labels. Quiet confidence.</p>
         </div>
-
-        <div class="work-grid">
-          <!-- Card 1 -->
-          <article class="card card--project">
-            <figure class="card__media">
-              <img src="https://picsum.photos/id/1040/1200/800" alt="Fintech analytics dashboard" loading="lazy">
-              <figcaption><span class="tag">FINTECH</span> Analytics suite & design tokens</figcaption>
-            </figure>
-            <div class="card__body">
-              <h3 class="card__title">SignalDeck</h3>
-              <p class="card__copy">Complex data, simple decisions. Systemized typography, 16-column grid, and runtime
-                theming.</p>
-              <ul class="chips">
-                <li>Figma</li>
-                <li>React</li>
-                <li>Typescript</li>
-                <li>Vitest</li>
-              </ul>
-            </div>
-            <a class="card__cta" href="#" aria-label="Open SignalDeck case study">VIEW ↗</a>
-          </article>
-
-          <!-- Card 2 -->
-          <article class="card card--project">
-            <figure class="card__media">
-              <img src="https://picsum.photos/id/1057/1200/800" alt="Ecommerce catalog" loading="lazy">
-              <figcaption><span class="tag">COMMERCE</span> Headless storefront</figcaption>
-            </figure>
-            <div class="card__body">
-              <h3 class="card__title">Mercado</h3>
-              <p class="card__copy">Instant nav, measurable UX. Core Web Vitals in the green, even on 3G.</p>
-              <ul class="chips">
-                <li>Next.js</li>
-                <li>Edge</li>
-                <li>ISR</li>
-                <li>Playwright</li>
-              </ul>
-            </div>
-            <a class="card__cta" href="#" aria-label="Open Mercado case study">VIEW ↗</a>
-          </article>
-
-          <!-- Card 3 -->
-          <article class="card card--project">
-            <figure class="card__media">
-              <img src="https://picsum.photos/id/1027/1200/800" alt="IoT control center" loading="lazy">
-              <figcaption><span class="tag">IoT</span> Realtime control center</figcaption>
-            </figure>
-            <div class="card__body">
-              <h3 class="card__title">GridOps</h3>
-              <p class="card__copy">Dense UI, zero ambiguity. Keyboard-first controls and resilient realtime sync.</p>
-              <ul class="chips">
-                <li>WebSockets</li>
-                <li>Zustand</li>
-                <li>Rust API</li>
-                <li>GSAP</li>
-              </ul>
-            </div>
-            <a class="card__cta" href="#" aria-label="Open GridOps case study">VIEW ↗</a>
-          </article>
+        <div class="work__view-toggle" role="group" aria-label="Toggle work view">
+          <button class="chip" data-view-btn="showcase" aria-pressed="true">Showcase</button>
+          <button class="chip" data-view-btn="grid" aria-pressed="false">Grid</button>
         </div>
-      </div>
+      </header>
+
+      <!-- Projects -->
+      <article class="project project--a" data-reveal data-stagger>
+        <div class="project__media" data-parallax data-tilt>
+          <img
+            src="https://images.pexels.com/photos/3585075/pexels-photo-3585075.jpeg?auto=compress&cs=tinysrgb&dpr=2&w=1400"
+            alt="Monochrome UI on smartphone — interface close-up."
+            loading="lazy"
+            class="project__img"
+            data-bw />
+        </div>
+        <div class="project__copy">
+          <h3 class="project__title">01 — Minimal Commerce</h3>
+          <p class="project__desc">Stark storefront with index navigation and scroll‑reveal product shots.</p>
+          <a href="./case-study.html" class="project__link" aria-label="Open project Minimal Commerce">View case</a>
+        </div>
+      </article>
+
+      <article class="project project--b" data-reveal data-stagger>
+        <div class="project__copy">
+          <h3 class="project__title">02 — Studio Index</h3>
+          <p class="project__desc">Editorial layout with “Showcase / Index” toggles and a subtle grid overlay.</p>
+          <a href="./case-study.html" class="project__link" aria-label="Open project Studio Index">View case</a>
+        </div>
+        <div class="project__media" data-parallax data-tilt>
+          <img
+            src="https://images.pexels.com/photos/7140021/pexels-photo-7140021.jpeg?auto=compress&cs=tinysrgb&dpr=2&w=1400"
+            alt="Black-and-white poster wall with bold typography."
+            loading="lazy"
+            class="project__img"
+            data-bw />
+        </div>
+      </article>
+
+      <article class="project project--a" data-reveal data-stagger>
+        <div class="project__media" data-parallax data-tilt>
+          <img
+            src="https://images.pexels.com/photos/4164418/pexels-photo-4164418.jpeg?auto=compress&cs=tinysrgb&dpr=2&w=1400"
+            alt="Close-up of code on a dark screen."
+            loading="lazy"
+            class="project__img"
+            data-bw />
+        </div>
+        <div class="project__copy">
+          <h3 class="project__title">03 — SaaS Launch</h3>
+          <p class="project__desc">Conversion landing — hard rules, punchy type, playful micro‑interactions.</p>
+          <a href="./case-study.html" class="project__link" aria-label="Open project SaaS Launch">View case</a>
+        </div>
+      </article>
     </section>
 
-    <!-- PROCESS (Heuristic-driven) -->
-    <section id="process" class="section section--process">
-      <div class="wrap">
-        <div class="section-head">
-          <h2 class="section-title">Process</h2>
-          <p class="eyebrow">A brutalist lens through NN/g’s ten heuristics.</p>
-        </div>
-
-        <ol class="steps">
-          <li class="step">
-            <span class="num">01</span>
-            <h3>System Status, Always</h3>
-            <p>Explicit loading, progress, and success/failure states. Nothing hidden, nothing implied.</p>
-          </li>
-          <li class="step">
-            <span class="num">02</span>
-            <h3>Speak Human, Not Jargon</h3>
-            <p>Words that read like you talk. Labels in plain English beat clever tooltips.</p>
-          </li>
-          <li class="step">
-            <span class="num">03</span>
-            <h3>User Control > Wizardry</h3>
-            <p>Undo, redo, and safe exits. Modals and destructive actions follow strict patterns.</p>
-          </li>
-          <li class="step">
-            <span class="num">04</span>
-            <h3>Consistency is a Feature</h3>
-            <p>Grids, rhythm, and tokenized decisions. Components don’t freelance.</p>
-          </li>
-          <li class="step">
-            <span class="num">05</span>
-            <h3>Error Prevention</h3>
-            <p>Constrain input, pre-validate, confirm dangerous paths. UIs that make mistakes hard.</p>
-          </li>
-        </ol>
-
-        <div class="stamp alt" aria-hidden="true">STRICT • SYSTEMS</div>
-      </div>
-    </section>
-
-    <!-- SERVICES -->
-    <section class="section section--services">
-      <div class="wrap">
-        <div class="section-head">
-          <h2 class="section-title">Services</h2>
-          <p class="eyebrow">Design that ships. Code that lasts.</p>
-        </div>
-
-        <div class="svc-grid">
-          <article class="svc">
-            <h3>Design</h3>
-            <ul>
-              <li>Design systems & tokens</li>
-              <li>Type scales & grid architecture</li>
-              <li>Accessibility by default</li>
-            </ul>
-          </article>
-          <article class="svc">
-            <h3>Engineering</h3>
-            <ul>
-              <li>Frontend architecture</li>
-              <li>API wiring & auth</li>
-              <li>Performance budgets</li>
-            </ul>
-          </article>
-          <article class="svc">
-            <h3>Motion</h3>
-            <ul>
-              <li>GSAP & scroll scenes</li>
-              <li>Microinteractions</li>
-              <li>Three.js visuals</li>
-            </ul>
-          </article>
-        </div>
-      </div>
+    <!-- INDEX -->
+    <section id="index" class="index" aria-label="Index of services & artifacts">
+      <header class="section-head" data-reveal>
+        <h2 class="section-title">Index</h2>
+        <p class="section-kicker">What I bring to the table.</p>
+      </header>
+      <ol class="index__list" data-reveal" data-stagger>
+        <li class="index__item"><span class="index__num">(01)</span> Web Design — bold, conversion‑minded pages.</li>
+        <li class="index__item"><span class="index__num">(02)</span> Frontend Engineering — modern, performant builds.</li>
+        <li class="index__item"><span class="index__num">(03)</span> Brand Systems — type, layout, motion rules.</li>
+        <li class="index__item"><span class="index__num">(04)</span> Prototypes — interactive demos & micro‑interactions.</li>
+      </ol>
     </section>
 
     <!-- ABOUT -->
-    <section id="about" class="section section--about">
-      <div class="wrap about-grid">
-        <figure class="about__photo">
-          <img src="assets/images/smiley.jpg" alt="Studio portrait" loading="lazy">
-          <figcaption><span class="tag">BRUTAL</span> Minimal tools, maximal clarity</figcaption>
-        </figure>
-
-        <div class="about__copy">
+    <section id="about" class="about" aria-label="About me">
+      <div class="container about__inner">
+        <header class="section-head" data-reveal>
           <h2 class="section-title">About</h2>
-          <p class="lead">I’m Abdullahinur — a UI/UX designer and web engineer obsessed with grids, typography, and
-            speed. I work with founders and teams who value clarity over ornament.</p>
-          <ul class="chips">
-            <li>Figma</li>
-            <li>React</li>
-            <li>TypeScript</li>
-            <li>Node</li>
-            <li>GSAP</li>
-            <li>Three.js</li>
-          </ul>
+          <p class="section-kicker">Calm process. Loud results.</p>
+        </header>
 
-          <div class="cta-row">
-            <a class="btn btn--solid" href="#work">VIEW CASES</a>
-            <a class="btn btn--ghost" href="mailto:hello@abdullahinur.dev">SAY HI</a>
+        <div class="about__grid">
+          <figure class="about__media" data-parallax>
+            <img
+              src="https://images.pexels.com/photos/29822563/pexels-photo-29822563.jpeg?auto=compress&cs=tinysrgb&dpr=2&w=1400"
+              alt="Monochrome studio desk in black and white."
+              loading="lazy"
+              class="about__img"
+              data-bw />
+          </figure>
+          <div class="about__copy prose" data-reveal data-stagger>
+            <p>I design and build websites that feel inevitable — simple, fast, unmistakably you.</p>
+            <p>System thinking + playful details: strict grids, big type, crisp interactions.</p>
+            <ul class="about__facts">
+              <li>Based in Nairobi (remote‑friendly)</li>
+              <li>Stack: HTML/CSS/JS, React/Next, Framer</li>
+              <li>Toolkit: Figma, GSAP, SVG, WebGL (light)</li>
+            </ul>
           </div>
         </div>
       </div>
     </section>
 
     <!-- CONTACT -->
-    <section id="contact" class="section section--contact">
-      <div class="wrap contact-box">
-        <h2 class="contact-title">Let’s build something sharp.</h2>
-        <p class="contact-sub">Mail me a quick brief or invite me to your repo.</p>
-        <div class="cta-row">
-          <a class="btn btn--solid" href="mailto:hello@abdullahinur.dev">hello@abdullahinur.dev</a>
-          <a class="btn btn--ghost" href="#top">BACK TO TOP ↑</a>
+    <section id="contact" class="contact" aria-label="Contact">
+      <div class="container contact__inner" data-reveal>
+        <h2 class="section-title">Let’s build something unmistakable.</h2>
+        <form class="contact__form" action="#" method="post" data-form>
+          <label class="field">
+            <span class="field__label">Name</span>
+            <input type="text" name="name" required />
+          </label>
+          <label class="field">
+            <span class="field__label">Email</span>
+            <input type="email" name="email" required />
+          </label>
+          <label class="field field--full">
+            <span class="field__label">Project note</span>
+            <textarea name="message" rows="4" required></textarea>
+          </label>
+          <button class="btn" type="submit">Send</button>
+        </form>
+      </div>
+
+      <div class="ticker ticker--alt" aria-hidden="true" data-marquee data-speed="fast">
+        <div class="ticker__track">
+          <span>AVAILABLE FOR SELECT PROJECTS — </span>
+          <span>FAST. ACCESSIBLE. RESPONSIVE. — </span>
+          <span>STRICT GRIDS / PLAYFUL MOTION — </span>
         </div>
       </div>
     </section>
   </main>
 
-  <footer class="footer">
-    <div class="wrap footer-row">
-      <span>© <span id="y"></span> Abdullahinur</span>
-      <span>Built with straight lines & loud type</span>
+  <!-- ===== FOOTER ===== -->
+  <footer class="site-footer" data-reveal>
+    <div class="container footer__inner">
+      <p class="footer__credit">© <span data-year></span> YOUR NAME</p>
+      <ul class="footer__links">
+        <li><a href="mailto:you@example.com">Email</a></li>
+        <li><a href="https://github.com/" rel="noopener">GitHub</a></li>
+        <li><a href="https://www.instagram.com/" rel="noopener">Instagram</a></li>
+      </ul>
     </div>
   </footer>
 
-  <script type="module" src="assets/js/app.js"></script>
-</body>
+  <!-- Scripts -->
+  <script defer src="./assets/scripts/main.js?v=3.4.4"></script>
 
+  <!-- Noscript fallback -->
+  <noscript>
+    <style>
+      [data-reveal],[data-parallax],[data-grid-overlay],[data-marquee]{opacity:1;transform:none}
+    </style>
+  </noscript>
+</body>
 </html>

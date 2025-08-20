@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="bw">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Case Study — Project Title</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700&family=Inter:wght@300;400;600;800&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="./assets/css/main.css" />
+  <script defer src="./assets/scripts/main.js"></script>
+</head>
+<body>
+  <div class="grain" aria-hidden="true"></div>
+
+  <header class="site-header">
+    <div class="container header__inner">
+      <a class="brand" href="./index.html">
+        <span class="brand__wordmark">YOUR&nbsp;NAME</span>
+        <span class="brand__tag">CASE STUDY</span>
+      </a>
+
+      <nav class="nav nav--desktop"><ul class="nav__list">
+        <li><a href="./index.html#work" class="nav__link">Back to Work</a></li>
+      </ul></nav>
+
+      <a class="hamburger" href="./index.html" aria-label="Back">←</a>
+    </div>
+  </header>
+
+  <aside class="mini-header is-visible" aria-hidden="false">
+    <div class="mini-header__progress" aria-hidden="true">
+      <div class="mini-header__bar" data-scroll-progress></div>
+    </div>
+    <div class="mini-header__inner container">
+      <a href="./index.html#work" class="mini-header__brand">Case Study</a>
+      <nav class="mini-header__nav">
+        <a href="./index.html#work">Work</a>
+        <a href="./index.html#about">About</a>
+        <a href="./index.html#contact">Contact</a>
+      </nav>
+    </div>
+  </aside>
+
+  <main>
+    <section class="case-hero" data-reveal>
+      <div class="container">
+        <h1 class="case-title">Minimal Commerce</h1>
+        <p class="case-dek">A conversion‑minded storefront with oversized product type, index navigation, and scroll‑reveal imagery.</p>
+      </div>
+      <figure class="case-hero__media" data-parallax>
+        <img src="https://images.pexels.com/photos/3318582/pexels-photo-3318582.jpeg" alt="Hero mockup" class="case-hero__img" />
+      </figure>
+    </section>
+
+    <section class="case-meta" data-reveal>
+      <div class="container">
+        <ul class="case-meta__grid">
+          <li><span>Role</span> Design, Frontend</li>
+          <li><span>Year</span> <span data-year></span></li>
+          <li><span>Stack</span> Next.js, CSS, GSAP</li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="case-body" data-reveal data-stagger>
+      <div class="container prose">
+        <h2>Context</h2>
+        <p>We set out to reduce cognitive load and embrace a blunt, editorial look: fewer modules, bigger type, stronger hierarchy.</p>
+
+        <blockquote class="case-quote">“Make it feel inevitable.”</blockquote>
+
+        <h2>Outcome</h2>
+        <p>Pages load fast, the index is scannable, and the product grid has a tactility that invites exploration.</p>
+
+        <div class="case-gallery">
+          <figure><img src="https://images.pexels.com/photos/949587/pexels-photo-949587.jpeg?auto=compress&cs=tinysrgb&dpr=2&w=1400" alt="Gallery 1"></figure>
+          <figure><img src="https://images.pexels.com/photos/2280547/pexels-photo-2280547.jpeg?auto=compress&cs=tinysrgb&dpr=2&w=1400" alt="Gallery 2"></figure>
+          <figure><img src="https://images.pexels.com/photos/3318582/pexels-photo-3318582.jpeg" alt="Gallery 3"></figure>
+        </div>
+      </div>
+    </section>
+
+    <nav class="case-next container" data-reveal>
+      <a class="btn" href="./index.html#work">← Back</a>
+    </nav>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer__inner">
+      <p class="footer__credit">© <span data-year></span> YOUR NAME</p>
+    </div>
+  </footer>
+</body>
+</html>
